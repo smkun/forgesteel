@@ -7,7 +7,6 @@ export const humanNull = {
 	folder: '',
 	settingIDs: [
 		'',
-		'orden'
 	],
 	ancestry: {
 		id: 'ancestry-human',

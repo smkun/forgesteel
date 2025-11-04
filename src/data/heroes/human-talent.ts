@@ -7,7 +7,6 @@ export const humanTalent = {
 	folder: '',
 	settingIDs: [
 		'',
-		'orden'
 	],
 	ancestry: {
 		id: 'ancestry-human',

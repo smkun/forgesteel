@@ -7,7 +7,6 @@ export const dwarfFury = {
 	folder: '',
 	settingIDs: [
 		'',
-		'orden'
 	],
 	ancestry: {
 		id: 'ancestry-dwarf',

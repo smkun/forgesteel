@@ -7,7 +7,6 @@ export const polderElementalist = {
 	folder: '',
 	settingIDs: [
 		'',
-		'orden'
 	],
 	ancestry: {
 		id: 'ancestry-polder',
