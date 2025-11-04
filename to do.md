@@ -1,6 +1,6 @@
 # Development Plans
 
-### Bugs
+## Bugs
 
 * The Blade of Quintessence should gain the Ranged keyword at level 5.
 
@@ -55,39 +55,35 @@
   * Encounter building / running
   * Map making / adding minis
 
-
 ## Classic Sheet
 
 ### Heroes (classic)
 
-- Add 'Made With Forge Steel' to classic sheet
-- convert 'Standard Features' view to classic sheet style + PDF export
-- Add ability to create standalone 'reference sheets' with selectable
+* Add 'Made With Forge Steel' to classic sheet
+* convert 'Standard Features' view to classic sheet style + PDF export
+* Add ability to create standalone 'reference sheets' with selectable
     'reference cards'
-- (possibly solved along with above) Have ability to create handout
+* (possibly solved along with above) Have ability to create handout
     sheets with items, followers, etc without being attached to a
     character
-- add something like 'known projects'? or, would it be adding 'project
+* add something like 'known projects'? or, would it be adding 'project
     cards' for projects that show the description, etc
-- Check hero features/abilities for certain keywords and ensure
+* Check hero features/abilities for certain keywords and ensure
     relevant reference cards get put into the character sheet?
-- Add user-selectable color scheme
+* Add user-selectable color scheme
 
 ### Encounter
 
-- Add filter/selection of Malice features
-- Add ability to create standalone 'reference sheets' with selectable 'reference cards'
-- (possibly solved along with above) Have ability to create handout sheets with items, followers, etc without being attached to a character
-- Check hero features/abilities for certain keywords and ensure relevant reference cards get put into the character sheet?
-- Add user-selectable color scheme
-
-### Encounter
+* Add filter/selection of Malice features
+* Add ability to create standalone 'reference sheets' with selectable 'reference cards'
+* (possibly solved along with above) Have ability to create handout sheets with items, followers, etc without being attached to a character
+* Check hero features/abilities for certain keywords and ensure relevant reference cards get put into the character sheet?
+* Add user-selectable color scheme
 
 ### Negotiation
 
-- Add Negotiation classic sheet
+* Add Negotiation classic sheet
 
 ### Montage
 
-- Add Montage classic sheet
-### Montage
+* Add Montage classic sheet
