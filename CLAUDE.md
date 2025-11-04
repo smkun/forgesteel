@@ -1012,11 +1012,13 @@ Built with **React 19**, **TypeScript 5.9**, **Vite 7**, and **Ant Design 5**, t
 
 #### Changes Made
 
-1. **Core Sourcebook Removal**
+1. **Sourcebook Consolidation**
    - Merged all necessary content from `core.ts` into `draachenmar.ts` sourcebook
    - Removed core sourcebook from main.tsx initialization ([main.tsx:252](src/components/main/main.tsx#L252))
-   - Removed core sourcebook from sourcebook-logic.ts getAllSourcebooks()
-   - Application now loads with draachenmar sourcebook only
+   - Removed orden sourcebook from [sourcebook-data.ts](src/data/sourcebook-data.ts) to eliminate duplicate ancestries
+   - Application now loads with draachenmar and playtest sourcebooks only
+   - **Fixed Build Error**: Corrected smart apostrophe in "Ssar'uk" language name ([draachenmar.ts:787](src/data/sourcebooks/draachenmar.ts#L787))
+   - **Fixed Library Bug**: Hakaan, Memonek, Time Raider no longer appear duplicated in library categories
 
 2. **Lizardfolk Integration**
    - Fixed lizardfolk.ts and integrated with Ssar'uk ancestral language
@@ -1048,7 +1050,8 @@ Built with **React 19**, **TypeScript 5.9**, **Vite 7**, and **Ant Design 5**, t
 **Core Changes**:
 
 - `src/components/main/main.tsx` - Removed core sourcebook from initialization
-- `src/logic/sourcebook-logic.ts` - Removed core from getAllSourcebooks()
+- `src/data/sourcebook-data.ts` - Removed orden sourcebook, fixed Ssar'uk apostrophe in draachenmar
+- `src/data/sourcebooks/draachenmar.ts` - Fixed smart apostrophe in Ssar'uk language name
 
 **Bug Fix**:
 
