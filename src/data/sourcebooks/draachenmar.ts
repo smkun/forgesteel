@@ -58,10 +58,13 @@ export const draachenmar: Sourcebook = {
 		AncestryData.caprini,
 		AncestryData.cervari,
 		AncestryData.elgari,
+		AncestryData.falcar,
 		AncestryData.lizardfolk,
 		AncestryData.seraphite,
+		AncestryData.strigara,
 		AncestryData.verminari,
-		AncestryData.warforged
+		AncestryData.warforged,
+		AncestryData.zefiri
 	],
 	cultures: [
 		// --- Professional Cultures (from Core) ---
@@ -158,6 +161,15 @@ export const draachenmar: Sourcebook = {
 			OrganizationData.communal,
 			UpbringingData.lawless,
 			'Szetch'
+		),
+		FactoryLogic.createCulture(
+			'Plumari',
+			'Wilderness, communal, martial — winged sky-dwellers who master the winds and ride thermal currents with grace and power.',
+			CultureType.Ancestral,
+			EnvironmentData.wilderness,
+			OrganizationData.communal,
+			UpbringingData.martial,
+			'Aeryn'
 		)
 	],
 	careers: [
@@ -786,6 +798,7 @@ export const draachenmar: Sourcebook = {
 		{ name: 'Seraphic', description: 'Juridical and devotional tongue of the Seraphites; used for oaths, judgments, and sanctuary pleas.', type: LanguageType.Cultural, related: [] },
 		{ name: 'Ssar\'uk', description: 'Lizardfolk language; sibilant hisses, alveolar clicks, and tide-terms; spoken by lizardfolk anywhere.', type: LanguageType.Cultural, related: [] },
 		{ name: 'Szetch', description: 'Verminari language; chittering consonants and guttural undertones; spoken by goblins, radenwights, and verminari.', type: LanguageType.Cultural, related: [] },
+		{ name: 'Aeryn', description: 'Plumari language; wind-song harmonics and altitude-pitch shifting; spoken by strigara, zefiri, and all winged folk.', type: LanguageType.Cultural, related: [] },
 		{ name: 'Terrari', description: 'Tortle/terran folk language; deliberate cadence, contractual/legal idioms; spoken by terrari anywhere.', type: LanguageType.Cultural, related: [] },
 		{ name: 'Umbrathi', description: 'Drow language spoken worldwide; Maelgoroth preserves an archaic register beneath the dome near the Orc Kettles.', type: LanguageType.Cultural, related: [] },
 		{ name: 'Vhroun', description: 'Hakaan language; resonant stone-phrasing and deep tonals; spoken by hakaan anywhere.', type: LanguageType.Cultural, related: [] },

@@ -12,6 +12,7 @@
 - [x] Integrate verminari ancestry with Szetch language
 - [x] Fix build error from smart apostrophe in Ssar'uk language name
 - [x] Fix white screen issue from orden sourcebook removal
+- [x] Fix ancestry-data.ts import errors (duplicate devil import, missing dragon-knight file)
 
 ## Pending Tasks
 
@@ -47,6 +48,10 @@ None currently active.
 - Fixed white screen runtime error caused by undefined orden sourcebook references
   - Removed SourcebookData.orden from sourcebook-logic.ts getSourcebooks() method
   - Removed 'orden' from settingIDs in 9 example hero files
+- Fixed ancestry-data.ts import errors
+  - Removed duplicate devil import (line 10)
+  - Removed missing dragon-knight import (line 11)
+  - Removed dragonKnight static property reference (line 32)
 
 ### Known Issues
 
