@@ -27,6 +27,7 @@ import { PerkData } from '@/data/perk-data';
 import { ProjectData } from '@/data/project-data';
 import { SkillList } from '@/enums/skill-list';
 import { Sourcebook } from '@/models/sourcebook';
+import { SourcebookType } from '@/enums/sourcebook-type';
 import { TerrainData } from '@/data/terrain-data';
 import { TitleData } from '@/data/title-data';
 import { TrinketData } from '@/data/items/trinket-data';
@@ -35,7 +36,7 @@ export const draachenmar: Sourcebook = {
 	id: 'draachenmar',
 	name: 'Draachenmar',
 	description: '32Gamers home brew game world.',
-	isHomebrew: false,
+	type: SourcebookType.Homebrew,
 	ancestries: [
 		// Core ancestries
 		AncestryData.devil,
@@ -464,6 +465,7 @@ export const draachenmar: Sourcebook = {
 		TitleData.goldenrod
 	],
 	items: [
+		// Consumables
 		ConsumableData.blackAshDart,
 		ConsumableData.bloodEssenceVial,
 		ConsumableData.buzzBalm,

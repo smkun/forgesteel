@@ -197,22 +197,42 @@ For each piety spent, you can choose one of the following enhancements:
 							feature: FactoryLogic.feature.createMultiple({
 								id: 'conduit-1-8c',
 								name: 'Prayer of Soldier\'s Skill',
-								description: 'Your god gives your mind the training of a soldier. You can wear light armor and wield light weapons effectively, even though you don’t have a kit. You can use light armor treasures and light weapon treasures. If you have a kit, you can’t take this blessing.',
+								description: 'Your god gives your mind the training of a soldier. You can wear light armor and wield light weapons effectively, even though you don\'t have a kit. You can use light armor treasures and light weapon treasures. If you have a kit, you can\'t take this prayer.',
 								features: [
-									FactoryLogic.feature.create({
-										id: 'conduit-1-8da',
-										name: 'Prayer of Soldier\'s Skill',
-										description: 'While you wield a light weapon, you gain a +1 damage bonus with weapon abilities, including free strikes.'
-									}),
-									FactoryLogic.feature.createBonus({
-										id: 'conduit-1-8db',
-										field: FeatureField.Stamina,
-										valuePerEchelon: 3
-									}),
 									FactoryLogic.feature.createProficiency({
-										id: 'conduit-1-8dc',
+										id: 'conduit-1-8c-prof',
+										name: 'Soldier\'s Proficiency',
+										description: 'You gain proficiency with light armor and light weapons.',
 										weapons: [ KitWeapon.Light ],
 										armor: [ KitArmor.Light ]
+									}),
+									FactoryLogic.feature.createChoice({
+										id: 'conduit-1-8c-bonuses',
+										name: 'Soldier\'s Blessings',
+										description: 'Select which equipment you have to gain bonuses. You can select both, one, or neither.',
+										count: 2,
+										options: [
+											{
+												feature: FactoryLogic.feature.createBonus({
+													id: 'conduit-1-8c-armor',
+													name: 'Has Light Armor',
+													description: 'While you wear light armor, you gain a +3 bonus to Stamina, and that bonus increases by 3 at 4th, 7th, and 10th levels.',
+													field: FeatureField.Stamina,
+													valuePerEchelon: 3
+												}),
+												value: 1
+											},
+											{
+												feature: FactoryLogic.feature.createAbilityDamage({
+													id: 'conduit-1-8c-weapon',
+													name: 'Has Light Weapon',
+													description: 'While you wield a light weapon, you gain a +1 damage bonus with weapon abilities, including free strikes.',
+													keywords: [ AbilityKeyword.Weapon, AbilityKeyword.Strike ],
+													value: 1
+												}),
+												value: 1
+											}
+										]
 									})
 								]
 							}),

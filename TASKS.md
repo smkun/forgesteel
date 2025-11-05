@@ -16,6 +16,13 @@
 - [x] Integrate Plumari ancestries (Falcar, Strigara, Zefiri) with Aeryn language
 - [x] Add Plumari ancestral culture to draachenmar sourcebook
 - [x] Fix zefiri.ts AbilityDistanceType.Blast enum error
+- [x] Fix draachenmar.ts isHomebrew property error (changed to type: SourcebookType.Homebrew)
+- [x] Implement Prayer of Soldier's Skill with checkbox bonuses
+  - Added "Has Light Armor" checkbox (+3 Stamina per echelon when wearing light armor)
+  - Added "Has Light Weapon" checkbox (+1 damage bonus with weapon abilities and free strikes)
+  - Uses createAbilityDamage with Weapon+Strike keywords for proper damage application
+  - Proficiencies always granted, bonuses conditionally selected
+  - Removed blessing item approach (items didn't appear in inventory UI)
 
 ## Pending Tasks
 
