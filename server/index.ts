@@ -131,14 +131,18 @@ app.get('/healthz', (req: Request, res: Response) => {
 });
 
 // ================================================================
-// API ROUTES (TODO: Implement in Milestone 2-3)
+// API ROUTES
 // ================================================================
 
-// Auth routes will go here
-// app.use('/api/auth', authRoutes);
+import authRoutes from './routes/auth.routes';
+import characterRoutes from './routes/character.routes';
+import { errorHandler } from './middleware/errorHandler';
 
-// Character routes will go here
-// app.use('/api/characters', charactersRoutes);
+// Auth routes
+app.use('/api/auth', authRoutes);
+
+// Character routes
+app.use('/api/characters', characterRoutes);
 
 // ================================================================
 // ERROR HANDLING MIDDLEWARE
@@ -153,16 +157,8 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-// Error handler
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(`[ERROR] ${err.message}`);
-  console.error(err.stack);
-
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: process.env.NODE_ENV === 'production' ? 'An error occurred' : err.message
-  });
-});
+// Centralized error handler (must be last)
+app.use(errorHandler);
 
 // ================================================================
 // SERVER STARTUP

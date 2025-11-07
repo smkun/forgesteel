@@ -5,7 +5,7 @@
     "target": "ES2022",
     "lib": ["ES2022"],
     "moduleResolution": "node",
-    "rootDir": ".",
+    "rootDir": "..",
     "outDir": "./dist",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -15,10 +15,15 @@
     "forceConsistentCasingInFileNames": true,
     "declaration": false,
     "sourceMap": true,
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@/*": ["../src/*"]
+    }
   },
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "../src/models/**/*.ts",
+    "../src/enums/**/*.ts"
   ],
   "exclude": [
     "node_modules",
