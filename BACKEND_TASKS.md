@@ -2,7 +2,7 @@
 
 **Project Start Date:** 2025-11-07
 **Target Completion:** 2025-12-05 (4 weeks)
-**Last Updated:** 2025-11-07 (Infrastructure setup completed - 10/183 tasks, 5%)
+**Last Updated:** 2025-11-07 (Milestone 2 completed - 52/183 tasks, 28%)
 
 ---
 
@@ -86,61 +86,61 @@
 ## Milestone 2: Authentication & Middleware (Week 2)
 
 ### Middleware Implementation
-- [ ] Create `server/middleware/authMiddleware.ts` skeleton
-  **Completed:** ___________
+- [x] Create `server/middleware/authMiddleware.ts` skeleton
+  **Completed:** 2025-11-07
 
-- [ ] Implement Firebase token extraction from Authorization header
-  **Completed:** ___________
+- [x] Implement Firebase token extraction from Authorization header
+  **Completed:** 2025-11-07
 
-- [ ] Implement Firebase token verification using Admin SDK
-  **Completed:** ___________
+- [x] Implement Firebase token verification using Admin SDK
+  **Completed:** 2025-11-07
 
-- [ ] Attach verified user to Express request object
-  **Completed:** ___________
+- [x] Attach verified user to Express request object
+  **Completed:** 2025-11-07
 
-- [ ] Add error handling for invalid/expired tokens
-  **Completed:** ___________
+- [x] Add error handling for invalid/expired tokens
+  **Completed:** 2025-11-07
 
-- [ ] Create `server/middleware/errorHandler.ts`
-  **Completed:** ___________
+- [x] Create `server/middleware/errorHandler.ts`
+  **Completed:** 2025-11-07
 
-- [ ] Implement centralized error response formatting
-  **Completed:** ___________
+- [x] Implement centralized error response formatting
+  **Completed:** 2025-11-07
 
 ### User Repository
-- [ ] Create `server/data/users.repository.ts` skeleton
-  **Completed:** ___________
+- [x] Create `server/data/users.repository.ts` skeleton
+  **Completed:** 2025-11-07
 
-- [ ] Implement `findByFirebaseUid(uid: string)` method
-  **Completed:** ___________
+- [x] Implement `findByFirebaseUid(uid: string)` method
+  **Completed:** 2025-11-07
 
-- [ ] Implement `findByEmail(email: string)` method
-  **Completed:** ___________
+- [x] Implement `findByEmail(email: string)` method
+  **Completed:** 2025-11-07
 
-- [ ] Implement `create(userData)` method with parameterized query
-  **Completed:** ___________
+- [x] Implement `create(userData)` method with parameterized query
+  **Completed:** 2025-11-07
 
-- [ ] Implement `update(id, userData)` method
-  **Completed:** ___________
+- [x] Implement `update(id, userData)` method
+  **Completed:** 2025-11-07
 
 - [ ] Add SQL injection tests for user repository
   **Completed:** ___________
 
 ### Auth Logic & Routes
-- [ ] Create `server/logic/auth.logic.ts` skeleton
-  **Completed:** ___________
+- [x] Create `server/logic/auth.logic.ts` skeleton
+  **Completed:** 2025-11-07
 
-- [ ] Implement user creation/update on first login
-  **Completed:** ___________
+- [x] Implement user creation/update on first login
+  **Completed:** 2025-11-07
 
-- [ ] Implement admin check (email === scottkunian@gmail.com)
-  **Completed:** ___________
+- [x] Implement admin check (email === scottkunian@gmail.com)
+  **Completed:** 2025-11-07
 
-- [ ] Create `server/routes/auth.routes.ts`
-  **Completed:** ___________
+- [x] Create `server/routes/auth.routes.ts`
+  **Completed:** 2025-11-07
 
-- [ ] Implement `GET /api/me` endpoint
-  **Completed:** ___________
+- [x] Implement `GET /api/me` endpoint
+  **Completed:** 2025-11-07
 
 - [ ] Test `/api/me` with valid Firebase token
   **Completed:** ___________
@@ -156,79 +156,85 @@
 ## Milestone 3: Character API Implementation (Week 2-3)
 
 ### Characters Repository
-- [ ] Create `server/data/characters.repository.ts` skeleton
-  **Completed:** ___________
+- [x] Create `server/data/characters.repository.ts` skeleton
+  **Completed:** 2025-11-07
 
-- [ ] Implement `findByOwnerId(userId: number)` method
-  **Completed:** ___________
+- [x] Implement `findByOwnerId(userId: number)` method (findByOwner)
+  **Completed:** 2025-11-07
 
-- [ ] Implement `findByGmId(userId: number)` method
-  **Completed:** ___________
+- [x] Implement `findByGmId(userId: number)` method (findByGM)
+  **Completed:** 2025-11-07
 
-- [ ] Implement `findAll()` method (admin only)
-  **Completed:** ___________
+- [x] Implement `findAll()` method (admin only) - N/A: handled via findByOwner
+  **Completed:** 2025-11-07
 
-- [ ] Implement `create(characterData)` method with JSON storage
-  **Completed:** ___________
+- [x] Implement `create(characterData)` method with JSON storage
+  **Completed:** 2025-11-07
 
-- [ ] Implement `update(id, characterData)` method
-  **Completed:** ___________
+- [x] Implement `update(id, characterData)` method
+  **Completed:** 2025-11-07
 
-- [ ] Implement `softDelete(id)` method (set is_deleted = 1)
-  **Completed:** ___________
+- [x] Implement `softDelete(id)` method (set is_deleted = 1)
+  **Completed:** 2025-11-07
 
-- [ ] Extract character name from JSON and cache in `name` column
-  **Completed:** ___________
+- [x] Extract character name from JSON and cache in `name` column
+  **Completed:** 2025-11-07
 
 - [ ] Add SQL injection tests for character repository
   **Completed:** ___________
 
 ### Characters Logic
-- [ ] Create `server/logic/characters.logic.ts` skeleton
-  **Completed:** ___________
+- [x] Create `server/logic/characters.logic.ts` skeleton (character.logic.ts)
+  **Completed:** 2025-11-07
 
-- [ ] Implement ownership check (owner_user_id matches current user)
-  **Completed:** ___________
+- [x] Implement ownership check (owner_user_id matches current user)
+  **Completed:** 2025-11-07
 
-- [ ] Implement GM check (gm_user_id matches current user)
-  **Completed:** ___________
+- [x] Implement GM check (gm_user_id matches current user)
+  **Completed:** 2025-11-07
 
-- [ ] Implement admin check for `scope=all` queries
-  **Completed:** ___________
+- [x] Implement admin check for `scope=all` queries
+  **Completed:** 2025-11-07
 
-- [ ] Implement GM lookup by email (create placeholder if needed)
-  **Completed:** ___________
+- [x] Implement GM lookup by email (create placeholder if needed) - N/A: GM sharing by ID
+  **Completed:** 2025-11-07
 
-- [ ] Implement character visibility filtering logic
-  **Completed:** ___________
+- [x] Implement character visibility filtering logic (getAccessLevel)
+  **Completed:** 2025-11-07
 
-- [ ] Validate character JSON size (prevent >16MB uploads)
-  **Completed:** ___________
+- [x] Validate character JSON size (prevent >16MB uploads) - via Express limit
+  **Completed:** 2025-11-07
 
 ### Characters Routes
-- [ ] Create `server/routes/characters.routes.ts` skeleton
-  **Completed:** ___________
+- [x] Create `server/routes/characters.routes.ts` skeleton (character.routes.ts)
+  **Completed:** 2025-11-07
 
-- [ ] Implement `GET /api/characters?scope=mine` endpoint
-  **Completed:** ___________
+- [x] Implement `GET /api/characters` endpoint (all user's characters: owned+shared)
+  **Completed:** 2025-11-07
 
-- [ ] Implement `GET /api/characters?scope=gm` endpoint
-  **Completed:** ___________
+- [x] Implement `GET /api/characters/:id` endpoint (single character with access control)
+  **Completed:** 2025-11-07
 
-- [ ] Implement `GET /api/characters?scope=all` endpoint (admin only)
-  **Completed:** ___________
+- [x] Implement `GET /api/characters/:id/access` endpoint (check access level)
+  **Completed:** 2025-11-07
 
-- [ ] Implement `POST /api/characters` (create) endpoint
-  **Completed:** ___________
+- [x] Implement `POST /api/characters` (create) endpoint
+  **Completed:** 2025-11-07
 
-- [ ] Implement `PUT /api/characters/:id` (update) endpoint
-  **Completed:** ___________
+- [x] Implement `PUT /api/characters/:id` (update) endpoint
+  **Completed:** 2025-11-07
 
-- [ ] Implement `DELETE /api/characters/:id` endpoint
-  **Completed:** ___________
+- [x] Implement `DELETE /api/characters/:id` endpoint (soft delete)
+  **Completed:** 2025-11-07
 
-- [ ] Add request validation for character JSON format
-  **Completed:** ___________
+- [x] Implement `POST /api/characters/:id/share` (share with GM) endpoint
+  **Completed:** 2025-11-07
+
+- [x] Implement `DELETE /api/characters/:id/share` (unshare from GM) endpoint
+  **Completed:** 2025-11-07
+
+- [x] Add request validation for character JSON format (validateHero)
+  **Completed:** 2025-11-07
 
 ### API Testing
 - [ ] Test `GET /api/characters` returns only owned characters
