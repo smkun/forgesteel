@@ -1,0 +1,35 @@
+{
+  "sqltools.connections": [
+    {
+      "name": "iFastNet MySQL (Forgesteel)",
+      "driver": "MySQL",
+      "server": "sql302.byetcluster.com",
+      "port": 3306,
+      "database": "epiz_XXXXXXXX_forgesteel",
+      "username": "epiz_XXXXXXXX",
+      "password": "",
+      "connectionTimeout": 30,
+      "previewLimit": 50,
+      "askForPassword": true
+    },
+    {
+      "name": "Local MySQL (Development)",
+      "driver": "MySQL",
+      "server": "localhost",
+      "port": 3306,
+      "database": "forgesteel_dev",
+      "username": "root",
+      "password": "",
+      "connectionTimeout": 30,
+      "previewLimit": 50,
+      "askForPassword": true
+    }
+  ],
+  "sqltools.useNodeRuntime": true,
+  "sqltools.autoOpenSessionFiles": false,
+  "sqltools.format": {
+    "language": "sql",
+    "indent": "  ",
+    "reservedWordCase": "upper"
+  }
+}
