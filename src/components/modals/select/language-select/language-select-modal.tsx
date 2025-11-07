@@ -45,7 +45,7 @@ export const LanguageSelectModal = (props: Props) => {
 			content={
 				<div className='language-select-modal'>
 					{
-						[ LanguageType.Common, LanguageType.Cultural, LanguageType.Regional, LanguageType.Dead ].map(type => {
+						[ LanguageType.Common, LanguageType.Cultural, LanguageType.Regional, LanguageType.Dead, LanguageType.Secret ].map(type => {
 							const subset = languages.filter(l => l.type === type);
 							if (subset.length === 0) {
 								return null;

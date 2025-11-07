@@ -201,7 +201,8 @@ export const ReferenceModal = (props: Props) => {
 						LanguageType.Common,
 						LanguageType.Regional,
 						LanguageType.Cultural,
-						LanguageType.Dead
+						LanguageType.Dead,
+						LanguageType.Secret
 					].map((type, n1) => (
 						<div key={n1}>
 							<HeaderText>{type} Languages</HeaderText>
