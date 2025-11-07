@@ -809,7 +809,10 @@ export const draachenmar: Sourcebook = {
 		{ name: 'Dalelandic', description: 'Henge/Dale Lands; heavy academic/arcane register (Conclave & schools).', type: LanguageType.Regional, related: [] },
 		{ name: 'Jungari', description: 'Uxmal’s human diplomats/traders; Tyravos (Volcano of Omens) vocabulary.', type: LanguageType.Regional, related: [] },
 		{ name: 'Merish', description: 'Courtly arts dialect of the Duchy of Merish near Lineton.', type: LanguageType.Regional, related: [] },
-		{ name: 'Rider-cant', description: 'Badlands (Respite/Providence); survival/riding and rune-lexicon.', type: LanguageType.Regional, related: [] }
+		{ name: 'Rider-cant', description: 'Badlands (Respite/Providence); survival/riding and rune-lexicon.', type: LanguageType.Regional, related: [] },
+		{ name: 'Bargothian', description: 'The language of the ancient Bargothian empire.', type: LanguageType.Dead, related: [] },
+		{ name: 'Thieves\' Cant', description: 'Secret language spoken by the criminal underworld; uses coded phrases, hand signs, and subtle markings known only to thieves and rogues.', type: LanguageType.Secret, related: [] },
+		{ name: 'Druidic', description: 'Secret language spoken by druidic circles; sacred tongue of nature priests forbidden to teach outsiders under penalty of divine retribution.', type: LanguageType.Secret, related: [] }
 	],
 	projects: [
 		ProjectData.buildAirship,

@@ -3,5 +3,6 @@ export enum LanguageType {
 	Regional = 'Regional',
 	Cultural = 'Cultural',
 	Dead = 'Dead',
+	Secret = 'Secret',
 	Custom = 'Custom'
 }
