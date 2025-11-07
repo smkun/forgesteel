@@ -9,8 +9,8 @@
 ## Milestone 1: Database & Infrastructure Setup (Week 1)
 
 ### Database Setup
-- [ ] Verify iFastNet MySQL version and connection details
-  **Completed:** ___________
+- [x] Verify iFastNet MySQL version and connection details
+  **Completed:** 2025-11-07
 
 - [x] Create `db/schema.sql` with `users` table definition
   **Completed:** 2025-11-07
@@ -21,11 +21,11 @@
 - [x] Add foreign key constraints to schema
   **Completed:** 2025-11-07
 
-- [ ] Test schema creation on iFastNet database
-  **Completed:** ___________
+- [x] Test schema creation on iFastNet database
+  **Completed:** 2025-11-07
 
-- [ ] Verify JSON column support (or use LONGTEXT)
-  **Completed:** ___________
+- [x] Verify JSON column support (or use LONGTEXT)
+  **Completed:** 2025-11-07
 
 ### Firebase Setup
 - [ ] Create Firebase project for authentication
@@ -633,12 +633,12 @@
 ## Progress Summary
 
 **Milestone Progress:**
-- **Milestone 1:** 14/26 tasks complete (54%)
+- **Milestone 1:** 19/26 tasks complete (73%)
 - **Milestone 2:** 0/28 tasks complete (0%)
 - **Milestone 3:** 0/39 tasks complete (0%)
 - **Milestone 4:** 0/50 tasks complete (0%)
 - **Milestone 5:** 0/40 tasks complete (0%)
-- **Total:** 14/183 tasks complete (8%)
+- **Total:** 19/183 tasks complete (10%)
 
 **Newly Discovered Tasks:** 8 tasks (8 completed)
 
