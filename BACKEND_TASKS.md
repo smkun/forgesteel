@@ -75,11 +75,11 @@
 - [ ] Test SQLTools connection to iFastNet database
   **Completed:** ___________
 
-- [ ] Update Vite config to proxy API calls to Express
-  **Completed:** ___________
+- [x] Update Vite config to proxy API calls to Express
+  **Completed:** 2025-11-07
 
-- [ ] Add backend build scripts to `package.json`
-  **Completed:** ___________
+- [x] Add backend build scripts to `package.json`
+  **Completed:** 2025-11-07
 
 ---
 
@@ -633,12 +633,12 @@
 ## Progress Summary
 
 **Milestone Progress:**
-- **Milestone 1:** 12/26 tasks complete (46%)
+- **Milestone 1:** 14/26 tasks complete (54%)
 - **Milestone 2:** 0/28 tasks complete (0%)
 - **Milestone 3:** 0/39 tasks complete (0%)
 - **Milestone 4:** 0/50 tasks complete (0%)
 - **Milestone 5:** 0/40 tasks complete (0%)
-- **Total:** 12/183 tasks complete (7%)
+- **Total:** 14/183 tasks complete (8%)
 
 **Newly Discovered Tasks:** 8 tasks (8 completed)
 
@@ -678,3 +678,9 @@
   - ✅ Configured local MySQL connection for development
   - ✅ Set askForPassword: true for security
 - **Milestone 1 Progress:** 46% complete (12/26 tasks)
+- **Frontend-Backend Integration:**
+  - ✅ Updated vite.config.ts with API proxy configuration
+  - ✅ Configured proxy to forward /api requests to localhost:4000
+  - ✅ Added changeOrigin and error logging for debugging
+  - ✅ Backend build scripts already added to package.json (server:dev, server:build, server:start)
+- **Milestone 1 Progress:** 54% complete (14/26 tasks)
