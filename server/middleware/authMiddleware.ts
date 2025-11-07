@@ -32,15 +32,13 @@ admin.initializeApp({
 console.log('[AUTH] ✅ Firebase Admin SDK initialized');
 console.log(`[AUTH] Project: ${credentials.project_id}`);
 
+import { AuthenticatedUser, getOrCreateUser } from '../logic/auth.logic';
+
 /**
- * Extended Express Request with Firebase user information
+ * Extended Express Request with database user information
  */
 export interface AuthenticatedRequest extends Request {
-  user?: {
-    uid: string;
-    email: string | undefined;
-    emailVerified: boolean;
-  };
+  user?: AuthenticatedUser;
 }
 
 /**
@@ -100,14 +98,17 @@ export async function authMiddleware(
     // Verify token with Firebase Admin SDK
     const decodedToken = await admin.auth().verifyIdToken(token);
 
-    // Attach user information to request
-    (req as AuthenticatedRequest).user = {
+    // Get or create user in database (auto-creates on first login)
+    const user = await getOrCreateUser({
       uid: decodedToken.uid,
       email: decodedToken.email,
-      emailVerified: decodedToken.email_verified || false
-    };
+      displayName: decodedToken.name || null
+    });
 
-    console.log(`[AUTH] ✅ Authenticated: ${decodedToken.email} (${decodedToken.uid})`);
+    // Attach database user information to request
+    (req as AuthenticatedRequest).user = user;
+
+    console.log(`[AUTH] ✅ Authenticated: ${user.email} (ID: ${user.id}, Admin: ${user.is_admin})`);
 
     // Continue to next middleware/route
     next();
