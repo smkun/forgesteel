@@ -71,6 +71,21 @@ export default defineConfig({
 	server: {
 		headers: {
 			'Service-Worker-Allowed': '/forgesteel/'
+		},
+		proxy: {
+			'/api': {
+				target: 'http://localhost:4000',
+				changeOrigin: true,
+				secure: false,
+				configure: (proxy, _options) => {
+					proxy.on('error', (err, _req, _res) => {
+						console.log('[Vite Proxy] Error:', err);
+					});
+					proxy.on('proxyReq', (_proxyReq, req, _res) => {
+						console.log('[Vite Proxy] Request:', req.method, req.url);
+					});
+				}
+			}
 		}
 	}
 });
