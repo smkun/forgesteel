@@ -28,20 +28,20 @@
   **Completed:** 2025-11-07
 
 ### Firebase Setup
-- [ ] Create Firebase project for authentication
-  **Completed:** ___________
+- [x] Create Firebase project for authentication
+  **Completed:** 2025-11-07
 
-- [ ] Enable email/password authentication in Firebase Console
-  **Completed:** ___________
+- [x] Enable email/password authentication in Firebase Console
+  **Completed:** 2025-11-07
 
-- [ ] Download Firebase Admin SDK credentials JSON
-  **Completed:** ___________
+- [x] Download Firebase Admin SDK credentials JSON
+  **Completed:** 2025-11-07
 
-- [ ] Add Firebase config to `.env.local` template
-  **Completed:** ___________
+- [x] Add Firebase config to `.env.local` template
+  **Completed:** 2025-11-07
 
-- [ ] Test Firebase Admin SDK connection
-  **Completed:** ___________
+- [x] Test Firebase Admin SDK connection
+  **Completed:** 2025-11-07
 
 ### Backend Project Setup
 - [x] Initialize `/server/` directory structure
@@ -633,12 +633,12 @@
 ## Progress Summary
 
 **Milestone Progress:**
-- **Milestone 1:** 19/26 tasks complete (73%)
+- **Milestone 1:** 24/26 tasks complete (92%)
 - **Milestone 2:** 0/28 tasks complete (0%)
 - **Milestone 3:** 0/39 tasks complete (0%)
 - **Milestone 4:** 0/50 tasks complete (0%)
 - **Milestone 5:** 0/40 tasks complete (0%)
-- **Total:** 19/183 tasks complete (10%)
+- **Total:** 24/183 tasks complete (13%)
 
 **Newly Discovered Tasks:** 8 tasks (8 completed)
 
@@ -684,3 +684,18 @@
   - ✅ Added changeOrigin and error logging for debugging
   - ✅ Backend build scripts already added to package.json (server:dev, server:build, server:start)
 - **Milestone 1 Progress:** 54% complete (14/26 tasks)
+- **Database Deployment:**
+  - ✅ Created test-connection.ts script
+  - ✅ Verified MySQL 11.4.8-MariaDB connection successful
+  - ✅ Created deploy-schema-simple.ts script
+  - ✅ Deployed users and characters tables to gamers_forgesteel database
+  - ✅ Confirmed LONGTEXT support and foreign key constraints
+- **Milestone 1 Progress:** 73% complete (19/26 tasks)
+- **Firebase Authentication Setup:**
+  - ✅ User created Firebase project: forgesteel-6e968
+  - ✅ User enabled email/password authentication in console
+  - ✅ User downloaded firebase-service-account.json credentials
+  - ✅ Created test-firebase.ts script
+  - ✅ Verified Firebase Admin SDK connection successful
+  - ✅ Updated .env.local with Firebase credentials path
+- **Milestone 1 Progress:** 92% complete (24/26 tasks)
