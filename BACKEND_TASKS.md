@@ -2,7 +2,7 @@
 
 **Project Start Date:** 2025-11-07
 **Target Completion:** 2025-12-05 (4 weeks)
-**Last Updated:** 2025-11-07
+**Last Updated:** 2025-11-07 (Infrastructure setup completed - 10/183 tasks, 5%)
 
 ---
 
@@ -595,49 +595,54 @@
 
 1. **Verify iFastNet MySQL version and connection details**
    *Milestone 1: Database & Infrastructure Setup*
-   **Why:** Determines JSON vs LONGTEXT column type for schema design
-   **Blocking:** All database schema tasks
+   **Why:** Determines JSON vs LONGTEXT column type for schema design (already using LONGTEXT)
+   **Blocking:** Database connection testing and schema deployment
+   **Requires:** User to provide iFastNet MySQL credentials
    **Estimated Time:** 30 minutes
 
 2. **Create Firebase project for authentication**
    *Milestone 1: Database & Infrastructure Setup*
    **Why:** Needed for Firebase Admin SDK setup and credentials
-   **Blocking:** All authentication tasks
+   **Blocking:** All authentication middleware and API testing
+   **Requires:** User to create project in Firebase Console
    **Estimated Time:** 1 hour
 
-3. **Create `db/schema.sql` with `users` table definition**
+3. **Set up mysql2 connection pool** (NEXT IMPLEMENTABLE TASK)
    *Milestone 1: Database & Infrastructure Setup*
-   **Why:** Foundation for all user authentication and character ownership
-   **Blocking:** Database tests and backend user repository
+   **Why:** Required for all database operations and repository implementation
+   **Blocking:** User and character repository creation
+   **Status:** Can implement skeleton, requires credentials for testing
    **Estimated Time:** 30 minutes
 
-4. **Create `db/schema.sql` with `characters` table definition**
+4. **Create `.vscode/settings.json` with SQLTools configuration** (INDEPENDENT TASK)
    *Milestone 1: Database & Infrastructure Setup*
-   **Why:** Foundation for character storage and retrieval
-   **Blocking:** Character API implementation
-   **Estimated Time:** 30 minutes
+   **Why:** Developer tooling for database exploration
+   **Blocking:** None (quality-of-life improvement)
+   **Status:** Can implement immediately with placeholder config
+   **Estimated Time:** 15 minutes
 
-5. **Initialize `/server/` directory structure**
+5. **Update Vite config to proxy API calls to Express** (INDEPENDENT TASK)
    *Milestone 1: Database & Infrastructure Setup*
-   **Why:** Sets up backend project organization before code implementation
-   **Blocking:** All backend development tasks
-   **Estimated Time:** 30 minutes
+   **Why:** Frontend development convenience (avoid CORS in local dev)
+   **Blocking:** None (CORS already configured as fallback)
+   **Status:** Can implement immediately
+   **Estimated Time:** 20 minutes
 
 ---
 
 ## Progress Summary
 
 **Milestone Progress:**
-- **Milestone 1:** 0/26 tasks complete (0%)
+- **Milestone 1:** 10/26 tasks complete (38%)
 - **Milestone 2:** 0/28 tasks complete (0%)
 - **Milestone 3:** 0/39 tasks complete (0%)
 - **Milestone 4:** 0/50 tasks complete (0%)
 - **Milestone 5:** 0/40 tasks complete (0%)
-- **Total:** 0/183 tasks complete (0%)
+- **Total:** 10/183 tasks complete (5%)
 
 **Newly Discovered Tasks:** 8 tasks (8 completed)
 
-**Overall Project Status:** 🟡 Not Started
+**Overall Project Status:** 🟢 In Progress (Milestone 1)
 **Target Completion:** 2025-12-05 (4 weeks from 2025-11-07)
 **Days Remaining:** 28 days
 
@@ -649,3 +654,15 @@
 - Created BACKEND_TASKS.md with 183 atomic tasks across 5 milestones
 - Added 8 newly discovered tasks for Secret language type implementation
 - Marked 8 language system tasks as completed (100% of discovered tasks)
+- **Backend Infrastructure Setup (Milestone 1 - 10 tasks completed):**
+  - ✅ Created db/schema.sql with users and characters tables
+  - ✅ Added foreign key constraints to schema
+  - ✅ Initialized /server/ directory structure (index.ts, app.js, tsconfig.json)
+  - ✅ Added backend dependencies to package.json (express, firebase-admin, mysql2, dotenv, cors)
+  - ✅ Configured Express CORS middleware in server/index.ts
+  - ✅ Implemented Passenger path normalization middleware
+  - ✅ Added intelligent port selection (3000 Passenger, 4000 local)
+  - ✅ Created .env.local.example with iFastNet deployment warnings
+  - ✅ Updated .gitignore for backend artifacts and secrets
+  - ✅ Committed all infrastructure files to repository
+- **Milestone 1 Progress:** 38% complete (10/26 tasks)

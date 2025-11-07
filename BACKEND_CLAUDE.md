@@ -265,6 +265,62 @@ At end of each session, append to "Session Log" section:
 
 ---
 
+### Session 2025-11-07 (Backend Infrastructure)
+
+**Duration:** 2 hours
+**Milestone:** Milestone 1 - Database & Infrastructure Setup
+
+**Tasks Completed:**
+- [x] Create db/schema.sql with users table definition (Milestone 1)
+- [x] Create db/schema.sql with characters table definition (Milestone 1)
+- [x] Add foreign key constraints to schema (Milestone 1)
+- [x] Initialize /server/ directory structure (Milestone 1)
+- [x] Add backend dependencies to package.json (Milestone 1)
+- [x] Create server/tsconfig.json for backend TypeScript (Milestone 1)
+- [x] Create server/index.ts Express entry point (Milestone 1)
+- [x] Configure Express CORS middleware (Milestone 1)
+- [x] Add .env.local to .gitignore (Milestone 1)
+- [x] Create .env.local.example with placeholder values (Milestone 1)
+
+**Tasks Added:**
+- [x] Add Secret language type to LanguageType enum (Completed 2025-11-07)
+- [x] Update language-select-modal to display Secret languages (Completed 2025-11-07)
+- [x] Update reference-modal to filter Secret languages (Completed 2025-11-07)
+- [x] Update sourcebook-panel dropdown to include Secret option (Completed 2025-11-07)
+- [x] Add Thieves' Cant secret language to draachenmar.ts (Completed 2025-11-07)
+- [x] Add Druidic secret language to draachenmar.ts (Completed 2025-11-07)
+- [x] Fix Bargothian description typo (languange → language) (Completed 2025-11-07)
+
+**Files Modified:**
+- package.json - Added backend dependencies and scripts
+- .gitignore - Added backend build artifacts and environment files
+
+**Files Created:**
+- db/schema.sql - Database schema with users and characters tables
+- server/index.ts - Express server with Passenger deployment support
+- server/app.js - Passenger entry point wrapper
+- server/tsconfig.json - Backend TypeScript configuration
+- .env.local.example - Environment variable template with iFastNet warnings
+
+**Progress:**
+- Milestone 1: 10/26 tasks (38%)
+- Total Backend Tasks: 10/183 tasks (5%)
+- Language System Enhancement: 8/8 discovered tasks (100%)
+
+**Blockers/Questions:**
+- **BLOCKED:** MySQL verification requires user's iFastNet database credentials
+- **BLOCKED:** Firebase setup requires user to create Firebase project in console
+- **BLOCKED:** Database connection testing requires MySQL credentials
+
+**Next Session:**
+- Three independent tasks can proceed without credentials:
+  1. **Set up mysql2 connection pool** (skeleton implementation, testing requires credentials)
+  2. **Create .vscode/settings.json with SQLTools configuration** (developer tooling)
+  3. **Update Vite config to proxy API calls to Express** (frontend convenience)
+- Recommended: Implement mysql2 connection pool skeleton to unblock Milestone 2 repository work
+
+---
+
 ## Quick Reference
 
 ### Startup Checklist
