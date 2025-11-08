@@ -10,7 +10,7 @@
  * - PASSENGER_DEPLOYMENT_GUIDE.md: iFastNet deployment patterns
  */
 
-import express, { Request, Response, NextFunction } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
 import './utils/loadEnv';
@@ -24,11 +24,11 @@ import './utils/loadEnv';
  * Passenger sets PASSENGER_BASE_URI and PASSENGER_APP_ENV
  */
 const isPassenger = !!(
-  process.env.PASSENGER_BASE_URI ||
+	process.env.PASSENGER_BASE_URI ||
   process.env.PASSENGER_APP_ENV
 );
 
-console.log(`[BOOT] Starting Forgesteel API...`);
+console.log('[BOOT] Starting Forgesteel API...');
 console.log(`[BOOT] Environment: ${isPassenger ? 'Passenger (iFastNet)' : 'Local Development'}`);
 console.log(`[BOOT] Node version: ${process.version}`);
 console.log(`[BOOT] PASSENGER_BASE_URI: ${process.env.PASSENGER_BASE_URI || 'not set'}`);
@@ -46,23 +46,23 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = process.env.ALLOWED_ORIGIN
-  ? process.env.ALLOWED_ORIGIN.split(',')
-  : ['http://localhost:5173', 'http://localhost:4173'];
+	? process.env.ALLOWED_ORIGIN.split(',')
+	: [ 'http://localhost:5173', 'http://localhost:4173' ];
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, Postman, etc.)
-    if (!origin) return callback(null, true);
+	origin: (origin, callback) => {
+		// Allow requests with no origin (mobile apps, Postman, etc.)
+		if (!origin) return callback(null, true);
 
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+		if (allowedOrigins.indexOf(origin) !== -1) {
+			callback(null, true);
+		} else {
+			callback(new Error('Not allowed by CORS'));
+		}
+	},
+	credentials: true,
+	methods: [ 'GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS' ],
+	allowedHeaders: [ 'Content-Type', 'Authorization' ]
 }));
 
 // Body parsers
@@ -71,8 +71,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`[REQUEST] ${req.method} ${req.url} from ${req.headers.host}`);
-  next();
+	console.log(`[REQUEST] ${req.method} ${req.url} from ${req.headers.host}`);
+	next();
 });
 
 // ================================================================
@@ -93,14 +93,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
  *   Express route matches: app.get('/characters', ...)
  */
 app.use((req: Request, res: Response, next: NextFunction) => {
-  const baseUri = process.env.PASSENGER_BASE_URI || '';
+	const baseUri = process.env.PASSENGER_BASE_URI || '';
 
-  if (baseUri && req.url.startsWith(baseUri)) {
-    req.url = req.url.slice(baseUri.length) || '/';
-    console.log(`[PATH] Normalized: ${baseUri}${req.url} → ${req.url}`);
-  }
+	if (baseUri && req.url.startsWith(baseUri)) {
+		req.url = req.url.slice(baseUri.length) || '/';
+		console.log(`[PATH] Normalized: ${baseUri}${req.url} → ${req.url}`);
+	}
 
-  next();
+	next();
 });
 
 // ================================================================
@@ -108,25 +108,25 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // ================================================================
 
 app.get('/', (req: Request, res: Response) => {
-  res.json({
-    status: 'ok',
-    service: 'forgesteel-api',
-    environment: isPassenger ? 'passenger' : 'local',
-    baseUri: process.env.PASSENGER_BASE_URI || 'none',
-    node: process.version,
-    uptime: process.uptime(),
-    timestamp: new Date().toISOString()
-  });
+	res.json({
+		status: 'ok',
+		service: 'forgesteel-api',
+		environment: isPassenger ? 'passenger' : 'local',
+		baseUri: process.env.PASSENGER_BASE_URI || 'none',
+		node: process.version,
+		uptime: process.uptime(),
+		timestamp: new Date().toISOString()
+	});
 });
 
 app.get('/healthz', (req: Request, res: Response) => {
-  res.json({
-    status: 'ok',
-    environment: isPassenger ? 'passenger' : 'local',
-    baseUri: process.env.PASSENGER_BASE_URI || 'none',
-    node: process.version,
-    uptime: process.uptime()
-  });
+	res.json({
+		status: 'ok',
+		environment: isPassenger ? 'passenger' : 'local',
+		baseUri: process.env.PASSENGER_BASE_URI || 'none',
+		node: process.version,
+		uptime: process.uptime()
+	});
 });
 
 // ================================================================
@@ -157,11 +157,11 @@ app.use('/api/users', userRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
-  res.status(404).json({
-    error: 'Not Found',
-    message: `Route ${req.method} ${req.url} not found`,
-    path: req.url
-  });
+	res.status(404).json({
+		error: 'Not Found',
+		message: `Route ${req.method} ${req.url} not found`,
+		path: req.url
+	});
 });
 
 // Centralized error handler (must be last)
@@ -186,37 +186,37 @@ app.use(errorHandler);
  * Reference: PASSENGER_DEPLOYMENT_GUIDE.md section "Common Pitfalls"
  */
 const PORT = isPassenger
-  ? Number(process.env.PORT || 3000)
-  : Number(process.env.PORT || 4000);
+	? Number(process.env.PORT || 3000)
+	: Number(process.env.PORT || 4000);
 
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
-  console.log(`[BOOT] ✅ Server listening on port ${PORT}`);
-  console.log(`[BOOT] Mode: ${isPassenger ? 'Passenger managed' : 'Local development'}`);
-  console.log(`[BOOT] Health check: http://localhost:${PORT}/healthz`);
+	console.log(`[BOOT] ✅ Server listening on port ${PORT}`);
+	console.log(`[BOOT] Mode: ${isPassenger ? 'Passenger managed' : 'Local development'}`);
+	console.log(`[BOOT] Health check: http://localhost:${PORT}/healthz`);
 
-  if (isPassenger) {
-    console.log(`[BOOT] Passenger will handle process lifecycle`);
-    console.log(`[BOOT] Base URI: ${process.env.PASSENGER_BASE_URI || 'none'}`);
-  }
+	if (isPassenger) {
+		console.log('[BOOT] Passenger will handle process lifecycle');
+		console.log(`[BOOT] Base URI: ${process.env.PASSENGER_BASE_URI || 'none'}`);
+	}
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('[SHUTDOWN] SIGTERM received, closing server...');
-  server.close(() => {
-    console.log('[SHUTDOWN] Server closed');
-    process.exit(0);
-  });
+	console.log('[SHUTDOWN] SIGTERM received, closing server...');
+	server.close(() => {
+		console.log('[SHUTDOWN] Server closed');
+		process.exit(0);
+	});
 });
 
 process.on('SIGINT', () => {
-  console.log('[SHUTDOWN] SIGINT received, closing server...');
-  server.close(() => {
-    console.log('[SHUTDOWN] Server closed');
-    process.exit(0);
-  });
+	console.log('[SHUTDOWN] SIGINT received, closing server...');
+	server.close(() => {
+		console.log('[SHUTDOWN] Server closed');
+		process.exit(0);
+	});
 });
 
 export default app;

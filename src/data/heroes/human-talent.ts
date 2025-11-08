@@ -6,7 +6,7 @@ export const humanTalent = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		'',
+		''
 	],
 	ancestry: {
 		id: 'ancestry-human',

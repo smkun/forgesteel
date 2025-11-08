@@ -10,20 +10,20 @@ import dotenv from 'dotenv';
 
 // Try multiple possible .env locations
 const possiblePaths = [
-  path.join(process.cwd(), '.env.local'),
-  path.join(process.cwd(), '.env'),
-  path.join(__dirname, '../../../../.env.local'),
-  path.join(__dirname, '../../../../.env'),
-  path.join(__dirname, '../../.env.local'),
-  path.join(__dirname, '../../.env')
+	path.join(process.cwd(), '.env.local'),
+	path.join(process.cwd(), '.env'),
+	path.join(__dirname, '../../../../.env.local'),
+	path.join(__dirname, '../../../../.env'),
+	path.join(__dirname, '../../.env.local'),
+	path.join(__dirname, '../../.env')
 ];
 
 let envPath = '.env'; // fallback
 for (const testPath of possiblePaths) {
-  if (fs.existsSync(testPath)) {
-    envPath = testPath;
-    break;
-  }
+	if (fs.existsSync(testPath)) {
+		envPath = testPath;
+		break;
+	}
 }
 
 console.log('[ENV] Current working directory:', process.cwd());

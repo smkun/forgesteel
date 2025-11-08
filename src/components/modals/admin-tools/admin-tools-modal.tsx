@@ -52,7 +52,6 @@ export const AdminToolsModal = (props: AdminToolsModalProps) => {
 	useEffect(() => {
 		loadCharacters();
 		loadUsers();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const characterOptions = useMemo(() => {
@@ -160,22 +159,26 @@ export const AdminToolsModal = (props: AdminToolsModalProps) => {
 				View all characters and reassign ownership to a different user. Enter the recipient&apos;s email exactly as it
 				appears in Firebase.
 			</Typography.Paragraph>
-			{error ? (
-				<Alert
-					type='error'
-					message={error}
-					style={{ marginBottom: '1rem' }}
-					showIcon={true}
-				/>
-			) : null}
-			{success ? (
-				<Alert
-					type='success'
-					message={success}
-					style={{ marginBottom: '1rem' }}
-					showIcon={true}
-				/>
-			) : null}
+			{error
+				? (
+					<Alert
+						type='error'
+						message={error}
+						style={{ marginBottom: '1rem' }}
+						showIcon={true}
+					/>
+				)
+				: null}
+			{success
+				? (
+					<Alert
+						type='success'
+						message={success}
+						style={{ marginBottom: '1rem' }}
+						showIcon={true}
+					/>
+				)
+				: null}
 			<Form layout='vertical'>
 				<Form.Item label='Character' required={true}>
 					<Select
@@ -285,28 +288,32 @@ export const AdminToolsModal = (props: AdminToolsModalProps) => {
 			<Typography.Title level={5} style={{ marginTop: '1.5rem' }}>
 				All Characters
 			</Typography.Title>
-			{loadingCharacters ? (
-				<Spin />
-			) : (
-				<List
-					dataSource={characters}
-					renderItem={character => (
-						<List.Item key={character.id}>
-							<div style={{ display: 'flex', flexDirection: 'column' }}>
-								<strong>{character.name || character.hero.name || character.hero.id}</strong>
-								<span>Owner: {character.owner_email || `User ${character.owner_user_id}`}</span>
-								{character.gm_email ? <span>GM: {character.gm_email}</span> : null}
-							</div>
-						</List.Item>
-					)}
-				/>
-			)}
-			{selectedCharacter ? (
-				<Typography.Paragraph type='secondary' style={{ marginTop: '1rem' }}>
-					Currently selected: {selectedCharacter.name || selectedCharacter.hero.name || selectedCharacter.hero.id} (Owner:{' '}
-					{selectedCharacter.owner_email || `User ${selectedCharacter.owner_user_id}`})
-				</Typography.Paragraph>
-			) : null}
+			{loadingCharacters
+				? (
+					<Spin />
+				)
+				: (
+					<List
+						dataSource={characters}
+						renderItem={character => (
+							<List.Item key={character.id}>
+								<div style={{ display: 'flex', flexDirection: 'column' }}>
+									<strong>{character.name || character.hero.name || character.hero.id}</strong>
+									<span>Owner: {character.owner_email || `User ${character.owner_user_id}`}</span>
+									{character.gm_email ? <span>GM: {character.gm_email}</span> : null}
+								</div>
+							</List.Item>
+						)}
+					/>
+				)}
+			{selectedCharacter
+				? (
+					<Typography.Paragraph type='secondary' style={{ marginTop: '1rem' }}>
+						Currently selected: {selectedCharacter.name || selectedCharacter.hero.name || selectedCharacter.hero.id} (Owner:{' '}
+						{selectedCharacter.owner_email || `User ${selectedCharacter.owner_user_id}`})
+					</Typography.Paragraph>
+				)
+				: null}
 		</div>
 	);
 };
