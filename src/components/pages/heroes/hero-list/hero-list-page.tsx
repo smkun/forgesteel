@@ -1,5 +1,5 @@
-import { Button, Input, Popover, Tabs, Upload } from 'antd';
-import { DownOutlined, DownloadOutlined, PlusOutlined, SearchOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { Button, Input, Popover, Switch, Tabs, Upload } from 'antd';
+import { DownOutlined, DownloadOutlined, PlusOutlined, SearchOutlined, ThunderboltOutlined, ToolOutlined } from '@ant-design/icons';
 import { AppFooter } from '@/components/panels/app-footer/app-footer';
 import { AppHeader } from '@/components/panels/app-header/app-header';
 import { Collections } from '@/utils/collections';
@@ -33,6 +33,10 @@ interface Props {
 	addHero: (folder: string) => void;
 	importHero: (hero: Hero, folder: string) => void;
 	showParty: (folder: string) => void;
+	isAdmin: boolean;
+	showAllCharacters: boolean;
+	onToggleShowAll: (value: boolean) => void;
+	onShowAdminTools: () => void;
 }
 
 export const HeroListPage = (props: Props) => {
@@ -110,6 +114,22 @@ export const HeroListPage = (props: Props) => {
 						suffix={<SearchOutlined />}
 						onChange={e => setSearchTerm(e.target.value)}
 					/>
+					{
+						props.isAdmin ?
+							<>
+								<div className='divider' />
+								<Switch
+									checked={props.showAllCharacters}
+									onChange={props.onToggleShowAll}
+									checkedChildren='All'
+									unCheckedChildren='Mine'
+								/>
+								<Button icon={<ToolOutlined />} onClick={props.onShowAdminTools}>
+									Admin Tools
+								</Button>
+							</>
+							: null
+					}
 					<div className='divider' />
 					<Popover
 						trigger='click'

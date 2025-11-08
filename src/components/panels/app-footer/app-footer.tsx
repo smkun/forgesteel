@@ -4,6 +4,8 @@ import { ErrorBoundary } from '@/components/controls/error-boundary/error-bounda
 import { SyncStatus } from '@/components/panels/sync-status/sync-status';
 import { useIsSmall } from '@/hooks/use-is-small';
 import { useNavigation } from '@/hooks/use-navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import { useState } from 'react';
 
 import './app-footer.scss';
 
@@ -21,6 +23,28 @@ interface Props {
 export const AppFooter = (props: Props) => {
 	const isSmall = useIsSmall();
 	const navigation = useNavigation();
+	const { user, userProfile, signOut } = useAuth();
+	const [ signingOut, setSigningOut ] = useState(false);
+
+	const handleAuthClick = async () => {
+		if (user) {
+			try {
+				setSigningOut(true);
+				await signOut();
+				navigation.goToAuth();
+			} catch (err) {
+				console.error('[APP FOOTER] Sign out failed:', err);
+			} finally {
+				setSigningOut(false);
+			}
+		} else {
+			navigation.goToAuth();
+		}
+	};
+
+	const authLabel = user
+		? (isSmall ? 'Sign Out' : `Sign Out (${userProfile?.display_name || user?.email || 'Account'})`)
+		: 'Sign In';
 
 	return (
 		<ErrorBoundary>
@@ -65,6 +89,9 @@ export const AppFooter = (props: Props) => {
 							{ isSmall ? <SettingOutlined /> : 'Settings' }
 						</Button>
 					</Badge>
+					<Button type='primary' onClick={handleAuthClick} loading={signingOut}>
+						{authLabel}
+					</Button>
 				</div>
 			</div>
 		</ErrorBoundary>

@@ -11,10 +11,8 @@
 
 import { Request, Response, NextFunction } from 'express';
 import admin from 'firebase-admin';
-import dotenv from 'dotenv';
 import fs from 'fs';
-
-dotenv.config({ path: '.env.local' });
+import '../utils/loadEnv';
 
 // Initialize Firebase Admin SDK
 const credPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;

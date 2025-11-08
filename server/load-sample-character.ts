@@ -10,9 +10,7 @@ import * as usersRepo from './data/users.repository';
 import * as charactersRepo from './data/characters.repository';
 import fs from 'fs';
 import path from 'path';
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.local' });
+import './utils/loadEnv';
 
 async function loadSampleCharacter() {
   try {

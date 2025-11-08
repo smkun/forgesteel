@@ -5,12 +5,10 @@
  * by querying the database directly.
  */
 
+import './utils/loadEnv';
 import pool from './data/db-connection';
 import * as charactersRepo from './data/characters.repository';
 import * as usersRepo from './data/users.repository';
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.local' });
 
 async function testCharacterAPI() {
   try {

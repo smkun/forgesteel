@@ -12,6 +12,18 @@
 import pool from './db-connection';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
+const CHARACTER_SELECT = `
+  SELECT
+    c.*,
+    owner.email AS owner_email,
+    owner.display_name AS owner_display_name,
+    gm.email AS gm_email,
+    gm.display_name AS gm_display_name
+  FROM characters c
+  LEFT JOIN users owner ON c.owner_user_id = owner.id
+  LEFT JOIN users gm ON c.gm_user_id = gm.id
+`;
+
 /**
  * Character database record
  */
@@ -24,6 +36,10 @@ export interface Character {
   is_deleted: boolean;
   created_at: Date;
   updated_at: Date;
+  owner_email?: string | null;
+  owner_display_name?: string | null;
+  gm_email?: string | null;
+  gm_display_name?: string | null;
 }
 
 /**
@@ -43,6 +59,7 @@ export interface UpdateCharacterData {
   name?: string | null;
   character_json?: string;
   gm_user_id?: number | null;
+  owner_user_id?: number;
   is_deleted?: boolean;
 }
 
@@ -54,7 +71,7 @@ export interface UpdateCharacterData {
  */
 export async function findById(id: number): Promise<Character | null> {
   const [rows] = await pool.query<RowDataPacket[]>(
-    'SELECT * FROM characters WHERE id = ?',
+    `${CHARACTER_SELECT} WHERE c.id = ?`,
     [id]
   );
 
@@ -78,11 +95,11 @@ export async function findByOwner(
   includeDeleted: boolean = false
 ): Promise<Character[]> {
   const whereClause = includeDeleted
-    ? 'WHERE owner_user_id = ?'
-    : 'WHERE owner_user_id = ? AND is_deleted = 0';
+    ? 'WHERE c.owner_user_id = ?'
+    : 'WHERE c.owner_user_id = ? AND c.is_deleted = 0';
 
   const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT * FROM characters ${whereClause} ORDER BY updated_at DESC`,
+    `${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`,
     [owner_user_id]
   );
 
@@ -102,11 +119,11 @@ export async function findByGM(
   includeDeleted: boolean = false
 ): Promise<Character[]> {
   const whereClause = includeDeleted
-    ? 'WHERE gm_user_id = ?'
-    : 'WHERE gm_user_id = ? AND is_deleted = 0';
+    ? 'WHERE c.gm_user_id = ?'
+    : 'WHERE c.gm_user_id = ? AND c.is_deleted = 0';
 
   const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT * FROM characters ${whereClause} ORDER BY updated_at DESC`,
+    `${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`,
     [gm_user_id]
   );
 
@@ -165,6 +182,11 @@ export async function update(id: number, data: UpdateCharacterData): Promise<Cha
   if (data.gm_user_id !== undefined) {
     updates.push('gm_user_id = ?');
     values.push(data.gm_user_id);
+  }
+
+  if (data.owner_user_id !== undefined) {
+    updates.push('owner_user_id = ?');
+    values.push(data.owner_user_id);
   }
 
   if (data.is_deleted !== undefined) {
@@ -309,4 +331,17 @@ export async function shareWithGM(character_id: number, gm_user_id: number): Pro
  */
 export async function unshareFromGM(character_id: number): Promise<Character | null> {
   return update(character_id, { gm_user_id: null });
+}
+/**
+ * Find all characters (admin use)
+ */
+export async function findAll(includeDeleted: boolean = false): Promise<Character[]> {
+  const whereClause = includeDeleted ? '' : 'WHERE c.is_deleted = 0';
+
+  const [rows] = await pool.query<RowDataPacket[]>(
+    `${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`
+  );
+
+  console.log(`[CHARACTERS] Found ${rows.length} total characters`);
+  return rows as Character[];
 }
