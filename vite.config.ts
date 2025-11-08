@@ -7,6 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
 	base: '/forgesteel/',
 	build: {
+		outDir: 'distribution/frontend',
 		chunkSizeWarningLimit: 10000,
 		rollupOptions: {
 			input: {

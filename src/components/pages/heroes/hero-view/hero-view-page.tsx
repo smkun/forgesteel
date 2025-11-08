@@ -1,10 +1,11 @@
 import { Alert, Button, Divider, Popover } from 'antd';
-import { CloseOutlined, CopyOutlined, DownOutlined, EditOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
-import { useMemo, useState } from 'react';
+import { CloseOutlined, CopyOutlined, DownOutlined, EditOutlined, TeamOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
+import { useEffect, useMemo, useState } from 'react';
 import { Ability } from '@/models/ability';
 import { Ancestry } from '@/models/ancestry';
 import { AppFooter } from '@/components/panels/app-footer/app-footer';
 import { AppHeader } from '@/components/panels/app-header/app-header';
+import { AssignGMModal } from '@/components/modals/assign-gm/assign-gm-modal';
 import { Career } from '@/models/career';
 import { Characteristic } from '@/enums/characteristic';
 import { Complication } from '@/models/complication';
@@ -30,6 +31,7 @@ import { StandardAbilitiesPage } from '@/components/pages/heroes/hero-sheet/stan
 import { SummoningInfo } from '@/models/summon';
 import { Title } from '@/models/title';
 import { ViewSelector } from '@/components/panels/view-selector/view-selector';
+import { getCharacterRecord, getStorageMode, StorageMode } from '@/services/character-storage';
 import { useIsSmall } from '@/hooks/use-is-small';
 import { useNavigation } from '@/hooks/use-navigation';
 import { useParams } from 'react-router';
@@ -73,37 +75,140 @@ export const HeroViewPage = (props: Props) => {
 	const navigation = useNavigation();
 	const { heroID } = useParams<{ heroID: string }>();
 	const [ view, setView ] = useState<string>('modern');
+	const [ showGMModal, setShowGMModal ] = useState<boolean>(false);
+	const [ gmInfo, setGmInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
+	const [ ownerInfo, setOwnerInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
+	const [ isOnline, setIsOnline ] = useState<boolean>(false);
 	const hero = useMemo(
 		() => props.heroes.find(h => h.id === heroID)!,
 		[ heroID, props.heroes ]
 	);
 	useTitle(hero.name || 'Unnamed Hero');
 
+	useEffect(() => {
+		const loadCharacterInfo = async () => {
+			const storageMode = getStorageMode();
+			setIsOnline(storageMode === StorageMode.API);
+
+			if (storageMode === StorageMode.API) {
+				try {
+					const record = await getCharacterRecord(hero.id);
+					if (record) {
+						// Set owner info
+						setOwnerInfo({
+							email: record.owner_email,
+							display_name: record.owner_display_name
+						});
+
+						// Set GM info
+						if (record.gm_email) {
+							setGmInfo({
+								email: record.gm_email,
+								display_name: record.gm_display_name
+							});
+						} else {
+							setGmInfo(null);
+						}
+					}
+				} catch (error) {
+					console.error('[GM] Failed to load character info:', error);
+					setGmInfo(null);
+					setOwnerInfo(null);
+				}
+			}
+		};
+
+		loadCharacterInfo();
+	}, [ hero.id ]);
+
+	const handleGMAssignComplete = async () => {
+		setShowGMModal(false);
+		// Reload character info
+		try {
+			const record = await getCharacterRecord(hero.id);
+			if (record) {
+				setOwnerInfo({
+					email: record.owner_email,
+					display_name: record.owner_display_name
+				});
+
+				if (record.gm_email) {
+					setGmInfo({
+						email: record.gm_email,
+						display_name: record.gm_display_name
+					});
+				} else {
+					setGmInfo(null);
+				}
+			}
+		} catch (error) {
+			console.error('[GM] Failed to reload character info:', error);
+		}
+	};
+
+	const getGMSelector = () => {
+		if (!isOnline) {
+			return null;
+		}
+
+		return (
+			<div style={{
+				padding: '10px 20px',
+				background: 'rgba(0, 0, 0, 0.2)',
+				borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				gap: '20px'
+			}}>
+				<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+					<span style={{ fontWeight: 500 }}>GM:</span>
+					<Button
+						size="small"
+						type={gmInfo ? 'default' : 'primary'}
+						onClick={() => setShowGMModal(true)}
+					>
+						{gmInfo ? `${gmInfo.display_name || gmInfo.email}` : 'Assign GM'}
+					</Button>
+				</div>
+				{ownerInfo && (
+					<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+						<span style={{ fontWeight: 500 }}>Owner:</span>
+						<span>{ownerInfo.display_name || ownerInfo.email}</span>
+					</div>
+				)}
+			</div>
+		);
+	};
+
 	const getContent = () => {
 		switch (view) {
 			case 'modern':
 				return (
-					<HeroPanel
-						hero={hero}
-						sourcebooks={props.sourcebooks}
-						options={props.options}
-						mode={PanelMode.Full}
-						onSelectAncestry={props.showAncestry}
-						onSelectCulture={props.showCulture}
-						onSelectCareer={props.showCareer}
-						onSelectClass={props.showClass}
-						onSelectComplication={props.showComplication}
-						onSelectDomain={props.showDomain}
-						onSelectKit={props.showKit}
-						onSelectTitle={props.showTitle}
-						onSelectMonster={props.showMonster}
-						onSelectFollower={props.showFollower}
-						onSelectCharacteristic={characteristic => props.showCharacteristic(characteristic, hero)}
-						onSelectFeature={feature => props.showFeature(feature, hero)}
-						onSelectAbility={ability => props.showAbility(ability, hero)}
-						onShowState={page => props.showHeroState(hero, page)}
-						onshowReference={page => props.showReference(hero, page)}
-					/>
+					<>
+						{getGMSelector()}
+						<HeroPanel
+							hero={hero}
+							sourcebooks={props.sourcebooks}
+							options={props.options}
+							mode={PanelMode.Full}
+							onSelectAncestry={props.showAncestry}
+							onSelectCulture={props.showCulture}
+							onSelectCareer={props.showCareer}
+							onSelectClass={props.showClass}
+							onSelectComplication={props.showComplication}
+							onSelectDomain={props.showDomain}
+							onSelectKit={props.showKit}
+							onSelectTitle={props.showTitle}
+							onSelectMonster={props.showMonster}
+							onSelectFollower={props.showFollower}
+							onSelectCharacteristic={characteristic => props.showCharacteristic(characteristic, hero)}
+							onSelectFeature={feature => props.showFeature(feature, hero)}
+							onSelectAbility={ability => props.showAbility(ability, hero)}
+							onShowState={page => props.showHeroState(hero, page)}
+							onshowReference={page => props.showReference(hero, page)}
+						/>
+					</>
 				);
 			case 'classic':
 				return (
@@ -209,6 +314,14 @@ export const HeroViewPage = (props: Props) => {
 					showSettings={props.showSettings}
 				/>
 			</div>
+			{showGMModal && (
+				<AssignGMModal
+					hero={hero}
+					currentGM={gmInfo}
+					onAssignComplete={handleGMAssignComplete}
+					onClose={() => setShowGMModal(false)}
+				/>
+			)}
 		</ErrorBoundary>
 	);
 };

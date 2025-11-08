@@ -6,7 +6,7 @@
     "lib": ["ES2022"],
     "moduleResolution": "node",
     "rootDir": "..",
-    "outDir": "./dist",
+    "outDir": "../distribution/backend-temp",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
