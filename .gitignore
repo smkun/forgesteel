@@ -23,3 +23,5 @@ server/**/*.js.map
 # Firebase credentials
 firebase-service-account.json
 .firebase/
+test-firebase-auth.html
+firebase-debug.log
