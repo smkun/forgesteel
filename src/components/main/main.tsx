@@ -1702,14 +1702,16 @@ export const Main = (props: Props) => {
 				<Route
 					path='/'
 					element={
-						user ? (
-							<MainLayout
-								drawer={drawer}
-								setDrawer={setDrawer}
-							/>
-						) : (
-							<Navigate to='/auth' replace />
-						)
+						user
+							? (
+								<MainLayout
+									drawer={drawer}
+									setDrawer={setDrawer}
+								/>
+							)
+							: (
+								<Navigate to='/auth' replace />
+							)
 					}
 				>
 					<Route

@@ -6,7 +6,7 @@ export const polderElementalist = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		'',
+		''
 	],
 	ancestry: {
 		id: 'ancestry-polder',

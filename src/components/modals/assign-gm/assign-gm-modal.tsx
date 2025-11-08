@@ -1,7 +1,7 @@
 import { Button, Input, message } from 'antd';
 import { Modal } from '../modal/modal';
 import { useState } from 'react';
-import { searchUsers, PublicUserSummary } from '@/services/api';
+import { PublicUserSummary, searchUsers } from '@/services/api';
 import { assignGMToHero, clearGMFromHero } from '@/services/character-storage';
 import { Hero } from '@/models/hero';
 
@@ -15,11 +15,11 @@ interface Props {
 }
 
 export const AssignGMModal = (props: Props) => {
-	const [gmEmail, setGmEmail] = useState<string>(props.currentGM?.email || '');
-	const [searching, setSearching] = useState<boolean>(false);
-	const [assigning, setAssigning] = useState<boolean>(false);
-	const [searchResults, setSearchResults] = useState<PublicUserSummary[]>([]);
-	const [showResults, setShowResults] = useState<boolean>(false);
+	const [ gmEmail, setGmEmail ] = useState<string>(props.currentGM?.email || '');
+	const [ searching, setSearching ] = useState<boolean>(false);
+	const [ assigning, setAssigning ] = useState<boolean>(false);
+	const [ searchResults, setSearchResults ] = useState<PublicUserSummary[]>([]);
+	const [ showResults, setShowResults ] = useState<boolean>(false);
 
 	const handleSearch = async () => {
 		if (!gmEmail.trim()) {
@@ -94,13 +94,13 @@ export const AssignGMModal = (props: Props) => {
 			<div className='gm-search'>
 				<div className='search-label'>Enter GM email address:</div>
 				<Input.Search
-					placeholder="gm@example.com"
+					placeholder='gm@example.com'
 					value={gmEmail}
-					onChange={(e) => setGmEmail(e.target.value)}
+					onChange={e => setGmEmail(e.target.value)}
 					onSearch={handleSearch}
 					loading={searching}
-					enterButton="Search"
-					size="large"
+					enterButton='Search'
+					size='large'
 				/>
 			</div>
 
@@ -126,8 +126,8 @@ export const AssignGMModal = (props: Props) => {
 
 			<div className='button-group'>
 				<Button
-					type="primary"
-					size="large"
+					type='primary'
+					size='large'
 					onClick={handleAssignGM}
 					loading={assigning}
 					disabled={!gmEmail.trim() || assigning}
@@ -137,7 +137,7 @@ export const AssignGMModal = (props: Props) => {
 
 				{props.currentGM && (
 					<Button
-						size="large"
+						size='large'
 						danger
 						onClick={handleClearGM}
 						loading={assigning}

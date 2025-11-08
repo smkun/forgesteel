@@ -31,16 +31,16 @@ console.log('[DB] User:', process.env.DB_USER);
 console.log('[DB] Password:', process.env.DB_PASS ? '***SET***' : 'NOT SET');
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT || '3306'),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 0
+	host: process.env.DB_HOST,
+	port: parseInt(process.env.DB_PORT || '3306'),
+	database: process.env.DB_NAME,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
+	waitForConnections: true,
+	connectionLimit: 10,
+	queueLimit: 0,
+	enableKeepAlive: true,
+	keepAliveInitialDelay: 0
 });
 
 /**
@@ -53,20 +53,20 @@ const pool = mysql.createPool({
  * @throws Error if connection fails
  */
 export async function testConnection(): Promise<boolean> {
-  try {
-    const connection = await pool.getConnection();
-    console.log('[DB] ✅ MySQL connection pool established');
+	try {
+		const connection = await pool.getConnection();
+		console.log('[DB] ✅ MySQL connection pool established');
 
-    // Test query
-    const [rows] = await connection.query('SELECT 1 as test');
-    console.log('[DB] ✅ Test query successful');
+		// Test query
+		const [ rows ] = await connection.query('SELECT 1 as test');
+		console.log('[DB] ✅ Test query successful');
 
-    connection.release();
-    return true;
-  } catch (error) {
-    console.error('[DB] ❌ Connection failed:', error);
-    throw error;
-  }
+		connection.release();
+		return true;
+	} catch (error) {
+		console.error('[DB] ❌ Connection failed:', error);
+		throw error;
+	}
 }
 
 /**

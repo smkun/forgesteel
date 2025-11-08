@@ -10,7 +10,7 @@
  */
 
 import pool from './db-connection';
-import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { ResultSetHeader, RowDataPacket } from 'mysql2';
 
 const CHARACTER_SELECT = `
   SELECT
@@ -28,39 +28,39 @@ const CHARACTER_SELECT = `
  * Character database record
  */
 export interface Character {
-  id: number;
-  owner_user_id: number;
-  gm_user_id: number | null;
-  name: string | null;
-  character_json: string; // JSON stringified Hero object
-  is_deleted: boolean;
-  created_at: Date;
-  updated_at: Date;
-  owner_email?: string | null;
-  owner_display_name?: string | null;
-  gm_email?: string | null;
-  gm_display_name?: string | null;
+	id: number;
+	owner_user_id: number;
+	gm_user_id: number | null;
+	name: string | null;
+	character_json: string; // JSON stringified Hero object
+	is_deleted: boolean;
+	created_at: Date;
+	updated_at: Date;
+	owner_email?: string | null;
+	owner_display_name?: string | null;
+	gm_email?: string | null;
+	gm_display_name?: string | null;
 }
 
 /**
  * Data for creating a new character
  */
 export interface CreateCharacterData {
-  owner_user_id: number;
-  gm_user_id?: number | null;
-  name?: string | null;
-  character_json: string;
+	owner_user_id: number;
+	gm_user_id?: number | null;
+	name?: string | null;
+	character_json: string;
 }
 
 /**
  * Data for updating an existing character
  */
 export interface UpdateCharacterData {
-  name?: string | null;
-  character_json?: string;
-  gm_user_id?: number | null;
-  owner_user_id?: number;
-  is_deleted?: boolean;
+	name?: string | null;
+	character_json?: string;
+	gm_user_id?: number | null;
+	owner_user_id?: number;
+	is_deleted?: boolean;
 }
 
 /**
@@ -70,17 +70,17 @@ export interface UpdateCharacterData {
  * @returns Character record or null if not found
  */
 export async function findById(id: number): Promise<Character | null> {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `${CHARACTER_SELECT} WHERE c.id = ?`,
-    [id]
-  );
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`${CHARACTER_SELECT} WHERE c.id = ?`,
+		[ id ]
+	);
 
-  if (rows.length === 0) {
-    console.log(`[CHARACTERS] Character not found: ID ${id}`);
-    return null;
-  }
+	if (rows.length === 0) {
+		console.log(`[CHARACTERS] Character not found: ID ${id}`);
+		return null;
+	}
 
-  return rows[0] as Character;
+	return rows[0] as Character;
 }
 
 /**
@@ -91,20 +91,20 @@ export async function findById(id: number): Promise<Character | null> {
  * @returns Array of characters
  */
 export async function findByOwner(
-  owner_user_id: number,
-  includeDeleted: boolean = false
+	owner_user_id: number,
+	includeDeleted: boolean = false
 ): Promise<Character[]> {
-  const whereClause = includeDeleted
-    ? 'WHERE c.owner_user_id = ?'
-    : 'WHERE c.owner_user_id = ? AND c.is_deleted = 0';
+	const whereClause = includeDeleted
+		? 'WHERE c.owner_user_id = ?'
+		: 'WHERE c.owner_user_id = ? AND c.is_deleted = 0';
 
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`,
-    [owner_user_id]
-  );
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`,
+		[ owner_user_id ]
+	);
 
-  console.log(`[CHARACTERS] Found ${rows.length} characters for user ${owner_user_id}`);
-  return rows as Character[];
+	console.log(`[CHARACTERS] Found ${rows.length} characters for user ${owner_user_id}`);
+	return rows as Character[];
 }
 
 /**
@@ -115,20 +115,20 @@ export async function findByOwner(
  * @returns Array of characters
  */
 export async function findByGM(
-  gm_user_id: number,
-  includeDeleted: boolean = false
+	gm_user_id: number,
+	includeDeleted: boolean = false
 ): Promise<Character[]> {
-  const whereClause = includeDeleted
-    ? 'WHERE c.gm_user_id = ?'
-    : 'WHERE c.gm_user_id = ? AND c.is_deleted = 0';
+	const whereClause = includeDeleted
+		? 'WHERE c.gm_user_id = ?'
+		: 'WHERE c.gm_user_id = ? AND c.is_deleted = 0';
 
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`,
-    [gm_user_id]
-  );
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`,
+		[ gm_user_id ]
+	);
 
-  console.log(`[CHARACTERS] Found ${rows.length} characters shared with GM ${gm_user_id}`);
-  return rows as Character[];
+	console.log(`[CHARACTERS] Found ${rows.length} characters shared with GM ${gm_user_id}`);
+	return rows as Character[];
 }
 
 /**
@@ -138,24 +138,24 @@ export async function findByGM(
  * @returns Created character record
  */
 export async function create(data: CreateCharacterData): Promise<Character> {
-  const [result] = await pool.query<ResultSetHeader>(
-    `INSERT INTO characters (owner_user_id, gm_user_id, name, character_json)
+	const [ result ] = await pool.query<ResultSetHeader>(
+		`INSERT INTO characters (owner_user_id, gm_user_id, name, character_json)
      VALUES (?, ?, ?, ?)`,
-    [
-      data.owner_user_id,
-      data.gm_user_id || null,
-      data.name || null,
-      data.character_json
-    ]
-  );
+		[
+			data.owner_user_id,
+			data.gm_user_id || null,
+			data.name || null,
+			data.character_json
+		]
+	);
 
-  const createdCharacter = await findById(result.insertId);
-  if (!createdCharacter) {
-    throw new Error('Failed to retrieve created character');
-  }
+	const createdCharacter = await findById(result.insertId);
+	if (!createdCharacter) {
+		throw new Error('Failed to retrieve created character');
+	}
 
-  console.log(`[CHARACTERS] ✅ Created character: ${createdCharacter.name || 'Unnamed'} (ID: ${createdCharacter.id})`);
-  return createdCharacter;
+	console.log(`[CHARACTERS] ✅ Created character: ${createdCharacter.name || 'Unnamed'} (ID: ${createdCharacter.id})`);
+	return createdCharacter;
 }
 
 /**
@@ -166,53 +166,53 @@ export async function create(data: CreateCharacterData): Promise<Character> {
  * @returns Updated character record or null if not found
  */
 export async function update(id: number, data: UpdateCharacterData): Promise<Character | null> {
-  const updates: string[] = [];
-  const values: any[] = [];
+	const updates: string[] = [];
+	const values: any[] = [];
 
-  if (data.name !== undefined) {
-    updates.push('name = ?');
-    values.push(data.name);
-  }
+	if (data.name !== undefined) {
+		updates.push('name = ?');
+		values.push(data.name);
+	}
 
-  if (data.character_json !== undefined) {
-    updates.push('character_json = ?');
-    values.push(data.character_json);
-  }
+	if (data.character_json !== undefined) {
+		updates.push('character_json = ?');
+		values.push(data.character_json);
+	}
 
-  if (data.gm_user_id !== undefined) {
-    updates.push('gm_user_id = ?');
-    values.push(data.gm_user_id);
-  }
+	if (data.gm_user_id !== undefined) {
+		updates.push('gm_user_id = ?');
+		values.push(data.gm_user_id);
+	}
 
-  if (data.owner_user_id !== undefined) {
-    updates.push('owner_user_id = ?');
-    values.push(data.owner_user_id);
-  }
+	if (data.owner_user_id !== undefined) {
+		updates.push('owner_user_id = ?');
+		values.push(data.owner_user_id);
+	}
 
-  if (data.is_deleted !== undefined) {
-    updates.push('is_deleted = ?');
-    values.push(data.is_deleted ? 1 : 0);
-  }
+	if (data.is_deleted !== undefined) {
+		updates.push('is_deleted = ?');
+		values.push(data.is_deleted ? 1 : 0);
+	}
 
-  if (updates.length === 0) {
-    console.log(`[CHARACTERS] No updates provided for character ${id}`);
-    return findById(id);
-  }
+	if (updates.length === 0) {
+		console.log(`[CHARACTERS] No updates provided for character ${id}`);
+		return findById(id);
+	}
 
-  values.push(id);
+	values.push(id);
 
-  const [result] = await pool.query<ResultSetHeader>(
-    `UPDATE characters SET ${updates.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
-    values
-  );
+	const [ result ] = await pool.query<ResultSetHeader>(
+		`UPDATE characters SET ${updates.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`,
+		values
+	);
 
-  if (result.affectedRows === 0) {
-    console.log(`[CHARACTERS] Character not found for update: ID ${id}`);
-    return null;
-  }
+	if (result.affectedRows === 0) {
+		console.log(`[CHARACTERS] Character not found for update: ID ${id}`);
+		return null;
+	}
 
-  console.log(`[CHARACTERS] ✅ Updated character: ID ${id}`);
-  return findById(id);
+	console.log(`[CHARACTERS] ✅ Updated character: ID ${id}`);
+	return findById(id);
 }
 
 /**
@@ -222,18 +222,18 @@ export async function update(id: number, data: UpdateCharacterData): Promise<Cha
  * @returns True if deleted, false if not found
  */
 export async function softDelete(id: number): Promise<boolean> {
-  const [result] = await pool.query<ResultSetHeader>(
-    'UPDATE characters SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-    [id]
-  );
+	const [ result ] = await pool.query<ResultSetHeader>(
+		'UPDATE characters SET is_deleted = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+		[ id ]
+	);
 
-  if (result.affectedRows === 0) {
-    console.log(`[CHARACTERS] Character not found for deletion: ID ${id}`);
-    return false;
-  }
+	if (result.affectedRows === 0) {
+		console.log(`[CHARACTERS] Character not found for deletion: ID ${id}`);
+		return false;
+	}
 
-  console.log(`[CHARACTERS] ✅ Soft-deleted character: ID ${id}`);
-  return true;
+	console.log(`[CHARACTERS] ✅ Soft-deleted character: ID ${id}`);
+	return true;
 }
 
 /**
@@ -243,18 +243,18 @@ export async function softDelete(id: number): Promise<boolean> {
  * @returns True if deleted, false if not found
  */
 export async function hardDelete(id: number): Promise<boolean> {
-  const [result] = await pool.query<ResultSetHeader>(
-    'DELETE FROM characters WHERE id = ?',
-    [id]
-  );
+	const [ result ] = await pool.query<ResultSetHeader>(
+		'DELETE FROM characters WHERE id = ?',
+		[ id ]
+	);
 
-  if (result.affectedRows === 0) {
-    console.log(`[CHARACTERS] Character not found for hard deletion: ID ${id}`);
-    return false;
-  }
+	if (result.affectedRows === 0) {
+		console.log(`[CHARACTERS] Character not found for hard deletion: ID ${id}`);
+		return false;
+	}
 
-  console.log(`[CHARACTERS] ✅ Hard-deleted character: ID ${id}`);
-  return true;
+	console.log(`[CHARACTERS] ✅ Hard-deleted character: ID ${id}`);
+	return true;
 }
 
 /**
@@ -265,19 +265,19 @@ export async function hardDelete(id: number): Promise<boolean> {
  * @returns Number of characters
  */
 export async function countByOwner(
-  owner_user_id: number,
-  includeDeleted: boolean = false
+	owner_user_id: number,
+	includeDeleted: boolean = false
 ): Promise<number> {
-  const whereClause = includeDeleted
-    ? 'WHERE owner_user_id = ?'
-    : 'WHERE owner_user_id = ? AND is_deleted = 0';
+	const whereClause = includeDeleted
+		? 'WHERE owner_user_id = ?'
+		: 'WHERE owner_user_id = ? AND is_deleted = 0';
 
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT COUNT(*) as count FROM characters ${whereClause}`,
-    [owner_user_id]
-  );
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`SELECT COUNT(*) as count FROM characters ${whereClause}`,
+		[ owner_user_id ]
+	);
 
-  return (rows[0] as any).count;
+	return (rows[0] as any).count;
 }
 
 /**
@@ -288,12 +288,12 @@ export async function countByOwner(
  * @returns True if user owns the character
  */
 export async function isOwner(character_id: number, user_id: number): Promise<boolean> {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    'SELECT id FROM characters WHERE id = ? AND owner_user_id = ?',
-    [character_id, user_id]
-  );
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		'SELECT id FROM characters WHERE id = ? AND owner_user_id = ?',
+		[ character_id, user_id ]
+	);
 
-  return rows.length > 0;
+	return rows.length > 0;
 }
 
 /**
@@ -304,12 +304,12 @@ export async function isOwner(character_id: number, user_id: number): Promise<bo
  * @returns True if character is shared with GM
  */
 export async function isSharedWithGM(character_id: number, gm_user_id: number): Promise<boolean> {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    'SELECT id FROM characters WHERE id = ? AND gm_user_id = ?',
-    [character_id, gm_user_id]
-  );
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		'SELECT id FROM characters WHERE id = ? AND gm_user_id = ?',
+		[ character_id, gm_user_id ]
+	);
 
-  return rows.length > 0;
+	return rows.length > 0;
 }
 
 /**
@@ -320,7 +320,7 @@ export async function isSharedWithGM(character_id: number, gm_user_id: number): 
  * @returns Updated character or null if not found
  */
 export async function shareWithGM(character_id: number, gm_user_id: number): Promise<Character | null> {
-  return update(character_id, { gm_user_id });
+	return update(character_id, { gm_user_id });
 }
 
 /**
@@ -330,18 +330,18 @@ export async function shareWithGM(character_id: number, gm_user_id: number): Pro
  * @returns Updated character or null if not found
  */
 export async function unshareFromGM(character_id: number): Promise<Character | null> {
-  return update(character_id, { gm_user_id: null });
+	return update(character_id, { gm_user_id: null });
 }
 /**
  * Find all characters (admin use)
  */
 export async function findAll(includeDeleted: boolean = false): Promise<Character[]> {
-  const whereClause = includeDeleted ? '' : 'WHERE c.is_deleted = 0';
+	const whereClause = includeDeleted ? '' : 'WHERE c.is_deleted = 0';
 
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`
-  );
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`
+	);
 
-  console.log(`[CHARACTERS] Found ${rows.length} total characters`);
-  return rows as Character[];
+	console.log(`[CHARACTERS] Found ${rows.length} total characters`);
+	return rows as Character[];
 }

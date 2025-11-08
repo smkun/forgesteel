@@ -19,22 +19,22 @@ const ADMIN_EMAIL = 'scottkunian@gmail.com';
  * User profile information from Firebase token
  */
 export interface UserProfile {
-  uid: string;
-  email: string | undefined;
-  displayName?: string | null;
+	uid: string;
+	email: string | undefined;
+	displayName?: string | null;
 }
 
 /**
  * Enhanced user information with admin flag
  */
 export interface AuthenticatedUser {
-  id: number;
-  firebase_uid: string;
-  email: string;
-  display_name: string | null;
-  is_admin: boolean;
-  created_at: Date;
-  updated_at: Date;
+	id: number;
+	firebase_uid: string;
+	email: string;
+	display_name: string | null;
+	is_admin: boolean;
+	created_at: Date;
+	updated_at: Date;
 }
 
 /**
@@ -51,97 +51,97 @@ export interface AuthenticatedUser {
  * @throws Error if email is missing or database operation fails
  */
 function normalizeDisplayName(name?: string | null): string | null {
-  if (!name) {
-    return null;
-  }
+	if (!name) {
+		return null;
+	}
 
-  const trimmed = name.trim();
-  return trimmed.length > 0 ? trimmed : null;
+	const trimmed = name.trim();
+	return trimmed.length > 0 ? trimmed : null;
 }
 
 export async function getOrCreateUser(profile: UserProfile): Promise<AuthenticatedUser> {
-  // Validate email exists
-  if (!profile.email) {
-    throw new Error('User email is required for authentication');
-  }
+	// Validate email exists
+	if (!profile.email) {
+		throw new Error('User email is required for authentication');
+	}
 
-  console.log(`[AUTH LOGIC] Processing login for: ${profile.email}`);
-  const normalizedDisplayName = normalizeDisplayName(profile.displayName);
+	console.log(`[AUTH LOGIC] Processing login for: ${profile.email}`);
+	const normalizedDisplayName = normalizeDisplayName(profile.displayName);
 
-  // Check if user exists by Firebase UID
-  let user = await usersRepo.findByFirebaseUid(profile.uid);
+	// Check if user exists by Firebase UID
+	let user = await usersRepo.findByFirebaseUid(profile.uid);
 
-  // If no user by UID, attempt to merge by email (handles placeholder users)
-  if (!user && profile.email) {
-    const userByEmail = await usersRepo.findByEmail(profile.email);
+	// If no user by UID, attempt to merge by email (handles placeholder users)
+	if (!user && profile.email) {
+		const userByEmail = await usersRepo.findByEmail(profile.email);
 
-    if (userByEmail) {
-      console.log(`[AUTH LOGIC] Found existing user by email, updating Firebase UID for: ${profile.email}`);
-      const updatePayload: any = {
-        firebase_uid: profile.uid,
-      };
+		if (userByEmail) {
+			console.log(`[AUTH LOGIC] Found existing user by email, updating Firebase UID for: ${profile.email}`);
+			const updatePayload: any = {
+				firebase_uid: profile.uid
+			};
 
-      if (normalizedDisplayName) {
-        updatePayload.display_name = normalizedDisplayName;
-      }
+			if (normalizedDisplayName) {
+				updatePayload.display_name = normalizedDisplayName;
+			}
 
-      const updatedUser = await usersRepo.update(userByEmail.id, updatePayload);
+			const updatedUser = await usersRepo.update(userByEmail.id, updatePayload);
 
-      if (updatedUser) {
-        user = updatedUser;
-      }
-    }
-  }
+			if (updatedUser) {
+				user = updatedUser;
+			}
+		}
+	}
 
-  if (!user) {
-    // User doesn't exist - create new record
-    console.log(`[AUTH LOGIC] First login detected - creating user: ${profile.email}`);
+	if (!user) {
+		// User doesn't exist - create new record
+		console.log(`[AUTH LOGIC] First login detected - creating user: ${profile.email}`);
 
-    user = await usersRepo.create({
-      firebase_uid: profile.uid,
-      email: profile.email,
-      display_name: normalizedDisplayName
-    });
+		user = await usersRepo.create({
+			firebase_uid: profile.uid,
+			email: profile.email,
+			display_name: normalizedDisplayName
+		});
 
-    console.log(`[AUTH LOGIC] ✅ User created: ${user.email} (ID: ${user.id})`);
-  } else {
-    // User exists - check if profile needs updating
-    let needsUpdate = false;
-    const updates: any = {};
+		console.log(`[AUTH LOGIC] ✅ User created: ${user.email} (ID: ${user.id})`);
+	} else {
+		// User exists - check if profile needs updating
+		let needsUpdate = false;
+		const updates: any = {};
 
-    if (user.email !== profile.email) {
-      updates.email = profile.email;
-      needsUpdate = true;
-    }
+		if (user.email !== profile.email) {
+			updates.email = profile.email;
+			needsUpdate = true;
+		}
 
-    if (normalizedDisplayName && user.display_name !== normalizedDisplayName) {
-      updates.display_name = normalizedDisplayName;
-      needsUpdate = true;
-    }
+		if (normalizedDisplayName && user.display_name !== normalizedDisplayName) {
+			updates.display_name = normalizedDisplayName;
+			needsUpdate = true;
+		}
 
-    if (needsUpdate) {
-      console.log(`[AUTH LOGIC] Updating user profile: ${profile.email}`);
-      const updatedUser = await usersRepo.update(user.id, updates);
+		if (needsUpdate) {
+			console.log(`[AUTH LOGIC] Updating user profile: ${profile.email}`);
+			const updatedUser = await usersRepo.update(user.id, updates);
 
-      if (updatedUser) {
-        user = updatedUser;
-        console.log(`[AUTH LOGIC] ✅ User profile updated: ${user.email}`);
-      }
-    }
-  }
+			if (updatedUser) {
+				user = updatedUser;
+				console.log(`[AUTH LOGIC] ✅ User profile updated: ${user.email}`);
+			}
+		}
+	}
 
-  // Check admin status
-  const is_admin = isAdmin(user.email);
+	// Check admin status
+	const is_admin = isAdmin(user.email);
 
-  if (is_admin) {
-    console.log(`[AUTH LOGIC] 🔒 Admin access granted: ${user.email}`);
-  }
+	if (is_admin) {
+		console.log(`[AUTH LOGIC] 🔒 Admin access granted: ${user.email}`);
+	}
 
-  // Return enhanced user object
-  return {
-    ...user,
-    is_admin
-  };
+	// Return enhanced user object
+	return {
+		...user,
+		is_admin
+	};
 }
 
 /**
@@ -154,7 +154,7 @@ export async function getOrCreateUser(profile: UserProfile): Promise<Authenticat
  * @returns True if user is admin
  */
 export function isAdmin(email: string): boolean {
-  return email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+	return email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 }
 
 /**
@@ -164,16 +164,16 @@ export function isAdmin(email: string): boolean {
  * @returns Authenticated user or null if not found
  */
 export async function getUserByFirebaseUid(firebase_uid: string): Promise<AuthenticatedUser | null> {
-  const user = await usersRepo.findByFirebaseUid(firebase_uid);
+	const user = await usersRepo.findByFirebaseUid(firebase_uid);
 
-  if (!user) {
-    return null;
-  }
+	if (!user) {
+		return null;
+	}
 
-  return {
-    ...user,
-    is_admin: isAdmin(user.email)
-  };
+	return {
+		...user,
+		is_admin: isAdmin(user.email)
+	};
 }
 
 /**
@@ -183,16 +183,16 @@ export async function getUserByFirebaseUid(firebase_uid: string): Promise<Authen
  * @returns Authenticated user or null if not found
  */
 export async function getUserById(id: number): Promise<AuthenticatedUser | null> {
-  const user = await usersRepo.findById(id);
+	const user = await usersRepo.findById(id);
 
-  if (!user) {
-    return null;
-  }
+	if (!user) {
+		return null;
+	}
 
-  return {
-    ...user,
-    is_admin: isAdmin(user.email)
-  };
+	return {
+		...user,
+		is_admin: isAdmin(user.email)
+	};
 }
 
 /**
@@ -202,14 +202,14 @@ export async function getUserById(id: number): Promise<AuthenticatedUser | null>
  * @returns Authenticated user or null if not found
  */
 export async function getUserByEmail(email: string): Promise<AuthenticatedUser | null> {
-  const user = await usersRepo.findByEmail(email);
+	const user = await usersRepo.findByEmail(email);
 
-  if (!user) {
-    return null;
-  }
+	if (!user) {
+		return null;
+	}
 
-  return {
-    ...user,
-    is_admin: isAdmin(user.email)
-  };
+	return {
+		...user,
+		is_admin: isAdmin(user.email)
+	};
 }

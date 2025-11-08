@@ -95,7 +95,7 @@ Promise.all(promises).then(results => {
 
 	// #region Heroes
 
-	let heroes = results[1] as Hero[];
+	const heroes = results[1] as Hero[];
 
 	heroes.forEach(hero => {
 		HeroUpdateLogic.updateHero(hero, SourcebookLogic.getSourcebooks(sourcebooks));

@@ -5,10 +5,10 @@
 import pool from './data/db-connection';
 
 async function deploy() {
-  console.log('[DEPLOY] Creating users table...');
+	console.log('[DEPLOY] Creating users table...');
 
-  // Create users table
-  await pool.query(`
+	// Create users table
+	await pool.query(`
     CREATE TABLE IF NOT EXISTS \`users\` (
       \`id\` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       \`firebase_uid\` VARCHAR(128) NOT NULL UNIQUE,
@@ -21,12 +21,12 @@ async function deploy() {
       INDEX \`idx_created_at\` (\`created_at\`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
-  console.log('[DEPLOY] ✅ users table created');
+	console.log('[DEPLOY] ✅ users table created');
 
-  console.log('[DEPLOY] Creating characters table...');
+	console.log('[DEPLOY] Creating characters table...');
 
-  // Create characters table
-  await pool.query(`
+	// Create characters table
+	await pool.query(`
     CREATE TABLE IF NOT EXISTS \`characters\` (
       \`id\` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
       \`owner_user_id\` INT UNSIGNED NOT NULL,
@@ -56,26 +56,26 @@ async function deploy() {
       INDEX \`idx_gm_not_deleted\` (\`gm_user_id\`, \`is_deleted\`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
-  console.log('[DEPLOY] ✅ characters table created');
+	console.log('[DEPLOY] ✅ characters table created');
 
-  // Verify tables
-  const [tables] = await pool.query(`
+	// Verify tables
+	const [ tables ] = await pool.query(`
     SELECT TABLE_NAME, TABLE_ROWS
     FROM information_schema.TABLES
     WHERE TABLE_SCHEMA = ?
     ORDER BY TABLE_NAME
-  `, [process.env.DB_NAME]);
+  `, [ process.env.DB_NAME ]);
 
-  console.log('\n[DEPLOY] Database Tables:');
-  (tables as any[]).forEach(row => {
-    console.log(`  - ${row.TABLE_NAME} (${row.TABLE_ROWS} rows)`);
-  });
+	console.log('\n[DEPLOY] Database Tables:');
+	(tables as any[]).forEach(row => {
+		console.log(`  - ${row.TABLE_NAME} (${row.TABLE_ROWS} rows)`);
+	});
 
-  console.log('\n[DEPLOY] ✅ Schema deployment complete!');
-  process.exit(0);
+	console.log('\n[DEPLOY] ✅ Schema deployment complete!');
+	process.exit(0);
 }
 
 deploy().catch(err => {
-  console.error('[DEPLOY] ❌ Error:', err);
-  process.exit(1);
+	console.error('[DEPLOY] ❌ Error:', err);
+	process.exit(1);
 });

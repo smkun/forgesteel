@@ -31,7 +31,7 @@ import { StandardAbilitiesPage } from '@/components/pages/heroes/hero-sheet/stan
 import { SummoningInfo } from '@/models/summon';
 import { Title } from '@/models/title';
 import { ViewSelector } from '@/components/panels/view-selector/view-selector';
-import { getCharacterRecord, getStorageMode, StorageMode } from '@/services/character-storage';
+import { StorageMode, getCharacterRecord, getStorageMode } from '@/services/character-storage';
 import { useIsSmall } from '@/hooks/use-is-small';
 import { useNavigation } from '@/hooks/use-navigation';
 import { useParams } from 'react-router';
@@ -162,11 +162,12 @@ export const HeroViewPage = (props: Props) => {
 				alignItems: 'center',
 				justifyContent: 'space-between',
 				gap: '20px'
-			}}>
+			}}
+			>
 				<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
 					<span style={{ fontWeight: 500 }}>GM:</span>
 					<Button
-						size="small"
+						size='small'
 						type={gmInfo ? 'default' : 'primary'}
 						onClick={() => setShowGMModal(true)}
 					>

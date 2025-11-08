@@ -9,7 +9,7 @@
  * - PRD.md: Security requirements
  */
 
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import admin from 'firebase-admin';
 import fs from 'fs';
 import '../utils/loadEnv';
@@ -17,14 +17,14 @@ import '../utils/loadEnv';
 // Initialize Firebase Admin SDK
 const credPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 if (!credPath || !fs.existsSync(credPath)) {
-  console.error('[AUTH] ❌ Firebase credentials file not found');
-  console.error(`[AUTH] Expected path: ${credPath}`);
-  process.exit(1);
+	console.error('[AUTH] ❌ Firebase credentials file not found');
+	console.error(`[AUTH] Expected path: ${credPath}`);
+	process.exit(1);
 }
 
 const credentials = JSON.parse(fs.readFileSync(credPath, 'utf-8'));
 admin.initializeApp({
-  credential: admin.credential.cert(credentials)
+	credential: admin.credential.cert(credentials)
 });
 
 console.log('[AUTH] ✅ Firebase Admin SDK initialized');
@@ -36,7 +36,7 @@ import { AuthenticatedUser, getOrCreateUser } from '../logic/auth.logic';
  * Extended Express Request with database user information
  */
 export interface AuthenticatedRequest extends Request {
-  user?: AuthenticatedUser;
+	user?: AuthenticatedUser;
 }
 
 /**
@@ -57,85 +57,85 @@ export interface AuthenticatedRequest extends Request {
  * @param next Express next function
  */
 export async function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
+	req: Request,
+	res: Response,
+	next: NextFunction
 ): Promise<void> {
-  try {
-    // Extract Authorization header
-    const authHeader = req.headers.authorization;
+	try {
+		// Extract Authorization header
+		const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
-      res.status(401).json({
-        error: 'Unauthorized',
-        message: 'No Authorization header provided'
-      });
-      return;
-    }
+		if (!authHeader) {
+			res.status(401).json({
+				error: 'Unauthorized',
+				message: 'No Authorization header provided'
+			});
+			return;
+		}
 
-    // Verify format: "Bearer <token>"
-    if (!authHeader.startsWith('Bearer ')) {
-      res.status(401).json({
-        error: 'Unauthorized',
-        message: 'Invalid Authorization header format. Expected: Bearer <token>'
-      });
-      return;
-    }
+		// Verify format: "Bearer <token>"
+		if (!authHeader.startsWith('Bearer ')) {
+			res.status(401).json({
+				error: 'Unauthorized',
+				message: 'Invalid Authorization header format. Expected: Bearer <token>'
+			});
+			return;
+		}
 
-    // Extract token
-    const token = authHeader.slice(7); // Remove "Bearer " prefix
+		// Extract token
+		const token = authHeader.slice(7); // Remove "Bearer " prefix
 
-    if (!token || token.length === 0) {
-      res.status(401).json({
-        error: 'Unauthorized',
-        message: 'No token provided'
-      });
-      return;
-    }
+		if (!token || token.length === 0) {
+			res.status(401).json({
+				error: 'Unauthorized',
+				message: 'No token provided'
+			});
+			return;
+		}
 
-    // Verify token with Firebase Admin SDK
-    const decodedToken = await admin.auth().verifyIdToken(token);
+		// Verify token with Firebase Admin SDK
+		const decodedToken = await admin.auth().verifyIdToken(token);
 
-    // Get or create user in database (auto-creates on first login)
-    const user = await getOrCreateUser({
-      uid: decodedToken.uid,
-      email: decodedToken.email,
-      displayName: decodedToken.name || null
-    });
+		// Get or create user in database (auto-creates on first login)
+		const user = await getOrCreateUser({
+			uid: decodedToken.uid,
+			email: decodedToken.email,
+			displayName: decodedToken.name || null
+		});
 
-    // Attach database user information to request
-    (req as AuthenticatedRequest).user = user;
+		// Attach database user information to request
+		(req as AuthenticatedRequest).user = user;
 
-    console.log(`[AUTH] ✅ Authenticated: ${user.email} (ID: ${user.id}, Admin: ${user.is_admin})`);
+		console.log(`[AUTH] ✅ Authenticated: ${user.email} (ID: ${user.id}, Admin: ${user.is_admin})`);
 
-    // Continue to next middleware/route
-    next();
-  } catch (error) {
-    console.error('[AUTH] ❌ Token verification failed:', error);
+		// Continue to next middleware/route
+		next();
+	} catch (error) {
+		console.error('[AUTH] ❌ Token verification failed:', error);
 
-    // Handle specific Firebase errors
-    if (error instanceof Error) {
-      if (error.message.includes('expired')) {
-        res.status(401).json({
-          error: 'Unauthorized',
-          message: 'Token has expired. Please sign in again.'
-        });
-        return;
-      }
+		// Handle specific Firebase errors
+		if (error instanceof Error) {
+			if (error.message.includes('expired')) {
+				res.status(401).json({
+					error: 'Unauthorized',
+					message: 'Token has expired. Please sign in again.'
+				});
+				return;
+			}
 
-      if (error.message.includes('invalid')) {
-        res.status(401).json({
-          error: 'Unauthorized',
-          message: 'Invalid token. Please sign in again.'
-        });
-        return;
-      }
-    }
+			if (error.message.includes('invalid')) {
+				res.status(401).json({
+					error: 'Unauthorized',
+					message: 'Invalid token. Please sign in again.'
+				});
+				return;
+			}
+		}
 
-    // Generic error response
-    res.status(401).json({
-      error: 'Unauthorized',
-      message: 'Authentication failed'
-    });
-  }
+		// Generic error response
+		res.status(401).json({
+			error: 'Unauthorized',
+			message: 'Authentication failed'
+		});
+	}
 }

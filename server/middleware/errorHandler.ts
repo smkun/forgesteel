@@ -7,18 +7,18 @@
  * - PLANNING.md: Error handling strategy
  */
 
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 /**
  * Standard error response format
  */
 export interface ErrorResponse {
-  error: string;
-  message: string;
-  statusCode: number;
-  timestamp: string;
-  path: string;
-  details?: any;
+	error: string;
+	message: string;
+	statusCode: number;
+	timestamp: string;
+	path: string;
+	details?: any;
 }
 
 /**
@@ -27,15 +27,15 @@ export interface ErrorResponse {
  * Extends Error with HTTP status code and optional details
  */
 export class AppError extends Error {
-  constructor(
-    public statusCode: number,
-    public message: string,
-    public details?: any
-  ) {
-    super(message);
-    this.name = 'AppError';
-    Error.captureStackTrace(this, this.constructor);
-  }
+	constructor(
+		public statusCode: number,
+		public message: string,
+		public details?: any
+	) {
+		super(message);
+		this.name = 'AppError';
+		Error.captureStackTrace(this, this.constructor);
+	}
 }
 
 /**
@@ -55,39 +55,39 @@ export class AppError extends Error {
  * @param next Express next function
  */
 export function errorHandler(
-  err: Error | AppError,
-  req: Request,
-  res: Response,
-  next: NextFunction
+	err: Error | AppError,
+	req: Request,
+	res: Response,
+	next: NextFunction
 ): void {
-  // Log error for debugging
-  console.error('[ERROR]', {
-    name: err.name,
-    message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
-    path: req.path,
-    method: req.method
-  });
+	// Log error for debugging
+	console.error('[ERROR]', {
+		name: err.name,
+		message: err.message,
+		stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+		path: req.path,
+		method: req.method
+	});
 
-  // Determine status code
-  const statusCode = err instanceof AppError ? err.statusCode : 500;
+	// Determine status code
+	const statusCode = err instanceof AppError ? err.statusCode : 500;
 
-  // Build error response
-  const errorResponse: ErrorResponse = {
-    error: err.name || 'InternalServerError',
-    message: err.message || 'An unexpected error occurred',
-    statusCode,
-    timestamp: new Date().toISOString(),
-    path: req.path
-  };
+	// Build error response
+	const errorResponse: ErrorResponse = {
+		error: err.name || 'InternalServerError',
+		message: err.message || 'An unexpected error occurred',
+		statusCode,
+		timestamp: new Date().toISOString(),
+		path: req.path
+	};
 
-  // Include additional details in development
-  if (process.env.NODE_ENV === 'development' && err instanceof AppError) {
-    errorResponse.details = err.details;
-  }
+	// Include additional details in development
+	if (process.env.NODE_ENV === 'development' && err instanceof AppError) {
+		errorResponse.details = err.details;
+	}
 
-  // Send response
-  res.status(statusCode).json(errorResponse);
+	// Send response
+	res.status(statusCode).json(errorResponse);
 }
 
 /**
@@ -99,11 +99,11 @@ export function errorHandler(
  * ```
  */
 export function createError(
-  statusCode: number,
-  message: string,
-  details?: any
+	statusCode: number,
+	message: string,
+	details?: any
 ): AppError {
-  return new AppError(statusCode, message, details);
+	return new AppError(statusCode, message, details);
 }
 
 /**
@@ -120,9 +120,9 @@ export function createError(
  * ```
  */
 export function asyncHandler(
-  fn: (req: Request, res: Response, next: NextFunction) => Promise<any>
+	fn: (req: Request, res: Response, next: NextFunction) => Promise<any>
 ) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
-  };
+	return (req: Request, res: Response, next: NextFunction) => {
+		Promise.resolve(fn(req, res, next)).catch(next);
+	};
 }

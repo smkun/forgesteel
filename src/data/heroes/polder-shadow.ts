@@ -6,7 +6,7 @@ export const polderShadow = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		'',
+		''
 	],
 	ancestry: {
 		id: 'ancestry-polder',
