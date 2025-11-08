@@ -1,4 +1,4 @@
-import { Alert, Button, Divider, Popover } from 'antd';
+import { Alert, Button, Divider, Empty, Popover } from 'antd';
 import { CloseOutlined, CopyOutlined, DownOutlined, EditOutlined, TeamOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Ability } from '@/models/ability';
@@ -80,12 +80,14 @@ export const HeroViewPage = (props: Props) => {
 	const [ ownerInfo, setOwnerInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
 	const [ isOnline, setIsOnline ] = useState<boolean>(false);
 	const hero = useMemo(
-		() => props.heroes.find(h => h.id === heroID)!,
+		() => props.heroes.find(h => h.id === heroID),
 		[ heroID, props.heroes ]
 	);
-	useTitle(hero.name || 'Unnamed Hero');
+	useTitle(hero?.name || 'Unnamed Hero');
 
 	useEffect(() => {
+		if (!hero) return;
+
 		const loadCharacterInfo = async () => {
 			const storageMode = getStorageMode();
 			setIsOnline(storageMode === StorageMode.API);
@@ -119,7 +121,7 @@ export const HeroViewPage = (props: Props) => {
 		};
 
 		loadCharacterInfo();
-	}, [ hero.id ]);
+	}, [ hero?.id ]);
 
 	const handleGMAssignComplete = async () => {
 		setShowGMModal(false);
@@ -234,6 +236,16 @@ export const HeroViewPage = (props: Props) => {
 				);
 		}
 	};
+
+	if (!hero) {
+		return (
+			<ErrorBoundary>
+				<div className='hero-view-page'>
+					<Empty description='Hero not found' />
+				</div>
+			</ErrorBoundary>
+		);
+	}
 
 	return (
 		<ErrorBoundary>
