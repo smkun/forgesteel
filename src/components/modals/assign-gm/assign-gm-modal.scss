@@ -1,0 +1,95 @@
+.assign-gm-modal-content {
+	padding: 20px;
+	max-width: 600px;
+	margin: 0 auto;
+
+	.character-info {
+		margin-bottom: 30px;
+		padding: 15px;
+		background: rgba(0, 0, 0, 0.2);
+		border-radius: 8px;
+
+		.character-name {
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+
+		.current-gm {
+			font-size: 14px;
+			color: #999;
+
+			strong {
+				color: #fff;
+			}
+		}
+	}
+
+	.gm-search {
+		margin-bottom: 20px;
+
+		.search-label {
+			margin-bottom: 10px;
+			font-weight: 500;
+		}
+	}
+
+	.search-results {
+		margin-bottom: 20px;
+		max-height: 300px;
+		overflow-y: auto;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+		background: rgba(0, 0, 0, 0.2);
+
+		.results-label {
+			padding: 10px 15px;
+			font-weight: 500;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.user-result {
+			padding: 12px 15px;
+			cursor: pointer;
+			transition: background 0.2s;
+
+			&:hover {
+				background: rgba(255, 255, 255, 0.1);
+			}
+
+			.user-email {
+				font-weight: 500;
+				margin-bottom: 4px;
+			}
+
+			.user-name {
+				font-size: 12px;
+				color: #999;
+			}
+		}
+	}
+
+	.no-results {
+		padding: 20px;
+		text-align: center;
+		color: #999;
+		font-style: italic;
+	}
+
+	.button-group {
+		display: flex;
+		gap: 10px;
+		margin-bottom: 20px;
+
+		button {
+			flex: 1;
+		}
+	}
+
+	.help-text {
+		font-size: 12px;
+		color: #999;
+		text-align: center;
+		font-style: italic;
+	}
+}

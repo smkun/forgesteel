@@ -1,15 +1,17 @@
 coverage
 dist
+distribution
 node_modules
 .DS_Store
 .github
 .vscode/
 .vscode/*
 
-# Backend build artifacts
+# Backend build artifacts (old location - now using distribution/backend)
 server/dist/
 server/**/*.js
 server/**/*.js.map
+
 
 # Environment files
 .env

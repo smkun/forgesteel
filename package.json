@@ -9,16 +9,18 @@
 		"start": "vite --host",
 		"server:dev": "tsx watch server/index.ts",
 		"server:build": "tsc -p server/tsconfig.json",
-		"server:start": "node server/dist/server/index.js",
-		"dev:api": "npm run server:build && node server/dist/index.js",
+		"server:start": "node distribution/backend/index.cjs",
+		"dev:api": "npm run server:build && node distribution/backend/index.cjs",
 		"update": "npx npm-check-updates --interactive --format group",
 		"lint": "tsc -p tsconfig.node.json && tsc -p tsconfig.app.json && eslint . && npm audit",
 		"fix": "eslint . --fix",
 		"test": "vitest",
 		"check": "npm run lint && vitest run",
-		"build": "vite build",
-		"predeploy": "npm run lint && vitest run && vite build",
-		"deploy": "gh-pages -d dist"
+		"build": "npm run build:frontend && npm run build:backend",
+		"build:frontend": "vite build",
+		"build:backend": "rm -rf distribution/backend distribution/backend-temp && tsc -p server/tsconfig.json && mv distribution/backend-temp/server distribution/backend && rm -rf distribution/backend-temp && find distribution/backend -name '*.js' -type f ! -name '*.cjs' | while read f; do mv \"$f\" \"${f%.js}.cjs\"; done && find distribution/backend -name '*.cjs' -type f -exec sed -i \"s/require(['\\\"]\\([.]*\\/[^'\\\"]*\\)['\\\"])/require('\\1.cjs')/g\" {} \\;",
+		"predeploy": "npm run lint && vitest run && npm run build",
+		"deploy": "gh-pages -d distribution/frontend"
 	},
 	"dependencies": {
 		"@ant-design/icons": "^6.1.0",

@@ -1,14 +1,7 @@
 import { Hero } from '@/models/hero';
 import { getIdToken } from './firebase';
 
-const DEFAULT_DEV_API_BASE = 'http://localhost:4000';
-const DEFAULT_PROD_API_BASE = 'https://32gamers.com/forgesteel/api';
-
-function resolveApiBaseUrl(): string {
-  return import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? DEFAULT_DEV_API_BASE : DEFAULT_PROD_API_BASE);
-}
-
-const API_BASE_URL = resolveApiBaseUrl();
+const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:4000' : 'https://32gamers.com/forgesteel';
 
 export interface CharacterResponse {
   id: number;
