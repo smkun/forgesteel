@@ -9,6 +9,7 @@
  */
 
 import * as charactersRepo from '../data/characters.repository';
+import * as usersRepo from '../data/users.repository';
 
 // Hero model from frontend source
 // Note: Using relative path because backend tsconfig doesn't include @ alias
@@ -26,6 +27,10 @@ export interface CharacterWithHero {
   is_deleted: boolean;
   created_at: Date;
   updated_at: Date;
+  owner_email: string | null;
+  owner_display_name: string | null;
+  gm_email: string | null;
+  gm_display_name: string | null;
 }
 
 /**
@@ -66,25 +71,7 @@ export async function getCharacter(
     return null;
   }
 
-  // Parse Hero JSON
-  let hero: Hero;
-  try {
-    hero = JSON.parse(character.character_json);
-  } catch (error) {
-    console.error(`[CHARACTER LOGIC] ❌ Invalid JSON for character ${character_id}:`, error);
-    throw new Error('Character data is corrupted');
-  }
-
-  return {
-    id: character.id,
-    owner_user_id: character.owner_user_id,
-    gm_user_id: character.gm_user_id,
-    name: character.name,
-    hero,
-    is_deleted: character.is_deleted,
-    created_at: character.created_at,
-    updated_at: character.updated_at
-  };
+  return mapCharacterRecord(character);
 }
 
 /**
@@ -107,27 +94,43 @@ export async function getUserCharacters(
   // Combine and parse
   const allCharacters = [...ownedCharacters, ...gmCharacters];
 
-  const charactersWithHero: CharacterWithHero[] = [];
+  // Extra safety: ensure no unauthorized rows slip through due to any upstream issues
+  const filteredCharacters = allCharacters.filter(character => {
+    const hasAccess =
+      character.owner_user_id === user_id ||
+      character.gm_user_id === user_id;
 
-  for (const character of allCharacters) {
-    try {
-      const hero = JSON.parse(character.character_json);
-      charactersWithHero.push({
-        id: character.id,
-        owner_user_id: character.owner_user_id,
-        gm_user_id: character.gm_user_id,
-        name: character.name,
-        hero,
-        is_deleted: character.is_deleted,
-        created_at: character.created_at,
-        updated_at: character.updated_at
-      });
-    } catch (error) {
-      console.error(`[CHARACTER LOGIC] ❌ Skipping corrupted character ${character.id}:`, error);
+    if (!hasAccess) {
+      console.warn(
+        `[CHARACTER LOGIC] ⚠️ Filtering unauthorized character ${character.id} for user ${user_id}`
+      );
     }
+
+    return hasAccess;
+  });
+
+  const uniqueCharacters: charactersRepo.Character[] = [];
+  const seen = new Set<number>();
+
+  for (const character of filteredCharacters) {
+    if (seen.has(character.id)) {
+      continue;
+    }
+    seen.add(character.id);
+    uniqueCharacters.push(character);
   }
 
-  return charactersWithHero;
+  return mapCharacters(uniqueCharacters);
+}
+
+/**
+ * Get all characters (admin only)
+ */
+export async function getAllCharacters(
+  includeDeleted: boolean = false
+): Promise<CharacterWithHero[]> {
+  const characters = await charactersRepo.findAll(includeDeleted);
+  return mapCharacters(characters);
 }
 
 /**
@@ -159,16 +162,11 @@ export async function createCharacter(
     character_json
   });
 
-  return {
-    id: character.id,
-    owner_user_id: character.owner_user_id,
-    gm_user_id: character.gm_user_id,
-    name: character.name,
-    hero,
-    is_deleted: character.is_deleted,
-    created_at: character.created_at,
-    updated_at: character.updated_at
-  };
+  const mapped = mapCharacterRecord(character);
+  if (!mapped) {
+    throw new Error('Failed to parse created character');
+  }
+  return mapped;
 }
 
 /**
@@ -206,20 +204,7 @@ export async function updateCharacter(
     character_json
   });
 
-  if (!character) {
-    return null;
-  }
-
-  return {
-    id: character.id,
-    owner_user_id: character.owner_user_id,
-    gm_user_id: character.gm_user_id,
-    name: character.name,
-    hero,
-    is_deleted: character.is_deleted,
-    created_at: character.created_at,
-    updated_at: character.updated_at
-  };
+  return character ? mapCharacterRecord(character) : null;
 }
 
 /**
@@ -280,16 +265,28 @@ export async function shareCharacterWithGM(
 
   console.log(`[CHARACTER LOGIC] ✅ Shared character ${character_id} with GM ${gm_user_id}`);
 
-  return {
-    id: character.id,
-    owner_user_id: character.owner_user_id,
-    gm_user_id: character.gm_user_id,
-    name: character.name,
-    hero,
-    is_deleted: character.is_deleted,
-    created_at: character.created_at,
-    updated_at: character.updated_at
-  };
+  return mapCharacterRecord(character);
+}
+
+export async function shareCharacterWithGMByEmail(
+  character_id: number,
+  owner_user_id: number,
+  gm_email: string,
+  is_admin: boolean = false
+): Promise<CharacterWithHero | null> {
+  const trimmedEmail = gm_email.trim();
+
+  if (trimmedEmail.length === 0) {
+    return unshareCharacterFromGM(character_id, owner_user_id, is_admin);
+  }
+
+  const gmUser = await usersRepo.findByEmail(trimmedEmail);
+
+  if (!gmUser) {
+    throw new Error(`User with email ${gm_email} not found`);
+  }
+
+  return shareCharacterWithGM(character_id, owner_user_id, gmUser.id, is_admin);
 }
 
 /**
@@ -324,16 +321,7 @@ export async function unshareCharacterFromGM(
 
   console.log(`[CHARACTER LOGIC] ✅ Unshared character ${character_id} from GM`);
 
-  return {
-    id: character.id,
-    owner_user_id: character.owner_user_id,
-    gm_user_id: character.gm_user_id,
-    name: character.name,
-    hero,
-    is_deleted: character.is_deleted,
-    created_at: character.created_at,
-    updated_at: character.updated_at
-  };
+  return mapCharacterRecord(character);
 }
 
 /**
@@ -367,6 +355,30 @@ export async function getAccessLevel(
 }
 
 /**
+ * Reassign character ownership (admin only)
+ */
+export async function reassignCharacterOwner(
+  character_id: number,
+  new_owner_email: string
+): Promise<CharacterWithHero | null> {
+  const newOwner = await usersRepo.findByEmail(new_owner_email);
+
+  if (!newOwner) {
+    throw new Error(`User with email ${new_owner_email} not found`);
+  }
+
+  const character = await charactersRepo.update(character_id, {
+    owner_user_id: newOwner.id
+  });
+
+  if (!character) {
+    return null;
+  }
+
+  return mapCharacterRecord(character);
+}
+
+/**
  * Validate Hero JSON structure
  *
  * Basic validation to ensure Hero has required fields
@@ -392,4 +404,40 @@ export function validateHero(hero: any): boolean {
   // For now, we trust the frontend sends valid Hero objects
 
   return true;
+}
+
+function mapCharacters(characters: charactersRepo.Character[]): CharacterWithHero[] {
+  const mapped: CharacterWithHero[] = [];
+
+  for (const character of characters) {
+    const parsed = mapCharacterRecord(character);
+    if (parsed) {
+      mapped.push(parsed);
+    }
+  }
+
+  return mapped;
+}
+
+function mapCharacterRecord(character: charactersRepo.Character): CharacterWithHero | null {
+  try {
+    const hero = JSON.parse(character.character_json) as Hero;
+    return {
+      id: character.id,
+      owner_user_id: character.owner_user_id,
+      owner_email: character.owner_email || null,
+      owner_display_name: character.owner_display_name || null,
+      gm_user_id: character.gm_user_id,
+      gm_email: character.gm_email || null,
+      gm_display_name: character.gm_display_name || null,
+      name: character.name,
+      hero,
+      is_deleted: character.is_deleted,
+      created_at: character.created_at,
+      updated_at: character.updated_at
+    };
+  } catch (error) {
+    console.error(`[CHARACTER LOGIC] ❌ Invalid JSON for character ${character.id}:`, error);
+    return null;
+  }
 }

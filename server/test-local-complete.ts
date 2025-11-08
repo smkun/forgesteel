@@ -9,9 +9,7 @@ import * as charactersRepo from './data/characters.repository';
 import * as usersRepo from './data/users.repository';
 import * as characterLogic from './logic/character.logic';
 import pool from './data/db-connection';
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.local' });
+import './utils/loadEnv';
 
 async function testComplete() {
   try {
@@ -46,7 +44,7 @@ async function testComplete() {
       console.log(`  Hero ID: ${char.hero.id}`);
       console.log(`  Ancestry: ${char.hero.ancestry?.name || 'N/A'}`);
       console.log(`  Class: ${char.hero.class?.name || 'N/A'}`);
-      console.log(`  Level: ${char.hero.level || 1}`);
+      console.log(`  Level: ${char.hero.class?.level || 1}`);
     }
 
     if (characters.length === 0) {

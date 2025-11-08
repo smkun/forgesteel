@@ -48,6 +48,9 @@ export const useNavigation = () => {
 		},
 		goToPlayerView: () => {
 			return navigate('/session/player');
+		},
+		goToAuth: () => {
+			return navigate('/auth');
 		}
 	};
 };

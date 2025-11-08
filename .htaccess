@@ -1,0 +1,23 @@
+Header add X-HTACCESS "forgesteel"
+
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/gamers/nodejs/forgesteel-api"
+PassengerBaseURI "/forgesteel"
+PassengerNodejs "/home/gamers/nodevenv/nodejs/forgesteel-api/20/bin/node"
+PassengerAppType node
+PassengerStartupFile app.js
+PassengerAppLogFile "/home/gamers/logs/forgesteel-passenger.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /forgesteel/
+
+  # Let /forgesteel/api/* fall through to the api/ subdir (Passenger handles it there)
+  RewriteRule ^api/ - [L]
+
+  # React Router fallback for the SPA
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /forgesteel/index.html [L]
+</IfModule>

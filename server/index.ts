@@ -12,11 +12,8 @@
 
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import http from 'http';
-
-// Load environment variables
-dotenv.config({ path: '.env.local' });
+import './utils/loadEnv';
 
 // ================================================================
 // PASSENGER ENVIRONMENT DETECTION
@@ -136,6 +133,8 @@ app.get('/healthz', (req: Request, res: Response) => {
 
 import authRoutes from './routes/auth.routes';
 import characterRoutes from './routes/character.routes';
+import adminRoutes from './routes/admin.routes';
+import userRoutes from './routes/user.routes';
 import { errorHandler } from './middleware/errorHandler';
 
 // Auth routes
@@ -143,6 +142,12 @@ app.use('/api/auth', authRoutes);
 
 // Character routes
 app.use('/api/characters', characterRoutes);
+
+// Admin routes
+app.use('/api/admin', adminRoutes);
+
+// User routes
+app.use('/api/users', userRoutes);
 
 // ================================================================
 // ERROR HANDLING MIDDLEWARE

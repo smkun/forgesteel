@@ -10,23 +10,32 @@
  */
 
 import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
-
-// Load environment variables
-dotenv.config({ path: '.env.local' });
+import '../utils/loadEnv';
 
 /**
  * Create MySQL connection pool
  *
  * Configuration:
- * - uri: MYSQL_URL from environment (mysql://user:pass@host:port/database)
+ * - Use individual connection parameters instead of URI to avoid encoding issues
  * - waitForConnections: Queue requests when pool is full
  * - connectionLimit: Max 10 concurrent connections (iFastNet shared hosting)
  * - queueLimit: 0 = unlimited queued requests
  * - enableKeepAlive: Maintain connections to avoid reconnection overhead
  */
+
+console.log('[DB] Initializing connection pool...');
+console.log('[DB] Host:', process.env.DB_HOST);
+console.log('[DB] Port:', process.env.DB_PORT);
+console.log('[DB] Database:', process.env.DB_NAME);
+console.log('[DB] User:', process.env.DB_USER);
+console.log('[DB] Password:', process.env.DB_PASS ? '***SET***' : 'NOT SET');
+
 const pool = mysql.createPool({
-  uri: process.env.MYSQL_URL,
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT || '3306'),
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

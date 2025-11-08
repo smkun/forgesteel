@@ -1,0 +1,20 @@
+{
+  "name": "forgesteel-api",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "Forgesteel Backend API Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.6.0",
+    "mysql2": "^3.15.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

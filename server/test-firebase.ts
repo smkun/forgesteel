@@ -3,10 +3,8 @@
  */
 
 import admin from 'firebase-admin';
-import dotenv from 'dotenv';
 import fs from 'fs';
-
-dotenv.config({ path: '.env.local' });
+import './utils/loadEnv';
 
 async function testFirebase() {
   try {

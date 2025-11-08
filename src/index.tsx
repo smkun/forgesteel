@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/contexts/AuthContext';
 import { FactoryLogic } from '@/logic/factory-logic.ts';
 import { Format } from '@/utils/format.ts';
 import { HashRouter } from 'react-router';
@@ -22,6 +23,25 @@ import './index.scss';
 
 initializeTheme();
 
+const HERO_CACHE_KEY = 'forgesteel-heroes:guest';
+const LEGACY_HERO_CACHE_KEY = 'forgesteel-heroes';
+
+const loadHeroCache = async (): Promise<Hero[]> => {
+	const heroes = await localforage.getItem<Hero[]>(HERO_CACHE_KEY);
+	if (heroes && heroes.length > 0) {
+		return heroes;
+	}
+
+	const legacyHeroes = await localforage.getItem<Hero[]>(LEGACY_HERO_CACHE_KEY);
+	if (legacyHeroes && legacyHeroes.length > 0) {
+		await localforage.setItem(HERO_CACHE_KEY, legacyHeroes);
+		await localforage.removeItem(LEGACY_HERO_CACHE_KEY);
+		return legacyHeroes;
+	}
+
+	return [];
+};
+
 // Register Service Worker for PWA functionality
 if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
@@ -34,7 +54,7 @@ if ('serviceWorker' in navigator) {
 
 const promises = [
 	localforage.getItem<Sourcebook[]>('forgesteel-homebrew-settings'),
-	localforage.getItem<Hero[]>('forgesteel-heroes'),
+	loadHeroCache(),
 	localforage.getItem<string[]>('forgesteel-hidden-setting-ids'),
 	localforage.getItem<Playbook>('forgesteel-playbook'),
 	localforage.getItem<Playbook>('forgesteel-session'),
@@ -75,10 +95,7 @@ Promise.all(promises).then(results => {
 
 	// #region Heroes
 
-	let heroes = results[1] as Hero[] | null;
-	if (!heroes) {
-		heroes = [];
-	}
+	let heroes = results[1] as Hero[];
 
 	heroes.forEach(hero => {
 		HeroUpdateLogic.updateHero(hero, SourcebookLogic.getSourcebooks(sourcebooks));
@@ -130,16 +147,18 @@ Promise.all(promises).then(results => {
 
 	createRoot(document.getElementById('root')!).render(
 		<StrictMode>
-			<HashRouter>
-				<Main
-					heroes={heroes}
-					homebrewSourcebooks={sourcebooks}
-					hiddenSourcebookIDs={hiddenSourcebookIDs}
-					playbook={playbook}
-					session={session}
-					options={options}
-				/>
-			</HashRouter>
+			<AuthProvider>
+				<HashRouter>
+					<Main
+						heroes={heroes}
+						homebrewSourcebooks={sourcebooks}
+						hiddenSourcebookIDs={hiddenSourcebookIDs}
+						playbook={playbook}
+						session={session}
+						options={options}
+					/>
+				</HashRouter>
+			</AuthProvider>
 		</StrictMode>
 	);
 });

@@ -1,13 +1,14 @@
 import { Adventure, AdventurePackage } from '@/models/adventure';
 import { Navigate, Route, Routes } from 'react-router';
 import { Playbook, PlaybookElementKind } from '@/models/playbook';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { Sourcebook, SourcebookElementKind } from '@/models/sourcebook';
 import { Spin, notification } from 'antd';
 import { Ability } from '@/models/ability';
 import { AbilityModal } from '@/components/modals/ability/ability-modal';
 import { AboutModal } from '@/components/modals/about/about-modal';
 import { Ancestry } from '@/models/ancestry';
+import { AuthPage } from '@/components/pages/auth/auth-page';
 import { Career } from '@/models/career';
 import { Characteristic } from '@/enums/characteristic';
 import { Collections } from '@/utils/collections';
@@ -20,6 +21,7 @@ import { Element } from '@/models/element';
 import { ElementModal } from '@/components/modals/element/element-modal';
 import { Encounter } from '@/models/encounter';
 import { EncounterToolsModal } from '@/components/modals/encounter-tools/encounter-tools-modal';
+import { useAuth } from '@/contexts/AuthContext';
 import { ErrorBoundary } from '@/components/controls/error-boundary/error-boundary';
 import { FactoryLogic } from '@/logic/factory-logic';
 import { Feature } from '@/models/feature';
@@ -56,6 +58,7 @@ import { PlaybookListPage } from '@/components/pages/playbook/playbook-list/play
 import { PlaybookLogic } from '@/logic/playbook-logic';
 import { PlaybookUpdateLogic } from '@/logic/update/playbook-update-logic';
 import { PlayerViewModal } from '@/components/modals/player-view/player-view-modal';
+import { AdminToolsModal } from '@/components/modals/admin-tools/admin-tools-modal';
 import { Project } from '@/models/project';
 import { ReferenceModal } from '@/components/modals/reference/reference-modal';
 import { RollModal } from '@/components/modals/roll/roll-modal';
@@ -75,6 +78,7 @@ import { TerrainModal } from '@/components/modals/terrain/terrain-modal';
 import { Title } from '@/models/title';
 import { Utils } from '@/utils/utils';
 import { WelcomePage } from '@/components/pages/welcome/welcome-page';
+import * as storage from '@/services/character-storage';
 import localforage from 'localforage';
 import { useErrorListener } from '@/hooks/use-error-listener';
 import { useIsSmall } from '@/hooks/use-is-small';
@@ -82,6 +86,8 @@ import { useNavigation } from '@/hooks/use-navigation';
 import { useSyncStatus } from '@/hooks/use-sync-status';
 
 import './main.scss';
+
+const ADMIN_SCOPE_STORAGE_KEY = 'forgesteel-admin-show-all';
 
 interface Props {
 	heroes: Hero[];
@@ -96,6 +102,7 @@ export const Main = (props: Props) => {
 	const isSmall = useIsSmall();
 	const navigation = useNavigation();
 	const [ notify, notifyContext ] = notification.useNotification();
+	const { user, userProfile, loading: authLoading } = useAuth();
 	const { triggerSyncOnChange } = useSyncStatus();
 	const [ heroes, setHeroes ] = useState<Hero[]>(props.heroes);
 	const [ playbook, setPlaybook ] = useState<Playbook>(props.playbook);
@@ -109,10 +116,107 @@ export const Main = (props: Props) => {
 		}
 		return opts;
 	});
+	const [ showAllCharacters, setShowAllCharacters ] = useState<boolean>(() => {
+		if (typeof window === 'undefined') {
+			return false;
+		}
+		return window.localStorage.getItem(ADMIN_SCOPE_STORAGE_KEY) === 'true';
+	});
 	const [ errors, setErrors ] = useState<Event[]>([]);
 	const [ drawer, setDrawer ] = useState<ReactNode>(null);
 	const [ playerView, setPlayerView ] = useState<Window | null>(null);
 	const [ spinning, setSpinning ] = useState(false);
+	const previousUserIdRef = useRef<string | null | undefined>(undefined);
+
+	useEffect(() => {
+		const currentId = user?.uid ?? null;
+		const previousId = previousUserIdRef.current;
+
+		if (previousId !== undefined && previousId !== currentId) {
+			setHeroes([]);
+		}
+
+		previousUserIdRef.current = currentId;
+	}, [ user ]);
+
+	useEffect(() => {
+		if (!userProfile?.is_admin) {
+			setShowAllCharacters(false);
+			if (typeof window !== 'undefined') {
+				window.localStorage.removeItem(ADMIN_SCOPE_STORAGE_KEY);
+			}
+		}
+	}, [ userProfile ]);
+
+	const fetchHeroes = useCallback(async () => {
+		const adminScope = userProfile?.is_admin && showAllCharacters ? 'all' : undefined;
+		const loadedHeroes = await storage.getAllCharacters(
+			adminScope ? { adminScope } : {}
+		);
+		const sortedHeroes = Collections.sort(loadedHeroes, h => h.name);
+		try {
+			await storage.setLocalCharacters(sortedHeroes);
+		} catch (error) {
+			console.error('[MAIN] ❌ Failed to cache heroes locally:', error);
+		}
+		console.log(`[MAIN] 🔄 Synced ${sortedHeroes.length} hero(es) from ${user ? 'API' : 'local storage'}`);
+		return sortedHeroes;
+	}, [ user, userProfile, showAllCharacters ]);
+
+	const refreshHeroes = useCallback(async () => {
+		try {
+			const sortedHeroes = await fetchHeroes();
+			setHeroes(sortedHeroes);
+		} catch (err) {
+			console.error('[MAIN] ❌ Failed to load heroes:', err);
+			notify.error({
+				message: 'Failed to load heroes',
+				description: err instanceof Error ? err.message : String(err),
+				placement: 'top'
+			});
+		}
+	}, [ fetchHeroes, notify ]);
+
+	useEffect(() => {
+		if (authLoading) {
+			return;
+		}
+
+		let cancelled = false;
+
+		const syncHeroes = async () => {
+			try {
+				const sortedHeroes = await fetchHeroes();
+				if (cancelled) {
+					return;
+				}
+				setHeroes(sortedHeroes);
+			} catch (err) {
+				if (cancelled) {
+					return;
+				}
+				console.error('[MAIN] ❌ Failed to load heroes:', err);
+				notify.error({
+					message: 'Failed to load heroes',
+					description: err instanceof Error ? err.message : String(err),
+					placement: 'top'
+				});
+			}
+		};
+
+		syncHeroes();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [ authLoading, fetchHeroes, notify ]);
+
+	const handleAdminScopeToggle = (value: boolean) => {
+		setShowAllCharacters(value);
+		if (typeof window !== 'undefined') {
+			window.localStorage.setItem(ADMIN_SCOPE_STORAGE_KEY, value ? 'true' : 'false');
+		}
+	};
 
 	useErrorListener(event => setErrors([ ...errors, event ]));
 
@@ -134,24 +238,24 @@ export const Main = (props: Props) => {
 		}
 	};
 
-	const persistHeroes = (heroes: Hero[]) => {
-		return localforage
-			.setItem<Hero[]>('forgesteel-heroes', Collections.sort(heroes, h => h.name))
-			.then(
-				setHeroes,
-				err => {
-					console.error(err);
-					notify.error({
-						message: 'Error saving heroes',
-						description: err,
-						placement: 'top'
-					});
-				}
-			)
-			.then(() => {
-				// Trigger sync when data changes
-				triggerSyncOnChange();
+	const persistHeroes = async (heroes: Hero[]) => {
+		const sorted = Collections.sort(heroes, h => h.name);
+		setHeroes(sorted);
+
+		try {
+			// Save all heroes using the storage service (API when signed in, LocalForage when offline)
+			await Promise.all(sorted.map(hero => storage.saveCharacter(hero)));
+			console.log(`[MAIN] ✅ Saved ${sorted.length} hero(es)`);
+			// Trigger sync when data changes
+			triggerSyncOnChange();
+		} catch (err) {
+			console.error('[MAIN] ❌ Error saving heroes:', err);
+			notify.error({
+				message: 'Error saving heroes',
+				description: err instanceof Error ? err.message : String(err),
+				placement: 'top'
 			});
+		}
 	};
 
 	const persistPlaybook = (playbook: Playbook) => {
@@ -1564,18 +1668,43 @@ export const Main = (props: Props) => {
 		);
 	};
 
+	const showAdminTools = () => {
+		setDrawer(
+			<AdminToolsModal
+				onClose={() => setDrawer(null)}
+				onRefresh={refreshHeroes}
+			/>
+		);
+	};
+
 	// #endregion
+
+	if (authLoading) {
+		return (
+			<div className='app-loading'>
+				<Spin size='large' />
+			</div>
+		);
+	}
 
 	return (
 		<ErrorBoundary name='main'>
 			<Routes>
 				<Route
+					path='auth'
+					element={user ? <Navigate to='/hero' replace /> : <AuthPage />}
+				/>
+				<Route
 					path='/'
 					element={
-						<MainLayout
-							drawer={drawer}
-							setDrawer={setDrawer}
-						/>
+						user ? (
+							<MainLayout
+								drawer={drawer}
+								setDrawer={setDrawer}
+							/>
+						) : (
+							<Navigate to='/auth' replace />
+						)
 					}
 				>
 					<Route
@@ -1609,6 +1738,10 @@ export const Main = (props: Props) => {
 									addHero={newHero}
 									importHero={importHero}
 									showParty={onShowParty}
+									isAdmin={Boolean(userProfile?.is_admin)}
+									showAllCharacters={showAllCharacters}
+									onToggleShowAll={handleAdminScopeToggle}
+									onShowAdminTools={showAdminTools}
 								/>
 							}
 						/>
@@ -1835,6 +1968,10 @@ export const Main = (props: Props) => {
 						/>
 					</Route>
 				</Route>
+				<Route
+					path='*'
+					element={<Navigate to={user ? '/hero' : '/auth'} replace />}
+				/>
 			</Routes>
 			{notifyContext}
 			<Spin spinning={spinning} size='large' fullscreen={true} />
