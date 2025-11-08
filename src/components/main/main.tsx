@@ -375,11 +375,16 @@ export const Main = (props: Props) => {
 
 	// #region Heroes
 
-	const deleteHero = (hero: Hero) => {
+	const deleteHero = async (hero: Hero) => {
+		// Delete from backend/LocalForage using storage service
+		await storage.deleteCharacter(hero.id);
+
+		// Update local state
 		const copy = Utils.copy(heroes.filter(h => h.id !== hero.id));
 		const stayInFolder = copy.some(h => h.folder === hero.folder);
 		navigation.goToHeroList(stayInFolder ? hero.folder : undefined);
 
+		// Persist updated list
 		persistHeroes(copy);
 	};
 
