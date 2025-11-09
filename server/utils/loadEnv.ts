@@ -8,12 +8,19 @@ import dotenv from 'dotenv';
 // Production: server/dist/server/utils/ -> already at /home/gamers/nodejs/forgesteel-api/server/dist/server/utils
 //             so we just need to check current directory first, then go up
 
+// Determine environment (development by default when not in Passenger)
+const isProduction = !!(process.env.PASSENGER_BASE_URI || process.env.PASSENGER_APP_ENV);
+const envFile = isProduction ? '.env' : '.env.development';
+
 // Try multiple possible .env locations
 const possiblePaths = [
+	path.join(process.cwd(), envFile),
 	path.join(process.cwd(), '.env.local'),
 	path.join(process.cwd(), '.env'),
+	path.join(__dirname, '../../../../', envFile),
 	path.join(__dirname, '../../../../.env.local'),
 	path.join(__dirname, '../../../../.env'),
+	path.join(__dirname, '../../', envFile),
 	path.join(__dirname, '../../.env.local'),
 	path.join(__dirname, '../../.env')
 ];
