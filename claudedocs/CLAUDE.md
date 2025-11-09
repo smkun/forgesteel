@@ -1133,11 +1133,13 @@ None - all requested work completed.
 #### Files Modified
 
 **New Ancestry Files** (user-created, integrated by assistant):
+
 - `src/data/ancestries/falcar.ts` - Added default export
 - `src/data/ancestries/stigara.ts` - Added default export (note typo: strigara → stigara in filename)
 - `src/data/ancestries/zefiri.ts` - Added default export, fixed Blast→Burst enum error
 
 **Integration Files**:
+
 - `src/data/ancestry-data.ts` - Added imports and static properties for all three Plumari ancestries
   - Import: [line 13](src/data/ancestry-data.ts#L13) (falcar)
   - Import: [line 22](src/data/ancestry-data.ts#L22) (strigara)
@@ -1151,11 +1153,13 @@ None - all requested work completed.
 #### Plumari Design Analysis
 
 **Shared Features**:
+
 - Sky-Sight (High Senses) - Ignore dim light penalties, edge on distant/fast targets outdoors
 - 6 shared 1-point options: Thermal Reader, Stooping Dash, Tight Turn, Air Brakes, Thermal Glide, Keen Cry
 - 4 shared 2-point options: Wings (fly), Gale Feint, Crosswind Roll, Defy the Downdraft
 
 **Size Differentiation**:
+
 | Ancestry | Size | Points | Unique 1-point | Unique 2-point | Design Theme |
 |----------|------|--------|----------------|----------------|--------------|
 | Falcar   | 1M   | 3      | 3              | 3              | Speed & precision |
@@ -1163,6 +1167,7 @@ None - all requested work completed.
 | Zefiri   | 1S   | 4      | 4              | 3              | Agility & evasion |
 
 **Balance Notes**:
+
 - Small size (Zefiri) costs 4 points but gains most options and Small Stature movement advantage
 - Large size (Strigara) costs only 2 points, reflecting fewer options but inherent size benefits
 - Medium size (Falcar) at 3 points balances flexibility with moderate option count
@@ -1170,6 +1175,7 @@ None - all requested work completed.
 #### Build Verification
 
 Build succeeded in **10.16s** with all three Plumari ancestries properly integrated:
+
 - No TypeScript errors
 - No missing imports
 - All ancestries available in draachenmar sourcebook
@@ -1217,6 +1223,141 @@ None currently active - all Plumari ancestry integration completed.
    - anthousai.ts and dryad.ts exist but are not in draachenmar.ts
    - Determine if these should be integrated in future sessions
    - Check if any other ancestry files are present but not integrated
+
+### Session: 2025-01-09 (Additive Architecture Implementation)
+
+#### Changes Made
+
+1. **Fixed Environment File Loading**
+   - **Issue**: Backend server couldn't start - was loading production `.env` instead of development `.env.development`
+   - **Root Cause**: `loadEnv.ts` had no environment detection logic
+   - **Fix**: [server/utils/loadEnv.ts:11-26](server/utils/loadEnv.ts#L11-L26)
+     - Added Passenger environment detection (`PASSENGER_BASE_URI`, `PASSENGER_APP_ENV`)
+     - Implemented dynamic env file selection (`.env.development` for local, `.env` for production)
+     - Added multiple fallback paths for both environments
+   - **Result**: Backend successfully starts with correct Firebase credentials path for development
+
+2. **Implemented Additive Sourcebook Architecture**
+   - **Issue**: App only showed Draachenmar sourcebook; Core sourcebook was missing from available sources
+   - **Root Cause**: `SourcebookLogic.getSourcebooks()` only returned Draachenmar ([sourcebook-logic.ts:130-146](src/logic/sourcebook-logic.ts#L130-L146))
+   - **Fixes**:
+     - Added `SourcebookData.core` to sourcebooks list (first priority)
+     - Added `SourcebookData.playtest` and `SourcebookData.ratcatcher` always available (removed feature flag requirement)
+     - Removed unused `FeatureFlags` import ([sourcebook-logic.ts:1-28](src/logic/sourcebook-logic.ts#L1-L28))
+   - **Hero Creation**: Heroes created with `[SourcebookData.core.id, SourcebookData.draachenmar.id]` ([main.tsx:359-361](src/components/main/main.tsx#L359-L361))
+   - **Result**: All four sourcebooks (Core, Draachenmar, Playtest, Ratcatcher) now available in hero creation and "Select Sourcebooks" UI
+
+3. **CORS and Frontend Server Issues Resolved**
+   - **Issue**: Two frontend servers running on ports 5173 and 5174, CORS errors from accessing port 5174
+   - **Root Cause**: Vite proxy only configured for port 5173
+   - **Fix**: Killed duplicate server process on port 5174
+   - **Result**: Frontend on port 5173 correctly proxies `/api` requests to backend on port 4000
+
+#### Architecture Changes
+
+**Before** (Replacement Architecture):
+
+```
+Heroes created with: ['draachenmar']
+Available sourcebooks: [Draachenmar] (+ Playtest/Ratcatcher with feature flags)
+Ancestries: Only Draachenmar custom ancestries (Angulotl, Aurealgar, etc.)
+```
+
+**After** (Additive Architecture):
+
+```
+Heroes created with: ['core', 'draachenmar']
+Available sourcebooks: [Core, Draachenmar, Playtest, Ratcatcher] (always available)
+Ancestries: Core ancestries (Human, Elf, Dwarf, etc.) + Draachenmar custom ancestries
+All content from both sourcebooks accessible to heroes
+```
+
+#### Files Modified
+
+**Environment Loading**:
+
+- `server/utils/loadEnv.ts` - Added environment detection and dynamic `.env` file selection
+
+**Sourcebook Architecture**:
+
+- `src/logic/sourcebook-logic.ts` - Implemented additive sourcebook loading with Core + Draachenmar + Playtest + Ratcatcher
+
+**Existing Correct Implementations** (verified):
+
+- `src/components/main/main.tsx` - Hero creation already using both Core and Draachenmar
+- `src/data/sourcebooks/draachenmar.ts` - Properly configured as additive supplement with empty arrays for Core content
+- `src/data/sourcebook-data.ts` - All sourcebooks properly exported
+
+#### Development Environment Fixed
+
+**Backend Server**:
+
+- Port: 4000
+- Environment: Development (`.env.development`)
+- Firebase Credentials: `./firebase-service-account.json` (local path)
+- Status: ✅ Running successfully
+
+**Frontend Server**:
+
+- Port: 5173 (Vite dev server)
+- Proxy: `/api` → `http://localhost:4000`
+- Status: ✅ Running successfully with CORS resolved
+
+**Merge Tool** (verified in [merge-tool.sh](merge-tool.sh)):
+
+- Protected files: `server/`, `db/`, `src/data/sourcebooks/draachenmar.ts`, custom ancestries
+- Auto-merge: `src/data/sourcebooks/core.ts`, `playtest.ts`, `ratcatcher.ts`
+- Manual merge: `main.tsx`, `package.json`, `ancestry-data.ts`, `sourcebook-logic.ts`
+
+#### New Tasks
+
+None - all work completed for additive architecture implementation.
+
+#### Risks Identified
+
+1. **Manual Merge Required for Future Updates**
+   - **Risk**: `sourcebook-logic.ts` now in MANUAL_MERGE list due to custom Core + Draachenmar loading
+   - **Impact**: Future community updates to this file require manual review
+   - **Mitigation**: Merge tool will create `.merge-conflicts/` comparison files for review
+   - **Note**: This is intentional - our custom additive architecture must be preserved
+
+2. **Feature Flags Removed**
+   - **Risk**: Playtest and Ratcatcher now always available (removed feature flag gates)
+   - **Impact**: All users see playtest/ratcatcher content by default
+   - **Mitigation**: This is desired behavior for Draachenmar fork
+   - **Decision**: Intentional simplification - Draachenmar fork doesn't need content gating
+
+3. **Existing Heroes May Have Old Sourcebook IDs**
+   - **Risk**: Heroes created before this session only have `['draachenmar']` in `settingIDs`
+   - **Impact**: Those heroes won't show Core content until user manually adds Core via "Select Sourcebooks"
+   - **Mitigation**: New heroes automatically get both Core and Draachenmar
+   - **Workaround**: Users can click "Select Sourcebooks" button to add Core to existing heroes
+
+#### Next 3 Tasks
+
+1. **Test Additive Architecture**
+   - Create new hero and verify both Core and Draachenmar sourcebooks appear in Start section
+   - Verify all Core ancestries (Human, Elf, Dwarf, Orc, etc.) are available in Ancestry selection
+   - Verify all Draachenmar ancestries (Angulotl, Aurealgar, Seraphite, etc.) are available
+   - Test that hero can access content from both sourcebooks
+
+2. **Test Sourcebook Selection UI**
+   - Open hero creation → Start tab → "Select Sourcebooks" button
+   - Verify all four sourcebooks appear: Core, Draachenmar, Playtest, Ratcatcher
+   - Test adding/removing sourcebooks from hero
+   - Verify sourcebook changes affect available ancestries/classes/etc.
+
+3. **Update Existing Heroes (Optional)**
+   - Identify any existing heroes with only Draachenmar sourcebook
+   - Add Core sourcebook to their `settingIDs` via "Select Sourcebooks"
+   - Verify those heroes now have access to Core content
+
+#### Build Status
+
+- ✅ Frontend: No TypeScript errors, hot reload working
+- ✅ Backend: Successfully running with correct environment variables
+- ✅ Linter: No errors after removing unused FeatureFlags import
+- ✅ Integration: Frontend communicating with backend via Vite proxy
 
 ---
 

@@ -7,7 +7,7 @@ import { FeatureField } from '@/enums/feature-field';
 
 export const zefiri: Ancestry = {
 	id: 'ancestry-zefiri',
-	name: 'Zefiri',
+	name: 'Zefiri (Plumari)',
 	description:
 		'Laughing slipstreams and rigging-dancers; masters of tight turns and sudden gusts. Small, agile Plumari who excel at infiltration and acrobatics.',
 	features: [
