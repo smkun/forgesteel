@@ -34,17 +34,14 @@ export const core: Sourcebook = {
 	type: SourcebookType.Official,
 	ancestries: [
 		AncestryData.devil,
-		AncestryData.draconem,
+		AncestryData.dragonKnight,
 		AncestryData.dwarf,
-		AncestryData.hakaan,
+		AncestryData.wodeElf,
 		AncestryData.highElf,
 		AncestryData.human,
-		AncestryData.memonek,
 		AncestryData.orc,
 		AncestryData.polder,
-		AncestryData.revenant,
-		AncestryData.timeRaider,
-		AncestryData.wodeElf
+		AncestryData.revenant
 	],
 	cultures: [
 		FactoryLogic.createCulture('Artisan Guild', 'Urban, bureaucratic, creative.', CultureType.Professional, EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.creative),
@@ -353,7 +350,8 @@ export const core: Sourcebook = {
 		TitleData.unchained,
 		// Special
 		TitleData.angler,
-		TitleData.goldenrod
+		TitleData.goldenrod,
+		TitleData.masterOfReels
 	],
 	items: [
 		ConsumableData.blackAshDart,

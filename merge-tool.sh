@@ -263,7 +263,7 @@ merge_new_files() {
         cp "$ANDY_DIR/$file" "$file"
 
         log_info "Copied new file: $file"
-        ((count++))
+        count=$((count + 1))
     done < /tmp/new-files.txt
 
     log "Copied $count new files ✓"
@@ -290,7 +290,7 @@ merge_modified_files() {
         # Skip protected files
         if should_keep_file "$file"; then
             log_warn "Skipping protected file: $file"
-            ((skipped++))
+            skipped=$((skipped + 1))
             continue
         fi
 
@@ -298,7 +298,7 @@ merge_modified_files() {
         if is_community_sourcebook "$file"; then
             cp "$ANDY_DIR/$file" "$file"
             log_info "Auto-merged community sourcebook: $file"
-            ((community_merged++))
+            community_merged=$((community_merged + 1))
             continue
         fi
 
@@ -312,14 +312,14 @@ merge_modified_files() {
             cp "$file" ".merge-conflicts/$(basename $file).draachenmar"
             cp "$ANDY_DIR/$file" ".merge-conflicts/$(basename $file).andy"
 
-            ((manual_needed++))
+            manual_needed=$((manual_needed + 1))
             continue
         fi
 
         # Auto-merge (accept theirs for non-critical files)
         cp "$ANDY_DIR/$file" "$file"
         log_info "Auto-merged: $file"
-        ((auto_merged++))
+        auto_merged=$((auto_merged + 1))
 
     done < /tmp/modified-files.txt
 
