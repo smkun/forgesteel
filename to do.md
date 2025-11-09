@@ -1,6 +1,6 @@
 # Development Plans
 
-### Bugs
+## Bugs
 
 * The Blade of Quintessence should gain the Ranged keyword at level 5.
 

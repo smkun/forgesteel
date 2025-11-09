@@ -7,7 +7,6 @@ import { Culture } from '@/models/culture';
 import { Domain } from '@/models/domain';
 import { Element } from '@/models/element';
 import { Feature } from '@/models/feature';
-import { FeatureFlags } from '@/utils/feature-flags';
 import { FeatureType } from '@/enums/feature-type';
 import { HeroClass } from '@/models/class';
 import { Imbuement } from '@/models/imbuement';
@@ -128,17 +127,16 @@ export class SourcebookLogic {
 	///////////////////////////////////////////////////////////////////////////
 
 	static getSourcebooks = (homebrew: Sourcebook[] = []) => {
+		// Core sourcebook is ALWAYS included (contains all base game content)
+		// Draachenmar is ALWAYS included (contains custom homebrew content)
+		// Playtest and Ratcatcher are ALWAYS available in Draachenmar fork
+		// This additive architecture allows using multiple sourcebooks together
 		const list: Sourcebook[] = [
-			SourcebookData.draachenmar
+			SourcebookData.core,
+			SourcebookData.draachenmar,
+			SourcebookData.playtest,
+			SourcebookData.ratcatcher
 		];
-
-		if (FeatureFlags.hasFlag(FeatureFlags.playtest.code)) {
-			list.push(SourcebookData.playtest);
-		}
-
-		if (FeatureFlags.hasFlag(FeatureFlags.ratcatcher.code)) {
-			list.push(SourcebookData.ratcatcher);
-		}
 
 		list.push(...Collections.sort(homebrew, cs => cs.name));
 
