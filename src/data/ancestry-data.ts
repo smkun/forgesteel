@@ -5,7 +5,7 @@ import { aurven } from '@/data/ancestries/aurven';
 import { caprini } from '@/data/ancestries/caprini';
 import { cervari } from '@/data/ancestries/cervari';
 import { devil } from '@/data/ancestries/devil';
-import { draconem } from '@/data/ancestries/draconem';
+import { dragonKnight } from '@/data/ancestries/dragon-knight';
 import { anthousai } from './ancestries/anthousai';
 import { dryad } from './ancestries/dryad';
 import { dwarf } from '@/data/ancestries/dwarf';
@@ -29,7 +29,7 @@ import { zefiri } from '@/data/ancestries/zefiri';
 export class AncestryData {
 	static anthousai = anthousai;
 	static devil = devil;
-	static draconem = draconem;
+	static dragonKnight = dragonKnight;
 	static dryad = dryad;
 	static dwarf = dwarf;
 	static wodeElf = wodeElf;
