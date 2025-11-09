@@ -354,7 +354,12 @@ export const Main = (props: Props) => {
 	// #region Welcome
 
 	const newHero = (folder: string) => {
-		const hero = FactoryLogic.createHero([ SourcebookData.draachenmar.id ]);
+		// Load Core (main system) + Draachenmar (custom content)
+		// This additive approach makes merging upstream updates easier
+		const hero = FactoryLogic.createHero([
+			SourcebookData.core.id,
+			SourcebookData.draachenmar.id
+		]);
 		hero.folder = folder;
 
 		setDrawer(null);
