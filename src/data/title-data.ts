@@ -37,7 +37,7 @@ export class TitleData {
 	static angler: Title = {
 		id: 'title-angler',
 		name: 'Angler',
-		description: 'You gain the following benefit',
+		description: 'You gain the following benefit.',
 		echelon: 1,
 		prerequisites: '120 project points spent on the Tackle table while Fishing.',
 		features: [
@@ -261,7 +261,7 @@ You find an agent who can provide you with three pieces of information about the
 	static goldenrod: Title = {
 		id: 'title-goldenrod',
 		name: 'Goldenrod',
-		description: 'You gain the following benefit',
+		description: 'You gain the following benefit.',
 		echelon: 1,
 		prerequisites: '300 project points spent on the Tackle table while Fishing.',
 		features: [
@@ -388,6 +388,22 @@ You find an agent who can provide you with three pieces of information about the
 				id: 'title-marshal-4',
 				name: 'Trained Tracker',
 				description: 'You gain an edge on tests made to track criminals.'
+			})
+		],
+		selectedFeatureID: ''
+	};
+
+	static masterOfReels: Title = {
+		id: 'title-master-of-reels',
+		name: 'Master of Reels',
+		description: 'You gain the following benefit.',
+		echelon: 1,
+		prerequisites: 'You gain this title by undertaking the Fishing project.',
+		features: [
+			FactoryLogic.feature.create({
+				id: 'title-master-of-reels-1',
+				name: 'Master of Reels',
+				description: 'Whenever you deal damage to a target who is 2 or more squares away from you and that target isn’t also force moved, you can pull the target a number of squares equal to your Agility, Reason, or Intuition score (your choice).'
 			})
 		],
 		selectedFeatureID: ''
@@ -1372,12 +1388,12 @@ When you are reduced to 0 Stamina by damage that isn’t fire or holy damage and
 			FactoryLogic.feature.create({
 				id: 'title-dragon-blooded-1',
 				name: 'Dragon Scaled',
-				description: 'Dragon scales grow on your body wherever the heart\'s blood of the dragon touched you. You gain the Wyrmplate signature trait from the draconem ancestry.'
+				description: 'Dragon scales grow on your body wherever the heart’s blood of the dragon touched you. You gain the Wyrmplate signature trait from the dragon knight ancestry.'
 			}),
 			FactoryLogic.feature.create({
 				id: 'title-dragon-blooded-2',
 				name: 'Dragon Touched',
-				description: 'You gain 3 ancestry points to spend on purchased draconem ancestry traits.'
+				description: 'You gain 3 ancestry points to spend on purchased dragon knight ancestry traits.'
 			})
 		],
 		selectedFeatureID: ''
