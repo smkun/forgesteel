@@ -1,4 +1,5 @@
 import { angulotl } from './ancestries/angulotl';
+import { anthousai } from './ancestries/anthousai';
 import { aurealgar } from '@/data/ancestries/aurealgar';
 import { aurkin } from '@/data/ancestries/aurkin';
 import { aurven } from '@/data/ancestries/aurven';
@@ -6,7 +7,6 @@ import { caprini } from '@/data/ancestries/caprini';
 import { cervari } from '@/data/ancestries/cervari';
 import { devil } from '@/data/ancestries/devil';
 import { dragonKnight } from '@/data/ancestries/dragon-knight';
-import { anthousai } from './ancestries/anthousai';
 import { dryad } from './ancestries/dryad';
 import { dwarf } from '@/data/ancestries/dwarf';
 import { elgari } from '@/data/ancestries/elgari';
