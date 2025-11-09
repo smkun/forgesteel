@@ -2053,7 +2053,7 @@ Rivals are NPCs built around the mechanics of seven of the classes in Draw Steel
 		}),
 		FactoryLogic.feature.createAddOn({
 			id: 'ancestry-2',
-			name: 'Draconian (for the draconem)',
+			name: 'Draconian (for the dragon knight)',
 			description: `
 - **Size Adjustment:** 1M
 - **Stability Adjustment:** +1,
