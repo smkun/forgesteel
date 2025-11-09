@@ -25,8 +25,9 @@ export const draachenmar: Sourcebook = {
         '32Gamers homebrew world - custom content that extends the core sourcebook.',
 	type: SourcebookType.Homebrew,
 
-	// Draachenmar custom ancestries only (core ancestries loaded separately)
+	// Draachenmar custom ancestries + official non-core ancestries used in Draachenmar
 	ancestries: [
+		// Custom Draachenmar ancestries
 		AncestryData.angulotl,
 		AncestryData.aurealgar,
 		AncestryData.aurkin,
@@ -40,7 +41,11 @@ export const draachenmar: Sourcebook = {
 		AncestryData.strigara,
 		AncestryData.verminari,
 		AncestryData.warforged,
-		AncestryData.zefiri
+		AncestryData.zefiri,
+		// Official non-core ancestries (from orden sourcebook)
+		AncestryData.hakaan,
+		AncestryData.memonek,
+		AncestryData.timeRaider
 	],
 
 	// Draachenmar custom ancestral cultures only (core cultures loaded separately)
@@ -116,6 +121,34 @@ export const draachenmar: Sourcebook = {
 			OrganizationData.communal,
 			UpbringingData.martial,
 			'Aeryn'
+		),
+		// Official non-core cultures (from orden sourcebook)
+		FactoryLogic.createCulture(
+			'Hakaan',
+			'Rural, communal, labor.',
+			CultureType.Ancestral,
+			EnvironmentData.rural,
+			OrganizationData.communal,
+			UpbringingData.labor,
+			'Vhroun'
+		),
+		FactoryLogic.createCulture(
+			'Memonek',
+			'Nomadic, communal, academic.',
+			CultureType.Ancestral,
+			EnvironmentData.nomadic,
+			OrganizationData.communal,
+			UpbringingData.academic,
+			'Axiomel'
+		),
+		FactoryLogic.createCulture(
+			'Time Raider',
+			'Nomadic, communal, martial.',
+			CultureType.Ancestral,
+			EnvironmentData.nomadic,
+			OrganizationData.communal,
+			UpbringingData.martial,
+			'Voll'
 		)
 	],
 
