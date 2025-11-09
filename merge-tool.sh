@@ -248,6 +248,9 @@ merge_new_files() {
 
     local count=0
     while IFS= read -r file; do
+        # Remove leading ./ if present
+        file="${file#./}"
+
         # Skip if it's a file we should never merge
         if should_keep_file "$file"; then
             log_warn "Skipping protected file: $file"
@@ -281,6 +284,9 @@ merge_modified_files() {
     local community_merged=0
 
     while IFS= read -r file; do
+        # Remove leading ./ if present
+        file="${file#./}"
+
         # Skip protected files
         if should_keep_file "$file"; then
             log_warn "Skipping protected file: $file"
