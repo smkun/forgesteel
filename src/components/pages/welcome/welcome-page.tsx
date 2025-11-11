@@ -383,6 +383,7 @@ const WelcomeButtons = (props: WelcomeButtonsProps) => {
 					<Flex align='center' justify='center' gap={10}>
 						<Button type='primary' icon={<TeamOutlined />} onClick={() => navigation.goToHeroList()}>Heroes</Button>
 						<Button icon={<PlusOutlined />} onClick={props.onNewHero}>New Hero</Button>
+						<Button icon={<TeamOutlined />} onClick={() => navigation.goToCampaigns()}>Campaigns</Button>
 					</Flex>
 				</div>
 			);

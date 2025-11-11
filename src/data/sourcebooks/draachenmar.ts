@@ -130,7 +130,7 @@ export const draachenmar: Sourcebook = {
 			EnvironmentData.rural,
 			OrganizationData.communal,
 			UpbringingData.labor,
-			'Shellspeak'
+			'Terrari'
 		),
 		// Official non-core cultures (from orden sourcebook)
 		FactoryLogic.createCulture(
@@ -322,6 +322,13 @@ export const draachenmar: Sourcebook = {
 			name: 'Szetch',
 			description:
                 'Verminari language; chittering consonants and guttural undertones; spoken by goblins, radenwights, and verminari.',
+			type: LanguageType.Cultural,
+			related: []
+		},
+		{
+			name: 'Potamic',
+			description:
+                'Cultural – Hippori river-tongue; broad labials and open vowels; "bank-speech" for trade and "water-speech" for ferry commands; spoken by Hippori across floodplains and canal cities.',
 			type: LanguageType.Cultural,
 			related: []
 		},

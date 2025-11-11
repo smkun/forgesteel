@@ -35,6 +35,9 @@
 ### Business Logic
 
 - `server/logic/character.logic.ts` - Character business rules
+  - ⚠️ **MODIFIED 2025-01-11**: Added campaign fields to `mapCharacterRecord` function (lines 488-489)
+  - ⚠️ **CRITICAL**: This function maps database records to API responses - missing fields here break frontend
+- `server/logic/campaign.logic.ts` - Campaign management and character assignment
 - `server/logic/auth.logic.ts` - Authentication logic
 
 ### Middleware
@@ -181,15 +184,26 @@
 
 **NEW FILE**: `src/components/modals/assign-gm/assign-gm-modal.tsx`
 
-- GM assignment modal
+- GM assignment modal (legacy feature)
 - **CONFLICT RISK**: 🟢 LOW - New file
+
+**NEW FILE**: `src/components/modals/assign-campaign/assign-campaign-modal.tsx`
+
+- Campaign assignment modal (current feature)
+- Allows assigning characters to campaigns
+- **CONFLICT RISK**: 🟢 LOW - New file
+- ⚠️ **Added 2025-01-11**: Replaces legacy GM assignment with campaign-based workflow
 
 **MODIFIED**: `src/components/pages/heroes/hero-view/hero-view-page.tsx`
 
 - **Lines 34**: Import character storage
 - **Lines 78-124**: Load GM/owner info from API
-- **Lines 151-184**: GM selector UI
-- **CONFLICT RISK**: 🟡 MEDIUM - Modified existing component
+- **Lines 136-192**: Load campaign info from API (added 2025-01-11)
+- **Lines 194-243**: Refresh campaign info after assignment (added 2025-01-11)
+- **Lines 245-279**: Campaign selector UI with owner display
+- **Lines 435-442**: AssignCampaignModal integration
+- **CONFLICT RISK**: 🔴 HIGH - Core hero view component with campaign integration
+- ⚠️ **CRITICAL**: Campaign data flow depends on backend `mapCharacterRecord` including campaign fields
 
 **MODIFIED**: `src/components/pages/heroes/hero-list/hero-list-page.tsx`
 
@@ -305,8 +319,10 @@
 ### Medium-Risk Files (Review Required)
 
 1. **`src/components/pages/heroes/hero-view/hero-view-page.tsx`**
-   - Added GM assignment UI
+   - Added campaign assignment UI (2025-01-11)
+   - Added GM assignment UI (legacy)
    - Review: Check if upstream modifies hero view
+   - ⚠️ **Data Dependency**: Requires backend campaign fields in API responses
 
 2. **`src/data/ancestries/*.ts`** (modified files)
    - Enhanced with Draachenmar features
@@ -315,6 +331,49 @@
 3. **`vite.config.ts`**
    - Added proxy configuration
    - Review: Merge build configuration changes
+
+4. **`src/services/api.ts`**
+   - Campaign assignment API endpoints (added 2025-01-11)
+   - Character fetching with campaign data
+   - Review: Ensure API response types match backend changes
+
+---
+
+## ⚠️ Critical Data Flow Dependencies (Frontend ↔ Backend)
+
+### Campaign Assignment Feature (Added 2025-01-11)
+
+**Frontend Components**:
+- `src/components/pages/heroes/hero-view/hero-view-page.tsx` - Campaign button UI
+- `src/components/modals/assign-campaign/assign-campaign-modal.tsx` - Assignment modal
+- `src/services/api.ts` - API client methods
+
+**Backend Components**:
+- `server/logic/character.logic.ts` - `mapCharacterRecord` function (lines 488-489)
+- `server/logic/campaign.logic.ts` - Campaign assignment business logic
+- `server/routes/character.routes.ts` - `serializeCharacter` function
+
+**Critical Mapping Chain**:
+```
+Database (MySQL)
+  ↓ LEFT JOIN campaigns
+Repository (characters.repository.ts)
+  ↓ Returns Character with campaign_id/campaign_name
+Logic Layer (character.logic.ts)
+  ↓ mapCharacterRecord() MUST include campaign fields ← BUG WAS HERE
+Routes (character.routes.ts)
+  ↓ serializeCharacter() includes campaign fields
+API Response (JSON)
+  ↓
+Frontend (hero-view-page.tsx)
+  ↓ Displays campaign button
+```
+
+**⚠️ DANGER**: If upstream modifies character interfaces or data flow:
+1. Verify `mapCharacterRecord` still includes campaign_id and campaign_name
+2. Verify `serializeCharacter` still outputs campaign fields to API
+3. Test campaign button displays campaign name after assignment
+4. Missing fields = button shows "Assign to Campaign" instead of campaign name
 
 ---
 
@@ -474,7 +533,11 @@ git cherry-pick <upstream-commit>
 
 ---
 
-**Last Updated**: 2025-11-08
+**Last Updated**: 2025-01-11
 **Maintainer**: Scott Kunian
 **Upstream Repo**: <https://github.com/andyaiken/forgesteel>
 **Custom Fork**: Draachenmar + Backend Integration
+
+**Recent Changes**:
+- 2025-01-11: Added campaign assignment feature documentation
+- 2025-01-11: Documented critical data flow for frontend-backend integration

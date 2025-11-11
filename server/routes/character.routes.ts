@@ -42,16 +42,68 @@ router.get(
 			);
 		}
 
+		console.log('[CHARACTER ROUTE /] First character RAW from DB:', {
+			id: characters[0]?.id,
+			campaign_id: characters[0]?.campaign_id,
+			campaign_name: characters[0]?.campaign_name
+		});
+		const serialized = characters.map(serializeCharacter);
+		console.log('[CHARACTER ROUTE /] First character SERIALIZED:', {
+			id: serialized[0]?.id,
+			campaign_id: serialized[0]?.campaign_id,
+			campaign_name: serialized[0]?.campaign_name
+		});
+
 		res.json({
 			count: characters.length,
-			characters: characters.map(serializeCharacter)
+			characters: serialized
+		});
+	})
+);
+
+// ================================================================
+// GET /api/characters/hero/:heroId
+// Get a specific character by hero ID (UUID)
+// ================================================================
+
+router.get(
+	'/hero/:heroId',
+	authMiddleware,
+	asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+		const user = req.user!;
+		const hero_id = req.params.heroId;
+
+		const character = await characterLogic.getCharacterByHeroId(
+			hero_id,
+			user.id,
+			user.is_admin
+		);
+
+		if (!character) {
+			throw createError(404, 'Character not found or access denied');
+		}
+
+		console.log('[CHARACTER ROUTE /hero/:heroId] Raw character from DB:', {
+			id: character.id,
+			campaign_id: character.campaign_id,
+			campaign_name: character.campaign_name
+		});
+		const serialized = serializeCharacter(character);
+		console.log('[CHARACTER ROUTE /hero/:heroId] Serialized character:', {
+			id: serialized.id,
+			campaign_id: serialized.campaign_id,
+			campaign_name: serialized.campaign_name
+		});
+
+		res.json({
+			...serialized
 		});
 	})
 );
 
 // ================================================================
 // GET /api/characters/:id
-// Get a specific character by ID
+// Get a specific character by database ID
 // ================================================================
 
 router.get(
@@ -433,6 +485,8 @@ function serializeCharacter(char: characterLogic.CharacterWithHero) {
 		gm_user_id: char.gm_user_id,
 		gm_email: char.gm_email,
 		gm_display_name: char.gm_display_name,
+		campaign_id: char.campaign_id,
+		campaign_name: char.campaign_name,
 		name: char.name,
 		hero: char.hero,
 		is_deleted: char.is_deleted,
