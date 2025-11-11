@@ -39,6 +39,7 @@ export const draachenmar: Sourcebook = {
 		AncestryData.lizardfolk,
 		AncestryData.seraphite,
 		AncestryData.strigara,
+		AncestryData.terrari,
 		AncestryData.verminari,
 		AncestryData.warforged,
 		AncestryData.zefiri,
@@ -121,6 +122,15 @@ export const draachenmar: Sourcebook = {
 			OrganizationData.communal,
 			UpbringingData.martial,
 			'Aeryn'
+		),
+		FactoryLogic.createCulture(
+			'Terrari',
+			'Rural, communal, labor — shellblooded folk who keep crossings and kitchens with stubborn grace, treating hospitality like shieldwork.',
+			CultureType.Ancestral,
+			EnvironmentData.rural,
+			OrganizationData.communal,
+			UpbringingData.labor,
+			'Shellspeak'
 		),
 		// Official non-core cultures (from orden sourcebook)
 		FactoryLogic.createCulture(

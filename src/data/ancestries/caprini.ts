@@ -1,4 +1,7 @@
+import { AbilityDistanceType } from '@/enums/abiity-distance-type';
+import { AbilityKeyword } from '@/enums/ability-keyword';
 import { Ancestry } from '@/models/ancestry';
+import { Characteristic } from '@/enums/characteristic';
 import { FactoryLogic } from '@/logic/factory-logic';
 import { FeatureField } from '@/enums/feature-field';
 
@@ -103,6 +106,31 @@ export const caprini: Ancestry = {
 						name: 'Ram\'s Head',
 						description: 'Your hardened skull and stubborn nature improve your resilience. Your first shove or Grab each scene gains an edge.',
 						value: 5
+					}),
+					value: 2
+				},
+				{
+					feature: FactoryLogic.feature.createAbility({
+						ability: FactoryLogic.createAbility({
+							id: 'caprini-option-8',
+							name: 'Crown of the Herd',
+							description: 'You unleash a thunderous bellow and antler-dominance display that overwhelms nearby foes.',
+							type: FactoryLogic.type.createMain(),
+							keywords: [ AbilityKeyword.Area ],
+							distance: [ FactoryLogic.distance.create({ type: AbilityDistanceType.Burst, value: 1 }) ],
+							target: 'Each enemy in the area',
+							cost: 'signature',
+							sections: [
+								FactoryLogic.createAbilitySectionRoll(
+									FactoryLogic.createPowerRoll({
+										characteristic: [ Characteristic.Presence ],
+										tier1: '2 untyped damage',
+										tier2: '5 untyped damage',
+										tier3: '7 untyped damage; choose one target hit—that target is Dazed until the end of its next turn'
+									})
+								)
+							]
+						})
 					}),
 					value: 2
 				}

@@ -29,7 +29,7 @@ export const seraphite: Ancestry = {
 		// Spend 4 ancestry points among these options
 		FactoryLogic.feature.createChoice({
 			id: 'seraphite-options',
-			name: 'Seraphite Options (4 points)',
+			name: 'Seraphite Options',
 			options: [
 				// 2-point options
 				{
@@ -146,7 +146,7 @@ export const seraphite: Ancestry = {
 			count: 'ancestry'
 		})
 	],
-	ancestryPoints: 4
+	ancestryPoints: 3
 };
 
 export default seraphite;

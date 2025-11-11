@@ -21,6 +21,7 @@ import { polder } from '@/data/ancestries/polder';
 import { revenant } from '@/data/ancestries/revenant';
 import { seraphite } from '@/data/ancestries/seraphite';
 import { strigara } from '@/data/ancestries/stigara';
+import { terrari } from '@/data/ancestries/terrari';
 import { timeRaider } from '@/data/ancestries/time-raider';
 import { verminari } from '@/data/ancestries/verminari';
 import { warforged } from '@/data/ancestries/warforged';
@@ -54,5 +55,6 @@ export class AncestryData {
 	static lizardfolk = lizardfolk;
 	static verminari = verminari;
 	static strigara = strigara;
+	static terrari = terrari;
 	static zefiri = zefiri;
 }
