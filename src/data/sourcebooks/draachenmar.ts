@@ -37,6 +37,7 @@ export const draachenmar: Sourcebook = {
 		AncestryData.elgari,
 		AncestryData.falcar,
 		AncestryData.lizardfolk,
+		AncestryData.loxonta,
 		AncestryData.seraphite,
 		AncestryData.strigara,
 		AncestryData.terrari,
@@ -104,6 +105,15 @@ export const draachenmar: Sourcebook = {
 			OrganizationData.communal,
 			UpbringingData.labor,
 			'Ssar\'uk'
+		),
+		FactoryLogic.createCulture(
+			'Loxonta',
+			'Nomadic, communal, labor — caravan oath-speakers who keep the long roads, stewarding treaties and trade routes with patient resolve.',
+			CultureType.Ancestral,
+			EnvironmentData.nomadic,
+			OrganizationData.communal,
+			UpbringingData.labor,
+			'Loxontic'
 		),
 		FactoryLogic.createCulture(
 			'Verminari',
@@ -303,6 +313,13 @@ export const draachenmar: Sourcebook = {
                 'Old hobgoblin state dialect; martial and administrative registers.',
 			type: LanguageType.Cultural,
 			related: [ 'Khelt' ]
+		},
+		{
+			name: 'Loxontic',
+			description:
+                'Caravan oath-tongue of the Loxonta; resonant, drum-cadenced speech with long vowels and sonorant clusters; rich in ledger terms and treaty formulae; spoken along trade roads and waystations.',
+			type: LanguageType.Cultural,
+			related: []
 		},
 		{
 			name: 'Seraphic',

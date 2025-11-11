@@ -15,6 +15,7 @@ import { hakaan } from '@/data/ancestries/hakaan';
 import { highElf } from '@/data/ancestries/elf-high';
 import { human } from '@/data/ancestries/human';
 import { lizardfolk } from '@/data/ancestries/lizardfolk';
+import { loxonta } from '@/data/ancestries/loxonta';
 import { memonek } from '@/data/ancestries/memonek';
 import { orc } from '@/data/ancestries/orc';
 import { polder } from '@/data/ancestries/polder';
@@ -53,6 +54,7 @@ export class AncestryData {
 	static seraphite = seraphite;
 	static angulotl = angulotl;
 	static lizardfolk = lizardfolk;
+	static loxonta = loxonta;
 	static verminari = verminari;
 	static strigara = strigara;
 	static terrari = terrari;
