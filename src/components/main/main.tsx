@@ -9,6 +9,8 @@ import { AbilityModal } from '@/components/modals/ability/ability-modal';
 import { AboutModal } from '@/components/modals/about/about-modal';
 import { Ancestry } from '@/models/ancestry';
 import { AuthPage } from '@/components/pages/auth/auth-page';
+import { CampaignListPage } from '@/components/pages/campaigns/campaign-list-page';
+import { CampaignDetailsPage } from '@/components/pages/campaigns/campaign-details-page';
 import { Career } from '@/models/career';
 import { Characteristic } from '@/enums/characteristic';
 import { Collections } from '@/utils/collections';
@@ -1971,6 +1973,30 @@ export const Main = (props: Props) => {
 									session={session}
 									options={options}
 									highlightAbout={errors.length > 0}
+									showReference={showReference}
+									showRoll={() => showRoll()}
+									showAbout={showAbout}
+									showSettings={showSettings}
+								/>
+							}
+						/>
+					</Route>
+					<Route path='campaigns'>
+						<Route
+							index={true}
+							element={
+								<CampaignListPage
+									showReference={showReference}
+									showRoll={() => showRoll()}
+									showAbout={showAbout}
+									showSettings={showSettings}
+								/>
+							}
+						/>
+						<Route
+							path=':id'
+							element={
+								<CampaignDetailsPage
 									showReference={showReference}
 									showRoll={() => showRoll()}
 									showAbout={showAbout}

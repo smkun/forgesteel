@@ -51,6 +51,9 @@ export const useNavigation = () => {
 		},
 		goToAuth: () => {
 			return navigate('/auth');
+		},
+		goToCampaigns: () => {
+			return navigate('/campaigns');
 		}
 	};
 };

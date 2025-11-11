@@ -18,10 +18,12 @@ const CHARACTER_SELECT = `
     owner.email AS owner_email,
     owner.display_name AS owner_display_name,
     gm.email AS gm_email,
-    gm.display_name AS gm_display_name
+    gm.display_name AS gm_display_name,
+    campaign.name AS campaign_name
   FROM characters c
   LEFT JOIN users owner ON c.owner_user_id = owner.id
   LEFT JOIN users gm ON c.gm_user_id = gm.id
+  LEFT JOIN campaigns campaign ON c.campaign_id = campaign.id
 `;
 
 /**
@@ -31,6 +33,7 @@ export interface Character {
 	id: number;
 	owner_user_id: number;
 	gm_user_id: number | null;
+	campaign_id: number | null;
 	name: string | null;
 	character_json: string; // JSON stringified Hero object
 	is_deleted: boolean;
@@ -40,6 +43,7 @@ export interface Character {
 	owner_display_name?: string | null;
 	gm_email?: string | null;
 	gm_display_name?: string | null;
+	campaign_name?: string | null;
 }
 
 /**
@@ -48,6 +52,7 @@ export interface Character {
 export interface CreateCharacterData {
 	owner_user_id: number;
 	gm_user_id?: number | null;
+	campaign_id?: number | null;
 	name?: string | null;
 	character_json: string;
 }
@@ -59,6 +64,7 @@ export interface UpdateCharacterData {
 	name?: string | null;
 	character_json?: string;
 	gm_user_id?: number | null;
+	campaign_id?: number | null;
 	owner_user_id?: number;
 	is_deleted?: boolean;
 }
@@ -84,6 +90,33 @@ export async function findById(id: number): Promise<Character | null> {
 }
 
 /**
+ * Find character by hero ID (UUID from character_json)
+ *
+ * @param hero_id Hero ID (UUID string)
+ * @returns Character or null if not found
+ */
+export async function findByHeroId(hero_id: string): Promise<Character | null> {
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`${CHARACTER_SELECT} WHERE JSON_EXTRACT(c.character_json, '$.id') = ?`,
+		[ hero_id ]
+	);
+
+	if (rows.length === 0) {
+		console.log(`[CHARACTERS] Character not found with hero_id: ${hero_id}`);
+		return null;
+	}
+
+	console.log('[REPO findByHeroId] RAW row from MySQL:', {
+		id: rows[0].id,
+		campaign_id: rows[0].campaign_id,
+		campaign_name: rows[0].campaign_name,
+		allKeys: Object.keys(rows[0])
+	});
+
+	return rows[0] as Character;
+}
+
+/**
  * Find all characters owned by a user
  *
  * @param owner_user_id Owner user ID
@@ -104,6 +137,14 @@ export async function findByOwner(
 	);
 
 	console.log(`[CHARACTERS] Found ${rows.length} characters for user ${owner_user_id}`);
+	if (rows.length > 0) {
+		console.log('[REPO findByOwner] First RAW row from MySQL:', {
+			id: rows[0].id,
+			campaign_id: rows[0].campaign_id,
+			campaign_name: rows[0].campaign_name,
+			allKeys: Object.keys(rows[0])
+		});
+	}
 	return rows as Character[];
 }
 
@@ -139,11 +180,12 @@ export async function findByGM(
  */
 export async function create(data: CreateCharacterData): Promise<Character> {
 	const [ result ] = await pool.query<ResultSetHeader>(
-		`INSERT INTO characters (owner_user_id, gm_user_id, name, character_json)
-     VALUES (?, ?, ?, ?)`,
+		`INSERT INTO characters (owner_user_id, gm_user_id, campaign_id, name, character_json)
+     VALUES (?, ?, ?, ?, ?)`,
 		[
 			data.owner_user_id,
 			data.gm_user_id || null,
+			data.campaign_id || null,
 			data.name || null,
 			data.character_json
 		]
@@ -182,6 +224,11 @@ export async function update(id: number, data: UpdateCharacterData): Promise<Cha
 	if (data.gm_user_id !== undefined) {
 		updates.push('gm_user_id = ?');
 		values.push(data.gm_user_id);
+	}
+
+	if (data.campaign_id !== undefined) {
+		updates.push('campaign_id = ?');
+		values.push(data.campaign_id);
 	}
 
 	if (data.owner_user_id !== undefined) {
@@ -344,4 +391,96 @@ export async function findAll(includeDeleted: boolean = false): Promise<Characte
 
 	console.log(`[CHARACTERS] Found ${rows.length} total characters`);
 	return rows as Character[];
+}
+
+/**
+ * Find all characters in a campaign
+ *
+ * @param campaign_id Campaign ID
+ * @param includeDeleted Include soft-deleted characters (default: false)
+ * @returns Array of characters
+ */
+export async function findByCampaign(
+	campaign_id: number,
+	includeDeleted: boolean = false
+): Promise<Character[]> {
+	const whereClause = includeDeleted
+		? 'WHERE c.campaign_id = ?'
+		: 'WHERE c.campaign_id = ? AND c.is_deleted = 0';
+
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`${CHARACTER_SELECT} ${whereClause} ORDER BY c.updated_at DESC`,
+		[ campaign_id ]
+	);
+
+	console.log(`[CHARACTERS] Found ${rows.length} characters in campaign ${campaign_id}`);
+	return rows as Character[];
+}
+
+/**
+ * Check if user can edit a character
+ * User can edit if they are:
+ * - Character owner, OR
+ * - Campaign GM (if character is in a campaign), OR
+ * - Legacy GM (gm_user_id)
+ *
+ * @param character_id Character ID
+ * @param user_id User ID
+ * @returns True if user can edit the character
+ */
+export async function canEditCharacter(character_id: number, user_id: number): Promise<boolean> {
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`SELECT COUNT(*) as can_edit
+     FROM characters c
+     LEFT JOIN campaign_members cm ON c.campaign_id = cm.campaign_id AND cm.user_id = ? AND cm.role = 'gm'
+     WHERE c.id = ?
+       AND (
+         c.owner_user_id = ?
+         OR c.gm_user_id = ?
+         OR cm.id IS NOT NULL
+       )`,
+		[ user_id, character_id, user_id, user_id ]
+	);
+
+	return (rows[0] as any).can_edit > 0;
+}
+
+/**
+ * Check if user can view a character
+ * User can view if they are:
+ * - Character owner, OR
+ * - Campaign GM, OR
+ * - Campaign member (player), OR
+ * - Legacy GM (gm_user_id)
+ *
+ * @param character_id Character ID
+ * @param user_id User ID
+ * @returns True if user can view the character
+ */
+export async function canViewCharacter(character_id: number, user_id: number): Promise<boolean> {
+	const [ rows ] = await pool.query<RowDataPacket[]>(
+		`SELECT COUNT(*) as can_view
+     FROM characters c
+     LEFT JOIN campaign_members cm ON c.campaign_id = cm.campaign_id AND cm.user_id = ?
+     WHERE c.id = ?
+       AND (
+         c.owner_user_id = ?
+         OR c.gm_user_id = ?
+         OR cm.id IS NOT NULL
+       )`,
+		[ user_id, character_id, user_id, user_id ]
+	);
+
+	return (rows[0] as any).can_view > 0;
+}
+
+/**
+ * Assign character to campaign
+ *
+ * @param character_id Character ID
+ * @param campaign_id Campaign ID (null to remove from campaign)
+ * @returns Updated character or null if not found
+ */
+export async function assignToCampaign(character_id: number, campaign_id: number | null): Promise<Character | null> {
+	return update(character_id, { campaign_id });
 }

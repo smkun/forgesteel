@@ -1,4 +1,5 @@
 import { Hero } from '@/models/hero';
+import { Campaign, CampaignMember, CampaignWithMembers, CreateCampaignData, UpdateCampaignData } from '@/models/campaign';
 import { getIdToken } from './firebase';
 
 const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:4000' : 'https://32gamers.com/forgesteel';
@@ -11,6 +12,8 @@ export interface CharacterResponse {
 	gm_user_id: number | null;
 	gm_email: string | null;
 	gm_display_name: string | null;
+	campaign_id: number | null;
+	campaign_name: string | null;
 	name: string | null;
 	hero: Hero;
 	is_deleted: boolean;
@@ -94,6 +97,13 @@ export async function getCharacter(id: number): Promise<CharacterResponse> {
 	return apiRequest<CharacterResponse>(`/api/characters/${id}`);
 }
 
+export async function getCharacterByHeroId(heroId: string): Promise<CharacterResponse> {
+	console.log('[API] getCharacterByHeroId called with heroId:', heroId);
+	const result = await apiRequest<CharacterResponse>(`/api/characters/hero/${heroId}`);
+	console.log('[API] getCharacterByHeroId result:', result);
+	return result;
+}
+
 export async function createCharacter(hero: Hero): Promise<CharacterResponse> {
 	return apiRequest<CharacterResponse>('/api/characters', {
 		method: 'POST',
@@ -155,4 +165,94 @@ export async function searchUsers(query: string): Promise<PublicUserSummary[]> {
 	const params = new URLSearchParams({ query });
 	const response = await apiRequest<{ count: number; users: PublicUserSummary[] }>(`/api/users/search?${params.toString()}`);
 	return response.users;
+}
+
+// ================================================================
+// Campaign API Functions
+// ================================================================
+
+export interface GetCampaignsParams {
+	includeDeleted?: boolean;
+	gmOnly?: boolean;
+}
+
+export async function getCampaigns(params: GetCampaignsParams = {}): Promise<Campaign[]> {
+	const searchParams = new URLSearchParams();
+	if (params.includeDeleted) {
+		searchParams.set('includeDeleted', 'true');
+	}
+	if (params.gmOnly) {
+		searchParams.set('gmOnly', 'true');
+	}
+	const query = searchParams.toString();
+	const response = await apiRequest<{ count: number; campaigns: Campaign[] }>(
+		`/api/campaigns${query ? `?${query}` : ''}`
+	);
+	return response.campaigns;
+}
+
+export async function getCampaign(id: number): Promise<Campaign> {
+	return apiRequest<Campaign>(`/api/campaigns/${id}`);
+}
+
+export async function getCampaignMembers(id: number): Promise<{ members: CampaignMember[]; gms: CampaignMember[] }> {
+	return apiRequest<{ campaign_id: number; members: CampaignMember[]; gms: CampaignMember[] }>(
+		`/api/campaigns/${id}/members`
+	);
+}
+
+export async function getCampaignCharacters(id: number): Promise<{ campaign_id: number; count: number; characters: CharacterResponse[] }> {
+	return apiRequest<{ campaign_id: number; count: number; characters: CharacterResponse[] }>(
+		`/api/campaigns/${id}/characters`
+	);
+}
+
+export async function createCampaign(data: CreateCampaignData): Promise<Campaign> {
+	return apiRequest<Campaign>('/api/campaigns', {
+		method: 'POST',
+		body: JSON.stringify(data)
+	});
+}
+
+export async function updateCampaign(id: number, data: UpdateCampaignData): Promise<Campaign> {
+	return apiRequest<Campaign>(`/api/campaigns/${id}`, {
+		method: 'PUT',
+		body: JSON.stringify(data)
+	});
+}
+
+export async function deleteCampaign(id: number): Promise<void> {
+	await apiRequest(`/api/campaigns/${id}`, { method: 'DELETE' });
+}
+
+export async function addCampaignMember(campaignId: number, userEmail: string, role: 'gm' | 'player' = 'player'): Promise<CampaignMember> {
+	return apiRequest<{ message: string; member: CampaignMember }>(`/api/campaigns/${campaignId}/members`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email: userEmail, role })
+	}).then(response => response.member);
+}
+
+export async function removeCampaignMember(campaignId: number, userId: number): Promise<void> {
+	await apiRequest(`/api/campaigns/${campaignId}/members/${userId}`, { method: 'DELETE' });
+}
+
+export async function updateCampaignMemberRole(campaignId: number, userId: number, role: 'gm' | 'player'): Promise<CampaignMember> {
+	return apiRequest<{ message: string; member: CampaignMember }>(`/api/campaigns/${campaignId}/members/${userId}`, {
+		method: 'PATCH',
+		body: JSON.stringify({ role })
+	}).then(response => response.member);
+}
+
+export async function assignCharacterToCampaign(characterId: number, campaignId: number): Promise<CharacterResponse> {
+	return apiRequest<{ message: string; character: CharacterResponse }>(
+		`/api/campaigns/${campaignId}/characters/${characterId}`,
+		{ method: 'POST' }
+	).then(response => response.character);
+}
+
+export async function removeCharacterFromCampaign(characterId: number, campaignId: number): Promise<CharacterResponse> {
+	return apiRequest<{ message: string; character: CharacterResponse }>(
+		`/api/campaigns/${campaignId}/characters/${characterId}`,
+		{ method: 'DELETE' }
+	).then(response => response.character);
 }

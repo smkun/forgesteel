@@ -10,6 +10,7 @@
 
 import * as charactersRepo from '../data/characters.repository';
 import * as usersRepo from '../data/users.repository';
+import * as campaignsRepo from '../data/campaigns.repository';
 
 // Hero model from frontend source
 // Note: Using relative path because backend tsconfig doesn't include @ alias
@@ -22,6 +23,7 @@ export interface CharacterWithHero {
 	id: number;
 	owner_user_id: number;
 	gm_user_id: number | null;
+	campaign_id: number | null;
 	name: string | null;
 	hero: Hero;
 	is_deleted: boolean;
@@ -31,6 +33,7 @@ export interface CharacterWithHero {
 	owner_display_name: string | null;
 	gm_email: string | null;
 	gm_display_name: string | null;
+	campaign_name: string | null;
 }
 
 /**
@@ -61,13 +64,65 @@ export async function getCharacter(
 		return null;
 	}
 
-	// Check access
-	const hasAccess = is_admin ||
+	// Check access - allow if:
+	// 1. User is admin
+	// 2. User owns the character
+	// 3. User is assigned as GM to the character
+	// 4. Character is in a campaign where user is a GM
+	let hasAccess = is_admin ||
     character.owner_user_id === user_id ||
     character.gm_user_id === user_id;
 
+	// If not already granted access, check campaign GM permissions
+	if (!hasAccess && character.campaign_id) {
+		const userRole = await campaignsRepo.getUserRole(character.campaign_id, user_id);
+		hasAccess = userRole === 'gm';
+	}
+
 	if (!hasAccess) {
 		console.log(`[CHARACTER LOGIC] ❌ Access denied: User ${user_id} cannot access character ${character_id}`);
+		return null;
+	}
+
+	return mapCharacterRecord(character);
+}
+
+/**
+ * Get character by hero ID (UUID)
+ *
+ * @param hero_id Hero ID (UUID string)
+ * @param user_id Requesting user ID
+ * @param is_admin Is user an admin
+ * @returns Character with Hero or null if not found/no access
+ */
+export async function getCharacterByHeroId(
+	hero_id: string,
+	user_id: number,
+	is_admin: boolean = false
+): Promise<CharacterWithHero | null> {
+	const character = await charactersRepo.findByHeroId(hero_id);
+
+	if (!character) {
+		return null;
+	}
+
+	// Check access - allow if:
+	// 1. User is admin
+	// 2. User owns the character
+	// 3. User is assigned as GM to the character
+	// 4. Character is in a campaign where user is a GM
+	let hasAccess = is_admin ||
+    character.owner_user_id === user_id ||
+    character.gm_user_id === user_id;
+
+	// If not already granted access, check campaign GM permissions
+	if (!hasAccess && character.campaign_id) {
+		const userRole = await campaignsRepo.getUserRole(character.campaign_id, user_id);
+		hasAccess = userRole === 'gm';
+	}
+
+	if (!hasAccess) {
+		console.log(`[CHARACTER LOGIC] ❌ Access denied: User ${user_id} cannot access character with hero_id ${hero_id}`);
 		return null;
 	}
 
@@ -406,7 +461,7 @@ export function validateHero(hero: any): boolean {
 	return true;
 }
 
-function mapCharacters(characters: charactersRepo.Character[]): CharacterWithHero[] {
+export function mapCharacters(characters: charactersRepo.Character[]): CharacterWithHero[] {
 	const mapped: CharacterWithHero[] = [];
 
 	for (const character of characters) {
@@ -430,6 +485,8 @@ function mapCharacterRecord(character: charactersRepo.Character): CharacterWithH
 			gm_user_id: character.gm_user_id,
 			gm_email: character.gm_email || null,
 			gm_display_name: character.gm_display_name || null,
+			campaign_id: character.campaign_id || null,
+			campaign_name: character.campaign_name || null,
 			name: character.name,
 			hero,
 			is_deleted: character.is_deleted,

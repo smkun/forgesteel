@@ -279,6 +279,20 @@ export async function getCharacterRecord(heroId: string): Promise<api.CharacterR
 	return apiCharacterCache.get(heroId) ?? null;
 }
 
+export async function getCharacterByDatabaseId(characterId: number): Promise<api.CharacterResponse | null> {
+	if (getStorageMode() !== StorageMode.API) {
+		return null;
+	}
+	try {
+		const character = await api.getCharacter(characterId);
+		upsertApiCache(character);
+		return character;
+	} catch (error) {
+		console.error('[STORAGE] ❌ Failed to fetch character by database ID:', error);
+		return null;
+	}
+}
+
 export async function assignGMToHero(heroId: string, gmEmail: string): Promise<api.CharacterResponse> {
 	const record = await getCharacterRecord(heroId);
 	if (!record) {

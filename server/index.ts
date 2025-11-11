@@ -135,6 +135,7 @@ app.get('/healthz', (req: Request, res: Response) => {
 
 import authRoutes from './routes/auth.routes';
 import characterRoutes from './routes/character.routes';
+import campaignRoutes from './routes/campaign.routes';
 import adminRoutes from './routes/admin.routes';
 import userRoutes from './routes/user.routes';
 import { errorHandler } from './middleware/errorHandler';
@@ -144,6 +145,9 @@ app.use('/api/auth', authRoutes);
 
 // Character routes
 app.use('/api/characters', characterRoutes);
+
+// Campaign routes
+app.use('/api/campaigns', campaignRoutes);
 
 // Admin routes
 app.use('/api/admin', adminRoutes);

@@ -5,7 +5,7 @@ import { Ability } from '@/models/ability';
 import { Ancestry } from '@/models/ancestry';
 import { AppFooter } from '@/components/panels/app-footer/app-footer';
 import { AppHeader } from '@/components/panels/app-header/app-header';
-import { AssignGMModal } from '@/components/modals/assign-gm/assign-gm-modal';
+import { AssignCampaignModal } from '@/components/modals/assign-campaign/assign-campaign-modal';
 import { Career } from '@/models/career';
 import { Characteristic } from '@/enums/characteristic';
 import { Complication } from '@/models/complication';
@@ -34,8 +34,9 @@ import { ViewSelector } from '@/components/panels/view-selector/view-selector';
 import { StorageMode, getCharacterRecord, getStorageMode } from '@/services/character-storage';
 import { useIsSmall } from '@/hooks/use-is-small';
 import { useNavigation } from '@/hooks/use-navigation';
-import { useParams } from 'react-router';
+import { useParams, useLocation, useNavigate } from 'react-router';
 import { useTitle } from '@/hooks/use-title';
+import * as api from '@/services/api';
 
 import './hero-view-page.scss';
 
@@ -73,28 +74,83 @@ interface Props {
 export const HeroViewPage = (props: Props) => {
 	const isSmall = useIsSmall();
 	const navigation = useNavigation();
+	const location = useLocation();
+	const navigate = useNavigate();
 	const { heroID } = useParams<{ heroID: string }>();
 	const [ view, setView ] = useState<string>('modern');
-	const [ showGMModal, setShowGMModal ] = useState<boolean>(false);
+	const [ showCampaignModal, setShowCampaignModal ] = useState<boolean>(false);
+	const [ campaignInfo, setCampaignInfo ] = useState<{ id: number; name: string } | null>(null);
 	const [ gmInfo, setGmInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
 	const [ ownerInfo, setOwnerInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
 	const [ isOnline, setIsOnline ] = useState<boolean>(false);
+	const [ fetchedHero, setFetchedHero ] = useState<Hero | null>(null);
 	const hero = useMemo(
-		() => props.heroes.find(h => h.id === heroID),
-		[ heroID, props.heroes ]
+		() => props.heroes.find(h => h.id === heroID) || fetchedHero,
+		[ heroID, props.heroes, fetchedHero ]
 	);
 	useTitle(hero?.name || 'Unnamed Hero');
+
+	useEffect(() => {
+		// If hero not found in local heroes, try to fetch from API
+		const fetchHeroFromAPI = async () => {
+			console.log('[HERO VIEW DEBUG] useEffect triggered', { heroID, propsHeroesCount: props.heroes.length });
+
+			if (!heroID) {
+				console.log('[HERO VIEW DEBUG] No heroID, returning');
+				return;
+			}
+
+			const foundInProps = props.heroes.find(h => h.id === heroID);
+			if (foundInProps) {
+				console.log('[HERO VIEW DEBUG] Hero found in props.heroes, returning');
+				return;
+			}
+
+			console.log('[HERO VIEW DEBUG] Hero not in props.heroes, checking storage mode');
+
+			const storageMode = getStorageMode();
+			console.log('[HERO VIEW DEBUG] Storage mode:', storageMode);
+			if (storageMode !== StorageMode.API) {
+				console.log('[HERO VIEW DEBUG] Not in API mode, returning');
+				return;
+			}
+
+			try {
+				console.log('[HERO VIEW DEBUG] Calling getCharacterByHeroId for heroID:', heroID);
+				const record = await api.getCharacterByHeroId(heroID);
+				console.log('[HERO VIEW DEBUG] getCharacterByHeroId result:', record ? 'found' : 'null', record);
+				if (record && record.hero) {
+					console.log('[HERO VIEW DEBUG] Setting fetchedHero with hero:', record.hero.name || record.hero.id);
+					setFetchedHero(record.hero);
+				} else {
+					console.log('[HERO VIEW DEBUG] No hero in record');
+				}
+			} catch (error) {
+				console.error('[HERO VIEW] Failed to fetch hero from API:', error);
+			}
+		};
+
+		fetchHeroFromAPI();
+	}, [ heroID, props.heroes ]);
 
 	useEffect(() => {
 		if (!hero) return;
 
 		const loadCharacterInfo = async () => {
+			console.log('[INITIAL LOAD] Loading character info for hero:', hero.id);
 			const storageMode = getStorageMode();
 			setIsOnline(storageMode === StorageMode.API);
 
 			if (storageMode === StorageMode.API) {
 				try {
+					console.log('[INITIAL LOAD] Calling getCharacterRecord (may use cache)...');
 					const record = await getCharacterRecord(hero.id);
+					console.log('[INITIAL LOAD] Got record:', record);
+					console.log('[INITIAL LOAD] Campaign data:', {
+						campaign_id: record?.campaign_id,
+						campaign_name: record?.campaign_name
+					});
+
 					if (record) {
 						// Set owner info
 						setOwnerInfo({
@@ -102,7 +158,19 @@ export const HeroViewPage = (props: Props) => {
 							display_name: record.owner_display_name
 						});
 
-						// Set GM info
+						// Set campaign info
+						if (record.campaign_id && record.campaign_name) {
+							console.log('[INITIAL LOAD] Setting campaignInfo to:', record.campaign_name);
+							setCampaignInfo({
+								id: record.campaign_id,
+								name: record.campaign_name
+							});
+						} else {
+							console.log('[INITIAL LOAD] No campaign data, clearing campaignInfo');
+							setCampaignInfo(null);
+						}
+
+						// Set GM info (legacy)
 						if (record.gm_email) {
 							setGmInfo({
 								email: record.gm_email,
@@ -113,7 +181,7 @@ export const HeroViewPage = (props: Props) => {
 						}
 					}
 				} catch (error) {
-					console.error('[GM] Failed to load character info:', error);
+					console.error('[INITIAL LOAD] Failed to load character info:', error);
 					setGmInfo(null);
 					setOwnerInfo(null);
 				}
@@ -123,17 +191,41 @@ export const HeroViewPage = (props: Props) => {
 		loadCharacterInfo();
 	}, [ hero?.id ]);
 
-	const handleGMAssignComplete = async () => {
-		setShowGMModal(false);
-		// Reload character info
+	const handleCampaignAssignComplete = async () => {
+		console.log('[CAMPAIGN ASSIGN] handleCampaignAssignComplete called for hero:', hero.id, hero.name);
+		setShowCampaignModal(false);
+		// Reload character info - use API call to get fresh data
 		try {
-			const record = await getCharacterRecord(hero.id);
+			console.log('[CAMPAIGN ASSIGN] Calling getCharacterByHeroId...');
+			const record = await api.getCharacterByHeroId(hero.id);
+			console.log('[CAMPAIGN ASSIGN] Received record:', record);
+			console.log('[CAMPAIGN ASSIGN] Campaign data in record:', {
+				campaign_id: record?.campaign_id,
+				campaign_name: record?.campaign_name
+			});
+
 			if (record) {
 				setOwnerInfo({
 					email: record.owner_email,
 					display_name: record.owner_display_name
 				});
 
+				// Set campaign info
+				if (record.campaign_id && record.campaign_name) {
+					console.log('[CAMPAIGN ASSIGN] Setting campaignInfo to:', {
+						id: record.campaign_id,
+						name: record.campaign_name
+					});
+					setCampaignInfo({
+						id: record.campaign_id,
+						name: record.campaign_name
+					});
+				} else {
+					console.log('[CAMPAIGN ASSIGN] Clearing campaignInfo (no campaign data)');
+					setCampaignInfo(null);
+				}
+
+				// Set GM info (legacy)
 				if (record.gm_email) {
 					setGmInfo({
 						email: record.gm_email,
@@ -142,9 +234,11 @@ export const HeroViewPage = (props: Props) => {
 				} else {
 					setGmInfo(null);
 				}
+			} else {
+				console.log('[CAMPAIGN ASSIGN] No record returned from API');
 			}
 		} catch (error) {
-			console.error('[GM] Failed to reload character info:', error);
+			console.error('[CAMPAIGN ASSIGN] Failed to reload character info:', error);
 		}
 	};
 
@@ -165,13 +259,13 @@ export const HeroViewPage = (props: Props) => {
 			}}
 			>
 				<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-					<span style={{ fontWeight: 500 }}>GM:</span>
+					<span style={{ fontWeight: 500 }}>Campaign:</span>
 					<Button
 						size='small'
-						type={gmInfo ? 'default' : 'primary'}
-						onClick={() => setShowGMModal(true)}
+						type={campaignInfo ? 'default' : 'primary'}
+						onClick={() => setShowCampaignModal(true)}
 					>
-						{gmInfo ? `${gmInfo.display_name || gmInfo.email}` : 'Assign GM'}
+						{campaignInfo ? campaignInfo.name : 'Assign to Campaign'}
 					</Button>
 				</div>
 				{ownerInfo && (
@@ -248,11 +342,22 @@ export const HeroViewPage = (props: Props) => {
 		);
 	}
 
+	const handleClose = () => {
+		const state = location.state as { returnToCampaign?: string } | null;
+		if (state?.returnToCampaign) {
+			// Navigate back to campaign if we came from one (using React Router for proper base URL handling)
+			navigate(`/campaigns/${state.returnToCampaign}`);
+		} else {
+			// Otherwise go to hero list
+			navigation.goToHeroList(hero.folder);
+		}
+	};
+
 	return (
 		<ErrorBoundary>
 			<div className='hero-view-page'>
 				<AppHeader subheader='Hero'>
-					<Button icon={<CloseOutlined />} onClick={() => navigation.goToHeroList(hero.folder)}>
+					<Button icon={<CloseOutlined />} onClick={handleClose}>
 						Close
 					</Button>
 					<div className='divider' />
@@ -327,12 +432,12 @@ export const HeroViewPage = (props: Props) => {
 					showSettings={props.showSettings}
 				/>
 			</div>
-			{showGMModal && (
-				<AssignGMModal
+			{showCampaignModal && (
+				<AssignCampaignModal
 					hero={hero}
-					currentGM={gmInfo}
-					onAssignComplete={handleGMAssignComplete}
-					onClose={() => setShowGMModal(false)}
+					currentCampaign={campaignInfo}
+					onAssignComplete={handleCampaignAssignComplete}
+					onClose={() => setShowCampaignModal(false)}
 				/>
 			)}
 		</ErrorBoundary>
