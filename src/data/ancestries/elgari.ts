@@ -136,6 +136,31 @@ export const elgari: Ancestry = {
 						})
 					}),
 					value: 2
+				},
+				{
+					feature: FactoryLogic.feature.createAbility({
+						ability: FactoryLogic.createAbility({
+							id: 'elgari-option-7',
+							name: 'Crown of the Herd',
+							description: 'You unleash a thunderous bellow and antler-dominance display that overwhelms nearby foes.',
+							type: FactoryLogic.type.createMain(),
+							keywords: [ AbilityKeyword.Area ],
+							distance: [ FactoryLogic.distance.create({ type: AbilityDistanceType.Burst, value: 1 }) ],
+							target: 'Each enemy in the area',
+							cost: 'signature',
+							sections: [
+								FactoryLogic.createAbilitySectionRoll(
+									FactoryLogic.createPowerRoll({
+										characteristic: [ Characteristic.Presence ],
+										tier1: '2 untyped damage',
+										tier2: '5 untyped damage',
+										tier3: '7 untyped damage; choose one target hit—that target is Dazed until the end of its next turn'
+									})
+								)
+							]
+						})
+					}),
+					value: 2
 				}
 			],
 			count: 'ancestry'

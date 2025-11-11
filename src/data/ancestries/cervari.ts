@@ -1,4 +1,7 @@
+import { AbilityDistanceType } from '@/enums/abiity-distance-type';
+import { AbilityKeyword } from '@/enums/ability-keyword';
 import { Ancestry } from '@/models/ancestry';
+import { Characteristic } from '@/enums/characteristic';
 import { FactoryLogic } from '@/logic/factory-logic';
 import { FeatureField } from '@/enums/feature-field';
 
@@ -95,6 +98,31 @@ export const cervari: Ancestry = {
 						name: 'Brush-Breaker',
 						description:
               'Action; Area 1 line within 1. t1: 2 damage; t2: 4 damage and the first target suffers a bane; t3: 6 damage and two targets suffer a bane.'
+					}),
+					value: 2
+				},
+				{
+					feature: FactoryLogic.feature.createAbility({
+						ability: FactoryLogic.createAbility({
+							id: 'cervari-option-8',
+							name: 'Crown of the Herd',
+							description: 'You unleash a thunderous bellow and antler-dominance display that overwhelms nearby foes.',
+							type: FactoryLogic.type.createMain(),
+							keywords: [ AbilityKeyword.Area ],
+							distance: [ FactoryLogic.distance.create({ type: AbilityDistanceType.Burst, value: 1 }) ],
+							target: 'Each enemy in the area',
+							cost: 'signature',
+							sections: [
+								FactoryLogic.createAbilitySectionRoll(
+									FactoryLogic.createPowerRoll({
+										characteristic: [ Characteristic.Presence ],
+										tier1: '2 untyped damage',
+										tier2: '5 untyped damage',
+										tier3: '7 untyped damage; choose one target hit—that target is Dazed until the end of its next turn'
+									})
+								)
+							]
+						})
 					}),
 					value: 2
 				}
