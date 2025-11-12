@@ -447,6 +447,37 @@ If build fails after changes:
 4. Run `npm run build` to verify
 5. Update task notes with issue encountered
 
+### Build System - Critical Information
+
+**CommonJS (.cjs) Convention**:
+- `package.json` has `"type": "module"` (for frontend ES modules)
+- Backend uses CommonJS (`require()`), so must use `.cjs` extension
+- Build script renames all `.js` → `.cjs` after TypeScript compilation
+- Build script updates all `require()` statements to use `.cjs` extension
+
+**Build Process**:
+```bash
+npm run build:backend
+```
+Does the following:
+1. Compiles TypeScript (`tsc -p server/tsconfig.json`)
+2. Moves output to `distribution/backend/`
+3. Renames all `.js` files to `.cjs`
+4. Updates all `require('./module')` to `require('./module.cjs')`
+5. Copies `server/app.js` to `distribution/backend/app.js`
+
+**Passenger Entry Point**:
+- `app.js` is the entry point (not renamed to `.cjs`)
+- **CRITICAL**: `app.js` must require `./index.cjs` (not `./index.js`)
+- Located at: `server/app.js`
+- Auto-copied by build: `cp server/app.js distribution/backend/app.js`
+
+**Common Issue**:
+If routes work locally but not in production:
+- Check `app.js` is loading `index.cjs` not `index.js`
+- Verify `app.js` was uploaded to production
+- Restart Passenger: `touch ~/forgesteel-api/tmp/restart.txt`
+
 ### Database Corruption Protocol
 If database changes corrupt data:
 1. STOP immediately
