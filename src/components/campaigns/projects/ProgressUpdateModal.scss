@@ -1,0 +1,53 @@
+.progress-update-modal {
+	.progress-current {
+		padding: 16px;
+		background: var(--background-color-light);
+		border-radius: 8px;
+		margin-bottom: 24px;
+
+		.progress-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 12px;
+		}
+
+		.progress-display {
+			.ant-progress {
+				margin-top: 8px;
+			}
+		}
+	}
+
+	.progress-preview {
+		padding: 16px;
+		background: #e6f7ff;
+		border: 1px solid #91d5ff;
+		border-radius: 8px;
+		margin-bottom: 16px;
+
+		.ant-progress {
+			margin-top: 8px;
+		}
+	}
+
+	.ant-form {
+		.ant-form-item-label > label {
+			font-weight: 500;
+		}
+	}
+}
+
+// Dark mode support
+body.dark-mode {
+	.progress-update-modal {
+		.progress-current {
+			background: var(--background-color-darker);
+		}
+
+		.progress-preview {
+			background: #111d2c;
+			border-color: #15395b;
+		}
+	}
+}

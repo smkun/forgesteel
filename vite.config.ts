@@ -5,6 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	mode: process.env.NODE_ENV || 'development',
 	base: '/forgesteel/',
 	build: {
 		outDir: 'distribution/frontend',

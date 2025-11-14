@@ -406,7 +406,221 @@ if (baseUri && urlPath.startsWith(baseUri)) {
 
 ---
 
+---
+
+## Campaign Project Tracking System
+
+### Vision
+
+Add a hierarchical project tracking system to campaigns where GMs and players can create projects with point-based goals, track progress, and organize large projects into sub-projects. Players can create and manage projects for their own characters, while GMs can manage all projects in their campaigns.
+
+### Feature Overview
+
+**Core Capabilities:**
+- **Project Goals**: Each project has a numeric target (goal points) and tracks current progress
+- **Hierarchical Structure**: Large projects broken into sub-projects (e.g., 2000 point project = 500 + 250 + 1250 sub-projects)
+- **Character Assignment**: Every project MUST be assigned to the character who started it (immutable, required field)
+- **Role-Based Management**:
+  - **Players**: Create/edit/delete projects for their own characters only
+  - **GMs**: Create/edit/delete projects for any character in the campaign
+  - **Admins**: Full access to all projects
+- **Progress Tracking**: Manual point updates with history tracking
+- **Aggregate Progress**: Parent project progress calculated from sum of all sub-project progress
+
+### Database Schema
+
+**New Table: `campaign_projects`**
+```sql
+CREATE TABLE IF NOT EXISTS `campaign_projects` (
+  `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `campaign_id` INT UNSIGNED NOT NULL,
+  `parent_project_id` INT UNSIGNED NULL,
+  `character_id` INT UNSIGNED NOT NULL, -- REQUIRED, who started project
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `goal_points` INT UNSIGNED NOT NULL DEFAULT 0,
+  `current_points` INT UNSIGNED NOT NULL DEFAULT 0,
+  `display_order` INT NOT NULL DEFAULT 0,
+  `is_completed` TINYINT(1) NOT NULL DEFAULT 0,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_by_user_id` INT UNSIGNED NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `completed_at` DATETIME NULL,
+
+  CONSTRAINT `fk_campaign_projects_character`
+    FOREIGN KEY (`character_id`)
+    REFERENCES `characters` (`id`)
+    ON DELETE RESTRICT, -- Cannot delete character with projects
+
+  -- Self-referential for hierarchy
+  CONSTRAINT `fk_campaign_projects_parent`
+    FOREIGN KEY (`parent_project_id`)
+    REFERENCES `campaign_projects` (`id`)
+    ON DELETE CASCADE
+);
+```
+
+**Audit Table: `campaign_project_history` (Optional)**
+- Tracks all changes to projects (progress updates, goal changes, completion)
+- Records user_id, action type, previous/new values, notes
+
+### API Endpoints
+
+**Read Operations:**
+- `GET /api/campaigns/:campaignId/projects` - Get all projects (hierarchical or flat)
+- `GET /api/campaigns/:campaignId/projects/:projectId` - Get single project with details
+
+**Write Operations (Permission-Based):**
+- `POST /api/campaigns/:campaignId/projects` - Create project
+  - Players: Can only create for own characters
+  - GMs: Can create for any campaign character
+  - Admins: Can create for any character
+- `PUT /api/campaigns/:campaignId/projects/:projectId` - Update project details
+- `PATCH /api/campaigns/:campaignId/projects/:projectId/progress` - Update progress
+- `POST /api/campaigns/:campaignId/projects/:projectId/complete` - Mark complete
+- `DELETE /api/campaigns/:campaignId/projects/:projectId` - Soft delete
+- `POST /api/campaigns/:campaignId/projects/:projectId/reorder` - Update display order (GM/Admin only)
+
+### Frontend Components
+
+**New Components:**
+1. **ProjectList** - Hierarchical project tree with progress bars
+2. **ProjectCard** - Individual project display with progress visualization
+3. **ProjectForm** - Create/edit modal with:
+   - Character selector (dropdown filtered by role)
+   - Parent project selector (for sub-projects)
+   - Name, description, goal points inputs
+   - Character field is REQUIRED and immutable after creation
+4. **ProgressUpdateModal** - Quick progress update with notes
+
+**UI Features:**
+- Expand/collapse sub-projects
+- Visual progress bars with percentage
+- Quick progress buttons (+1, +5, +10, custom)
+- Drag-and-drop reordering (GM/Admin only)
+- Character name display (not full character details)
+
+### Business Rules
+
+1. **Character Assignment**:
+   - REQUIRED field (cannot create without character)
+   - Immutable (set once on creation, cannot change)
+   - Character must be in same campaign
+   - Dropdown filtered by user role:
+     - Players: See only own characters
+     - GMs/Admins: See all campaign characters
+   - ON DELETE RESTRICT (cannot delete character with active projects)
+
+2. **Sub-Project Structure**:
+   - Sub-project goals should sum to parent goal
+   - Example: Parent (2000 pts) = Sub1 (500) + Sub2 (250) + Sub3 (1250) = 2000 total
+   - Parent progress = sum of all sub-project current points
+   - Max 3 levels of nesting recommended
+
+3. **Progress Updates**:
+   - Cannot exceed goal points
+   - History entry created for each update
+   - Optional auto-complete when goal reached
+
+4. **Permissions**:
+   - Players: Manage own character's projects only
+   - GMs: Manage all projects in campaign
+   - Admins: Manage all projects
+   - Viewing: All campaign members can view all projects
+
+### Implementation Phases
+
+**Phase 1: Database & Backend (Week 1)**
+1. Create migration `002_add_campaign_projects.sql`
+2. Implement `server/data/projects.repository.ts`
+3. Implement `server/logic/project.logic.ts` with permission checks
+4. Create `server/routes/project.routes.ts` with all endpoints
+5. Add validation and error handling
+6. Write unit tests for business logic
+
+**Phase 2: Frontend Integration (Week 2)**
+1. Create TypeScript types in `src/types/campaign.types.ts`
+2. Create API service `src/services/project.service.ts`
+3. Build UI components (ProjectList, ProjectCard, ProjectForm, ProgressUpdateModal)
+4. Add project tab to campaign detail view
+5. Implement drag-and-drop reordering
+6. Add loading/error states
+
+**Phase 3: Testing & Polish (Week 3)**
+1. Integration testing for all API endpoints
+2. Test permission enforcement (player vs GM vs admin)
+3. Test hierarchy validation (circular refs, max depth)
+4. Test aggregate progress calculation
+5. E2E testing with Playwright
+6. Performance testing with large project trees
+
+**Phase 4: Deployment**
+1. Run migration on production database
+2. Deploy backend with new routes
+3. Deploy frontend with project UI
+4. Monitor for errors in first 24 hours
+
+### Key Technical Decisions
+
+**1. Character Name Only (Not Full Object)**
+- **Rationale**: Only need to display who started the project, not all character details
+- **Implementation**: JOIN with characters table to get name only
+- **Trade-off**: Simpler data model, faster queries
+
+**2. Immutable Character Assignment**
+- **Rationale**: Track who initiated project, not current ownership
+- **Implementation**: Set on creation, field disabled in edit mode
+- **Trade-off**: Cannot reassign projects, but clearer accountability
+
+**3. Required Character Assignment**
+- **Rationale**: Every project must have an initiating character
+- **Implementation**: NOT NULL constraint, validation on creation
+- **Trade-off**: Cannot create "campaign-wide" projects without character
+
+**4. Aggregate Progress Calculation**
+- **Rationale**: Parent progress reflects all sub-project work
+- **Implementation**: Recursive CTE to sum all descendant points
+- **Trade-off**: More complex queries, but accurate hierarchy tracking
+
+**5. ON DELETE RESTRICT for Characters**
+- **Rationale**: Prevent data loss when deleting characters with projects
+- **Implementation**: Foreign key constraint prevents character deletion
+- **Trade-off**: Must reassign/delete projects before deleting character
+
+### Open Questions
+
+1. **Max Hierarchy Depth**: Enforce at DB or application layer? (Recommend: application with 3 levels)
+2. **Auto-Complete**: Auto-mark complete when goal reached? (Recommend: manual for explicit confirmation)
+3. **Bulk Operations**: Support bulk progress updates? (Defer to future release)
+4. **Notifications**: Notify campaign when projects complete? (Defer to future release)
+
+### Success Metrics
+
+**Functional:**
+- Players can create projects for own characters
+- GMs can create projects for any campaign character
+- Character dropdown shows correct characters based on role
+- Sub-project progress aggregates to parent correctly
+- Permission checks prevent unauthorized edits
+
+**Technical:**
+- All queries use parameterized statements (no SQL injection)
+- Response times < 500ms for project list (< 100 projects)
+- Aggregate progress calculations complete in < 200ms
+- No circular reference bugs in hierarchy
+
+**User Experience:**
+- Character assignment is clear and intuitive
+- Progress visualization is clear and helpful
+- Hierarchy navigation is smooth (expand/collapse)
+- Error messages guide users to fix issues
+
+---
+
 **References:**
+- Design Specification: `claudedocs/DESIGN_CAMPAIGN_PROJECTS.md`
+- Migration SQL: `db/migrations/002_add_campaign_projects.sql` (to be created)
 - PRD: `/PRD.md`
 - Current State: `src/components/main/main.tsx:252` (localStorage usage)
 - Character Model: `src/models/hero.ts`

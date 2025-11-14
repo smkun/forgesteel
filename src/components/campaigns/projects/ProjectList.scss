@@ -1,0 +1,87 @@
+.project-list {
+	padding: 16px;
+	background: var(--background-color);
+	border-radius: 8px;
+
+	.project-list-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 16px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid var(--divider-color);
+
+		h3 {
+			margin: 0;
+			font-size: 18px;
+			font-weight: 600;
+		}
+	}
+
+	.project-tree {
+		.project-tree-node {
+			width: 100%;
+			padding: 8px 0;
+
+			.project-header {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				margin-bottom: 4px;
+
+				.project-name {
+					font-weight: 500;
+					font-size: 14px;
+					display: flex;
+					align-items: center;
+					gap: 6px;
+
+					.completed-icon {
+						color: #52c41a;
+						font-size: 16px;
+					}
+				}
+
+				.project-character {
+					color: var(--text-color-secondary);
+					font-size: 12px;
+					font-style: italic;
+				}
+			}
+
+			.project-progress {
+				width: 200px;
+
+				.ant-progress {
+					margin: 0;
+				}
+			}
+		}
+	}
+}
+
+.project-list-loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 300px;
+}
+
+.project-list-empty {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 300px;
+	padding: 32px;
+}
+
+// Dark mode support
+body.dark-mode {
+	.project-list {
+		background: var(--background-color-dark);
+
+		.project-list-header {
+			border-bottom-color: var(--divider-color-dark);
+		}
+	}
+}

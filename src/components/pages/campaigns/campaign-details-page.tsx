@@ -1,10 +1,10 @@
 import { Button, Card, Input, Modal, Select, Spin, Tabs, message } from 'antd';
-import { DeleteOutlined, PlusOutlined, SaveOutlined, TeamOutlined, UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusOutlined, SaveOutlined, UserAddOutlined, UserDeleteOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { AppFooter } from '@/components/panels/app-footer/app-footer';
 import { AppHeader } from '@/components/panels/app-header/app-header';
-import { Campaign, CampaignMember } from '@/models/campaign';
+import { Campaign, CampaignMember, CampaignProject, CreateProjectRequest, UpdateProjectRequest, UpdateProgressRequest } from '@/models/campaign';
 import { Empty } from '@/components/controls/empty/empty';
 import { ErrorBoundary } from '@/components/controls/error-boundary/error-boundary';
 import { HeaderText } from '@/components/controls/header-text/header-text';
@@ -13,6 +13,10 @@ import { useTitle } from '@/hooks/use-title';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigation } from '@/hooks/use-navigation';
 import * as api from '@/services/api';
+import { ProjectList } from '@/components/campaigns/projects/ProjectList';
+import { ProjectCard } from '@/components/campaigns/projects/ProjectCard';
+import { ProjectForm } from '@/components/campaigns/projects/ProjectForm';
+import { ProgressUpdateModal } from '@/components/campaigns/projects/ProgressUpdateModal';
 
 import './campaign-details-page.scss';
 
@@ -53,6 +57,15 @@ export const CampaignDetailsPage = (props: Props) => {
 	const [ selectedCharacterId, setSelectedCharacterId ] = useState<number | null>(null);
 	const [ assigningChar, setAssigningChar ] = useState<boolean>(false);
 
+	// Projects state
+	const [ projects, setProjects ] = useState<CampaignProject[]>([]);
+	const [ loadingProjects, setLoadingProjects ] = useState<boolean>(false);
+	const [ showCompleted, setShowCompleted ] = useState<boolean>(true);
+	const [ projectFormModalOpen, setProjectFormModalOpen ] = useState<boolean>(false);
+	const [ editingProject, setEditingProject ] = useState<CampaignProject | undefined>(undefined);
+	const [ selectedProject, setSelectedProject ] = useState<CampaignProject | undefined>(undefined);
+	const [ progressModalOpen, setProgressModalOpen ] = useState<boolean>(false);
+
 	useTitle(campaign ? campaign.name : 'Campaign');
 
 	useEffect(() => {
@@ -60,6 +73,13 @@ export const CampaignDetailsPage = (props: Props) => {
 			loadCampaignDetails();
 		}
 	}, [ id ]);
+
+	useEffect(() => {
+		// Load projects when campaign is loaded or showCompleted changes
+		if (campaign) {
+			loadProjects();
+		}
+	}, [ campaign, showCompleted ]);
 
 	const loadCampaignDetails = async () => {
 		if (!id) return;
@@ -239,6 +259,129 @@ export const CampaignDetailsPage = (props: Props) => {
 				}
 			}
 		});
+	};
+
+	// ================================================================
+	// PROJECT HANDLERS
+	// ================================================================
+
+	const loadProjects = async () => {
+		if (!id) return;
+
+		try {
+			setLoadingProjects(true);
+			const campaignId = parseInt(id);
+			const projectsData = await api.getCampaignProjects(campaignId, {
+				includeCompleted: showCompleted,
+				flat: false // Get hierarchical structure
+			});
+			setProjects(projectsData);
+		} catch (error) {
+			console.error('Failed to load projects:', error);
+			message.error('Failed to load projects');
+		} finally {
+			setLoadingProjects(false);
+		}
+	};
+
+	const handleCreateProject = () => {
+		setEditingProject(undefined);
+		setProjectFormModalOpen(true);
+	};
+
+	const handleEditProject = (project: CampaignProject) => {
+		setEditingProject(project);
+		setProjectFormModalOpen(true);
+	};
+
+	const handleProjectFormSubmit = async (data: CreateProjectRequest | UpdateProjectRequest) => {
+		if (!campaign) return;
+
+		try {
+			if (editingProject) {
+				// Update existing project
+				await api.updateCampaignProject(campaign.id, editingProject.id, data as UpdateProjectRequest);
+				message.success('Project updated successfully');
+			} else {
+				// Create new project
+				await api.createCampaignProject(campaign.id, data as CreateProjectRequest);
+				message.success('Project created successfully');
+			}
+			setProjectFormModalOpen(false);
+			setEditingProject(undefined);
+			await loadProjects();
+		} catch (error) {
+			console.error('Failed to save project:', error);
+			message.error('Failed to save project');
+			throw error; // Re-throw to keep form loading state
+		}
+	};
+
+	const handleUpdateProgress = (project: CampaignProject) => {
+		setSelectedProject(project);
+		setProgressModalOpen(true);
+	};
+
+	const handleProgressSubmit = async (data: UpdateProgressRequest) => {
+		if (!campaign || !selectedProject) return;
+
+		try {
+			await api.updateProjectProgress(campaign.id, selectedProject.id, data);
+			message.success('Progress updated successfully');
+			setProgressModalOpen(false);
+			setSelectedProject(undefined);
+			await loadProjects();
+		} catch (error) {
+			console.error('Failed to update progress:', error);
+			message.error('Failed to update progress');
+			throw error;
+		}
+	};
+
+	const handleToggleComplete = async (project: CampaignProject) => {
+		if (!campaign) return;
+
+		try {
+			if (project.isCompleted) {
+				// Can't un-complete via this UI (would need backend support)
+				message.info('Project is already completed');
+			} else {
+				await api.completeProject(campaign.id, project.id, {});
+				message.success('Project marked as completed');
+				await loadProjects();
+			}
+		} catch (error) {
+			console.error('Failed to toggle completion:', error);
+			message.error('Failed to toggle completion');
+		}
+	};
+
+	const handleDeleteProject = (project: CampaignProject) => {
+		if (!campaign) return;
+
+		Modal.confirm({
+			title: 'Delete Project',
+			content: `Are you sure you want to delete "${project.name}"? This will also delete all sub-projects.`,
+			okText: 'Delete',
+			okType: 'danger',
+			onOk: async () => {
+				try {
+					await api.deleteCampaignProject(campaign.id, project.id);
+					message.success('Project deleted successfully');
+					await loadProjects();
+				} catch (error) {
+					console.error('Failed to delete project:', error);
+					message.error('Failed to delete project');
+				}
+			}
+		});
+	};
+
+	const handleCreateSubProject = (_parentProject: CampaignProject) => {
+		setEditingProject(undefined);
+		setProjectFormModalOpen(true);
+		// Note: We'd need to pass _parentProject.id to the form somehow
+		// For now, user can select it from the dropdown
 	};
 
 	if (loading) {
@@ -468,6 +611,37 @@ export const CampaignDetailsPage = (props: Props) => {
 										)}
 									</div>
 								)
+							},
+							{
+								key: 'projects',
+								label: `Projects (${projects.length})`,
+								children: (
+									<div>
+										<ProjectList
+											projects={projects}
+											loading={loadingProjects}
+											onSelectProject={(project) => setSelectedProject(project)}
+											onCreateProject={handleCreateProject}
+											showCompleted={showCompleted}
+											onToggleShowCompleted={setShowCompleted}
+											isGM={isGM}
+										/>
+										{selectedProject && !projectFormModalOpen && !progressModalOpen && (
+											<div style={{ marginTop: '20px' }}>
+												<ProjectCard
+													project={selectedProject}
+													onEdit={handleEditProject}
+													onDelete={handleDeleteProject}
+													onUpdateProgress={handleUpdateProgress}
+													onToggleComplete={handleToggleComplete}
+													onCreateSubProject={handleCreateSubProject}
+													canEdit={isGM || selectedProject.createdBy.id === userProfile?.id}
+													showActions={true}
+												/>
+											</div>
+										)}
+									</div>
+								)
 							}
 						]}
 					/>
@@ -549,6 +723,49 @@ export const CampaignDetailsPage = (props: Props) => {
 						/>
 					</div>
 				</Modal>
+
+				{/* Project Form Modal */}
+				<Modal
+					title={editingProject ? 'Edit Project' : 'Create New Project'}
+					open={projectFormModalOpen}
+					onCancel={() => {
+						setProjectFormModalOpen(false);
+						setEditingProject(undefined);
+					}}
+					footer={null}
+					width={800}
+				>
+					<ProjectForm
+						campaignId={campaign.id}
+						characters={characters.map(char => ({
+							id: char.id,
+							name: char.name || 'Unnamed',
+							owner_user_id: char.owner_user_id
+						}))}
+						currentUserId={userProfile?.id || 0}
+						isGM={isGM}
+						existingProject={editingProject}
+						parentProjects={projects}
+						onSubmit={handleProjectFormSubmit}
+						onCancel={() => {
+							setProjectFormModalOpen(false);
+							setEditingProject(undefined);
+						}}
+					/>
+				</Modal>
+
+				{/* Progress Update Modal */}
+				{selectedProject && (
+					<ProgressUpdateModal
+						project={selectedProject}
+						visible={progressModalOpen}
+						onSubmit={handleProgressSubmit}
+						onCancel={() => {
+							setProgressModalOpen(false);
+							setSelectedProject(undefined);
+						}}
+					/>
+				)}
 
 				<AppFooter
 					page='campaigns'

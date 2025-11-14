@@ -1,0 +1,115 @@
+.project-card {
+	margin-bottom: 16px;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+
+	&:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	&.completed {
+		opacity: 0.85;
+		background: #f6ffed;
+
+		.project-card-title {
+			color: #52c41a;
+		}
+	}
+
+	.project-card-title {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		font-size: 16px;
+		font-weight: 600;
+	}
+
+	.project-character {
+		font-size: 14px;
+		font-style: italic;
+	}
+
+	.project-description {
+		margin-bottom: 16px;
+		color: var(--text-color-secondary);
+	}
+
+	.project-progress-section,
+	.aggregate-progress-section {
+		margin-bottom: 16px;
+
+		.progress-label {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 8px;
+		}
+
+		.ant-progress {
+			margin: 0;
+		}
+	}
+
+	.aggregate-progress-section {
+		padding-top: 12px;
+		border-top: 1px solid var(--divider-color);
+	}
+
+	.project-metadata {
+		margin-top: 16px;
+		padding-top: 12px;
+		border-top: 1px solid var(--divider-color);
+		font-size: 12px;
+	}
+
+	.ant-card-actions {
+		background: var(--background-color-light);
+
+		> li {
+			margin: 8px 0;
+
+			&:not(:last-child) {
+				border-right: 1px solid var(--divider-color);
+			}
+		}
+	}
+}
+
+// Dark mode support
+body.dark-mode {
+	.project-card {
+		background: var(--background-color-dark);
+		border-color: var(--divider-color-dark);
+
+		&.completed {
+			background: #162312;
+		}
+
+		.aggregate-progress-section,
+		.project-metadata {
+			border-top-color: var(--divider-color-dark);
+		}
+
+		.ant-card-actions {
+			background: var(--background-color-darker);
+			border-top-color: var(--divider-color-dark);
+
+			> li:not(:last-child) {
+				border-right-color: var(--divider-color-dark);
+			}
+
+			// Make button icons visible in dark mode
+			button {
+				color: rgba(255, 255, 255, 0.65) !important;
+
+				&:hover {
+					color: #1890ff !important;
+				}
+
+				&.ant-btn-dangerous:hover {
+					color: #ff4d4f !important;
+				}
+			}
+		}
+	}
+}
