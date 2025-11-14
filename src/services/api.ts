@@ -256,3 +256,112 @@ export async function removeCharacterFromCampaign(characterId: number, campaignI
 		{ method: 'DELETE' }
 	).then(response => response.character);
 }
+
+// ================================================================
+// Campaign Projects API
+// ================================================================
+
+import {
+	CampaignProject,
+	CreateProjectRequest,
+	UpdateProjectRequest,
+	UpdateProgressRequest,
+	CompleteProjectRequest
+} from '@/models/campaign';
+
+export interface GetProjectsParams {
+	includeDeleted?: boolean;
+	includeCompleted?: boolean;
+	flat?: boolean;
+}
+
+export interface GetProjectParams {
+	includeHistory?: boolean;
+	includeChildren?: boolean;
+}
+
+export async function getCampaignProjects(
+	campaignId: number,
+	params: GetProjectsParams = {}
+): Promise<CampaignProject[]> {
+	const searchParams = new URLSearchParams();
+	if (params.includeDeleted) {
+		searchParams.set('includeDeleted', 'true');
+	}
+	if (params.includeCompleted === false) {
+		searchParams.set('includeCompleted', 'false');
+	}
+	if (params.flat) {
+		searchParams.set('flat', 'true');
+	}
+	const query = searchParams.toString();
+	const response = await apiRequest<{ count: number; projects: CampaignProject[] }>(
+		`/api/campaigns/${campaignId}/projects${query ? `?${query}` : ''}`
+	);
+	return response.projects;
+}
+
+export async function getCampaignProject(
+	campaignId: number,
+	projectId: number,
+	params: GetProjectParams = {}
+): Promise<CampaignProject> {
+	const searchParams = new URLSearchParams();
+	if (params.includeHistory) {
+		searchParams.set('includeHistory', 'true');
+	}
+	if (params.includeChildren) {
+		searchParams.set('includeChildren', 'true');
+	}
+	const query = searchParams.toString();
+	return apiRequest<CampaignProject>(
+		`/api/campaigns/${campaignId}/projects/${projectId}${query ? `?${query}` : ''}`
+	);
+}
+
+export async function createCampaignProject(
+	campaignId: number,
+	data: CreateProjectRequest
+): Promise<CampaignProject> {
+	return apiRequest<CampaignProject>(`/api/campaigns/${campaignId}/projects`, {
+		method: 'POST',
+		body: JSON.stringify(data)
+	});
+}
+
+export async function updateCampaignProject(
+	campaignId: number,
+	projectId: number,
+	data: UpdateProjectRequest
+): Promise<CampaignProject> {
+	return apiRequest<CampaignProject>(`/api/campaigns/${campaignId}/projects/${projectId}`, {
+		method: 'PUT',
+		body: JSON.stringify(data)
+	});
+}
+
+export async function updateProjectProgress(
+	campaignId: number,
+	projectId: number,
+	data: UpdateProgressRequest
+): Promise<CampaignProject> {
+	return apiRequest<CampaignProject>(`/api/campaigns/${campaignId}/projects/${projectId}/progress`, {
+		method: 'PATCH',
+		body: JSON.stringify(data)
+	});
+}
+
+export async function completeProject(
+	campaignId: number,
+	projectId: number,
+	data: CompleteProjectRequest = {}
+): Promise<CampaignProject> {
+	return apiRequest<CampaignProject>(`/api/campaigns/${campaignId}/projects/${projectId}/complete`, {
+		method: 'POST',
+		body: JSON.stringify(data)
+	});
+}
+
+export async function deleteCampaignProject(campaignId: number, projectId: number): Promise<void> {
+	await apiRequest(`/api/campaigns/${campaignId}/projects/${projectId}`, { method: 'DELETE' });
+}

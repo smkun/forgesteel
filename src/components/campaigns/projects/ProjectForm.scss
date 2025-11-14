@@ -1,0 +1,53 @@
+.project-form {
+	padding: 24px;
+	background: var(--background-color);
+	border-radius: 8px;
+	max-width: 800px;
+	margin: 0 auto;
+
+	.ant-form {
+		.ant-form-item {
+			margin-bottom: 20px;
+		}
+
+		.ant-form-item-label {
+			> label {
+				font-weight: 500;
+			}
+		}
+
+		.character-info {
+			padding: 12px;
+			background: var(--background-color-light);
+			border-radius: 4px;
+			margin-bottom: 16px;
+			border-left: 3px solid #1890ff;
+		}
+
+		.ant-divider {
+			margin: 24px 0;
+		}
+
+		.ant-input,
+		.ant-input-number,
+		.ant-select {
+			border-radius: 4px;
+		}
+
+		.ant-input-number {
+			width: 100%;
+		}
+	}
+}
+
+// Dark mode support
+body.dark-mode {
+	.project-form {
+		background: var(--background-color-dark);
+
+		.character-info {
+			background: var(--background-color-darker);
+			border-left-color: #177ddc;
+		}
+	}
+}
