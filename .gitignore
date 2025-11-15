@@ -19,6 +19,7 @@ server/**/*.js.map
 .env.production
 .env.*.local
 .env.development
+.env.production.backup
 
 # Firebase credentials
 firebase-service-account.json
