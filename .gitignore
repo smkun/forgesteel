@@ -26,3 +26,6 @@ firebase-service-account.json
 .firebase/
 test-firebase-auth.html
 firebase-debug.log
+
+# Logs
+backend.log
