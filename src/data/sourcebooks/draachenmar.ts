@@ -86,7 +86,7 @@ export const draachenmar: Sourcebook = {
 			EnvironmentData.rural,
 			OrganizationData.communal,
 			UpbringingData.martial,
-			'Antlerspeech'
+			'Hartic'
 		),
 		FactoryLogic.createCulture(
 			'Warforged',
@@ -142,34 +142,23 @@ export const draachenmar: Sourcebook = {
 			UpbringingData.labor,
 			'Terrari'
 		),
-		// Official non-core cultures (from orden sourcebook)
-		FactoryLogic.createCulture(
-			'Hakaan',
-			'Rural, communal, labor.',
-			CultureType.Ancestral,
-			EnvironmentData.rural,
-			OrganizationData.communal,
-			UpbringingData.labor,
-			'Vhroun'
-		),
-		FactoryLogic.createCulture(
-			'Memonek',
-			'Nomadic, communal, academic.',
-			CultureType.Ancestral,
-			EnvironmentData.nomadic,
-			OrganizationData.communal,
-			UpbringingData.academic,
-			'Axiomel'
-		),
-		FactoryLogic.createCulture(
-			'Time Raider',
-			'Nomadic, communal, martial.',
-			CultureType.Ancestral,
-			EnvironmentData.nomadic,
-			OrganizationData.communal,
-			UpbringingData.martial,
-			'Voll'
-		)
+		// Official core cultures used in Draachenmar (from orden sourcebook)
+		FactoryLogic.createCulture('Devil', 'Urban, bureaucratic, academic.', CultureType.Ancestral, EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.academic, 'Anjali'),
+		FactoryLogic.createCulture('DragonKnight', 'Secluded, bureaucratic, martial.', CultureType.Ancestral, EnvironmentData.secluded, OrganizationData.bureaucratic, UpbringingData.martial, 'Dracalis'),
+		FactoryLogic.createCulture('Dwarf', 'Secluded, bureaucratic, creative.', CultureType.Ancestral, EnvironmentData.secluded, OrganizationData.bureaucratic, UpbringingData.creative, 'Durekh'),
+		FactoryLogic.createCulture('Wode Elf', 'Wilderness, bureaucratic, martial.', CultureType.Ancestral, EnvironmentData.wilderness, OrganizationData.bureaucratic, UpbringingData.martial, 'Yllyric'),
+		FactoryLogic.createCulture('High Elf', 'Secluded, bureaucratic, martial.', CultureType.Ancestral, EnvironmentData.secluded, OrganizationData.bureaucratic, UpbringingData.martial, 'Hyrallic'),
+		FactoryLogic.createCulture('Hakaan', 'Rural, communal, labor.', CultureType.Ancestral, EnvironmentData.rural, OrganizationData.communal, UpbringingData.labor, 'Vhroun'),
+		FactoryLogic.createCulture('Memonek', 'Nomadic, communal, academic.', CultureType.Ancestral, EnvironmentData.nomadic, OrganizationData.communal, UpbringingData.academic, 'Axiomel'),
+		FactoryLogic.createCulture('Orc', 'Wilderness, communal, creative.', CultureType.Ancestral, EnvironmentData.wilderness, OrganizationData.communal, UpbringingData.creative, 'Grulakh'),
+		FactoryLogic.createCulture('Polder(Halfling)', 'Urban, communal, creative.', CultureType.Ancestral, EnvironmentData.urban, OrganizationData.communal, UpbringingData.creative, 'Hearthain'),
+		FactoryLogic.createCulture('Time Raider', 'Nomadic, communal, martial.', CultureType.Ancestral, EnvironmentData.nomadic, OrganizationData.communal, UpbringingData.martial, 'Voll'),
+		// Human regional cultures
+		FactoryLogic.createCulture('Avalonian', 'Urban, bureaucratic, noble.', CultureType.Ancestral, EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.noble, 'Avalonian'),
+		FactoryLogic.createCulture('Dalelandic', 'Urban, bureaucratic, academic.', CultureType.Ancestral, EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.academic, 'Dalelandic'),
+		FactoryLogic.createCulture('Jungari', 'Urban, communal, academic.', CultureType.Ancestral, EnvironmentData.urban, OrganizationData.communal, UpbringingData.academic, 'Jungari'),
+		FactoryLogic.createCulture('Merish', 'Urban, bureaucratic, noble.', CultureType.Ancestral, EnvironmentData.urban, OrganizationData.bureaucratic, UpbringingData.noble, 'Merish'),
+		FactoryLogic.createCulture('Rider-cant', 'Wilderness, communal, martial.', CultureType.Ancestral, EnvironmentData.wilderness, OrganizationData.communal, UpbringingData.martial, 'Rider-cant')
 	],
 
 	// Use core content for all other categories
@@ -186,197 +175,187 @@ export const draachenmar: Sourcebook = {
 	monsterGroups: [],
 	skills: [],
 
-	// Draachenmar custom languages
+	// Draachenmar languages - sorted by type, then alphabetically
 	languages: [
+		// === COMMON (Universal trade & diplomacy) ===
 		{
-			name: 'Draachen Trade',
-			description:
-                'Caravan and market koine across Draachenmar; used from Stoneharbor and Gulanbarak to the Henge market and Lineton. Keeps mixed-arm units interoperable.',
+			name: 'Concordial',
+			description: 'Court/negotiator register used for cross-cultural diplomacy.',
 			type: LanguageType.Common,
 			related: []
 		},
 		{
-			name: 'Concordial',
-			description:
-                'Diplomatic koine - court/negotiator register used for cross-cultural diplomacy.',
-			type: LanguageType.Cultural,
+			name: 'Draachen Trade',
+			description: 'Used across trade hubs like Stoneharbor/Gulanbarak, the Henge market, and Lineton; keeps mixed-arm units interoperable.',
+			type: LanguageType.Common,
 			related: []
 		},
+
+		// === CULTURAL (Peoples) ===
 		{
 			name: 'Aeryn',
-			description:
-                'Aarakocra/avian language; wind-tones, sky-measure and thermals vocabulary; spoken by aarakocra anywhere.',
+			description: 'Plumari/avian language; wind-tones, sky-measure and thermals vocabulary; spoken by Plumari anywhere.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Anjali',
-			description:
-                'Devil bureaucracy and contracts; precise legal registers.',
+			description: 'Devil bureaucracy and contracts; precise legal registers.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Aurish',
-			description:
-                'Language of the Aurian prides; rhythmic cadence and proverb-rich idioms; spoken by Aurians anywhere.',
+			description: 'Language of the Aurian prides; rhythmic cadence and proverb-rich idioms; spoken by Aurians anywhere.',
 			type: LanguageType.Cultural,
-			related: [ 'Aurealgar', 'Aurven', 'Aurkin' ]
+			related: []
 		},
 		{
 			name: 'Axiomel',
-			description:
-                'Memonek language; precise logical structures with truth-operators and formal address; spoken by memonek anywhere.',
+			description: 'Memonek language; precise logical structures with truth-operators and formal address; spoken by memonek anywhere.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Dracalis',
-			description:
-                'Dragonborn language spoken worldwide; Vandrhaf & Providence keep the prestige dialects.',
+			description: 'Dragonborn language spoken worldwide; Vandrhaf & Providence keep the prestige dialects.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Durekh',
-			description:
-                'Dwarven language spoken worldwide; Gulanbar runes are the dominant script variant.',
+			description: 'Dwarven language spoken worldwide; Gulanbar runes are the dominant script variant (Festival of Forges, Valthor Hollow).',
 			type: LanguageType.Cultural,
-			related: [ 'Steel Kuric' ]
+			related: []
 		},
 		{
 			name: 'Filliaric',
-			description:
-                'Angulotl language; fluid consonant clusters and tidal cadence; spoken by Angulotls anywhere in the world.',
+			description: 'Angulotl language; fluid consonant clusters and tidal cadence; spoken by Angulotls anywhere in the world.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Forged Cant',
-			description:
-                'Warforged code-speech and worksign; concise signals, taps, and machine-loanwords.',
-			type: LanguageType.Cultural,
-			related: []
-		},
-		{
-			name: 'Gobbic',
-			description:
-                'Goblin language spoken worldwide; \'Shard-cant\' is a thieves\'/warband register.',
+			description: 'Warforged code-speech and worksign; concise signals, taps, and machine-loanwords.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Gnomari',
-			description:
-                'Gnome language spoken worldwide; Kronus adds dense technic and elemental vocabulary.',
+			description: 'Gnome language spoken worldwide; Kronus adds dense technic and elemental vocabulary.',
+			type: LanguageType.Cultural,
+			related: []
+		},
+		{
+			name: 'Gobbic',
+			description: 'Goblin language spoken worldwide; "Shard-cant" is a thieves\'/warband register.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Grulakh',
-			description:
-                'Orc language spoken worldwide; notable Kettles and Shard dialects.',
+			description: 'Orc language spoken worldwide; notable Kettles and Shard dialects.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Hartic',
-			description:
-                'Hornvar macrolect; stocks/dialects include Elgari, Cervari, and Caprini.',
+			description: 'Hornvar macrolect; stocks/dialects include Elgari, Cervari, and Caprini.',
 			type: LanguageType.Cultural,
-			related: [ 'Elgari', 'Cervari', 'Caprini' ]
+			related: []
 		},
 		{
 			name: 'Hearthain',
-			description:
-                'Halfling language spoken worldwide; famed for hearth-tales and community idiom.',
+			description: 'Halfling language spoken worldwide; famed for hearth-tales and community idiom (Holden/Goodhome).',
+			type: LanguageType.Cultural,
+			related: []
+		},
+		{
+			name: 'Hyrallic',
+			description: 'High elf language.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Jotunic',
-			description:
-                'Giant language spoken worldwide; Vilos traditions emphasize \'Frostcraft,\' but hill, stone, cloud, and storm dialects persist.',
+			description: 'Giant language spoken worldwide; Vilos traditions emphasize "Frostcraft," but hill, stone, cloud, and storm dialects persist.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Khelt',
-			description:
-                'Bugbear/fey offshoot; oral-heavy, chantlike; related to Kheltivari.',
+			description: 'Bugbear/fey offshoot; oral-heavy, chantlike; related to Kheltivari.',
 			type: LanguageType.Cultural,
 			related: [ 'Kheltivari' ]
 		},
 		{
 			name: 'Kheltivari',
-			description:
-                'Old hobgoblin state dialect; martial and administrative registers.',
+			description: 'Old hobgoblin state dialect; martial and administrative registers.',
 			type: LanguageType.Cultural,
 			related: [ 'Khelt' ]
 		},
 		{
 			name: 'Loxontic',
-			description:
-                'Caravan oath-tongue of the Loxonta; resonant, drum-cadenced speech with long vowels and sonorant clusters; rich in ledger terms and treaty formulae; spoken along trade roads and waystations.',
-			type: LanguageType.Cultural,
-			related: []
-		},
-		{
-			name: 'Seraphic',
-			description:
-                'Juridical and devotional tongue of the Seraphites; used for oaths, judgments, and sanctuary pleas.',
-			type: LanguageType.Cultural,
-			related: []
-		},
-		{
-			name: 'Ssar\'uk',
-			description:
-                'Lizardfolk language; sibilant hisses, alveolar clicks, and tide-terms; spoken by lizardfolk anywhere.',
-			type: LanguageType.Cultural,
-			related: []
-		},
-		{
-			name: 'Szetch',
-			description:
-                'Verminari language; chittering consonants and guttural undertones; spoken by goblins, radenwights, and verminari.',
+			description: 'Caravan oath-tongue of the Loxonta; resonant, drum-cadenced speech with long vowels and sonorant clusters; rich in ledger terms and treaty formulae; spoken along trade roads and waystations.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Potamic',
-			description:
-                'Cultural – Hippori river-tongue; broad labials and open vowels; "bank-speech" for trade and "water-speech" for ferry commands; spoken by Hippori across floodplains and canal cities.',
+			description: 'Hippori river-tongue; broad labials and open vowels; "bank-speech" for trade and "water-speech" for ferry commands; spoken by Hippori across floodplains and canal cities.',
+			type: LanguageType.Cultural,
+			related: []
+		},
+		{
+			name: 'Seraphic',
+			description: 'Juridical and devotional tongue of the Seraphites; used for oaths, judgments, and sanctuary pleas.',
+			type: LanguageType.Cultural,
+			related: []
+		},
+		{
+			name: 'Ssar\'uk',
+			description: 'Lizardfolk language; sibilant hisses, alveolar clicks, and tide-terms; spoken by lizardfolk anywhere, not only Uxmal.',
+			type: LanguageType.Cultural,
+			related: []
+		},
+		{
+			name: 'Szetch',
+			description: 'Verminari language; chittering consonants and guttural undertones; spoken by goblins, radenwights, and verminari.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Terrari',
-			description:
-                'Tortle/terran folk language; deliberate cadence, contractual/legal idioms; spoken by terrari anywhere.',
+			description: 'Tortle/terran folk language; deliberate cadence, contractual/legal idioms; spoken by terrari anywhere.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Umbrathi',
-			description:
-                'Drow language spoken worldwide; Maelgoroth preserves an archaic register beneath the dome near the Orc Kettles.',
+			description: 'Drow language spoken worldwide; Maelgoroth preserves an archaic register beneath the dome near the Orc Kettles.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Vhroun',
-			description:
-                'Hakaan language; resonant stone-phrasing and deep tonals; spoken by hakaan anywhere.',
+			description: 'Hakaan language; resonant stone-phrasing and deep tonals; spoken by hakaan anywhere.',
 			type: LanguageType.Cultural,
 			related: []
 		},
 		{
 			name: 'Voll',
-			description:
-                'Language of the Time Raiders (four-armed extradimensional people); clipped command-patterns, battle-math, and caravan loanwords.',
+			description: 'Language of the Time Raiders (four-armed extradimensional people); clipped command-patterns, battle-math, and caravan loanwords.',
 			type: LanguageType.Cultural,
 			related: []
 		},
+		{
+			name: 'Yllyric',
+			description: 'Wood elf language.',
+			type: LanguageType.Cultural,
+			related: []
+		},
+
+		// === REGIONAL (Human regional dialects) ===
 		{
 			name: 'Avalonian',
 			description: 'Maritime duchies Aerlin, Braeten, Veringia, Albion.',
@@ -385,49 +364,47 @@ export const draachenmar: Sourcebook = {
 		},
 		{
 			name: 'Dalelandic',
-			description:
-                'Henge/Dale Lands; heavy academic/arcane register (Conclave & schools).',
+			description: 'Henge/Dale Lands; heavy academic/arcane register (Conclave & schools).',
 			type: LanguageType.Regional,
 			related: []
 		},
 		{
 			name: 'Jungari',
-			description:
-                'Uxmal\'s human diplomats/traders; Tyravos (Volcano of Omens) vocabulary.',
+			description: 'Uxmal\'s human diplomats/traders; Tyravos (Volcano of Omens) vocabulary.',
 			type: LanguageType.Regional,
 			related: []
 		},
 		{
 			name: 'Merish',
-			description:
-                'Courtly arts dialect of the Duchy of Merish near Lineton.',
+			description: 'Courtly arts dialect of the Duchy of Merish near Lineton.',
 			type: LanguageType.Regional,
 			related: []
 		},
 		{
 			name: 'Rider-cant',
-			description:
-                'Badlands (Respite/Providence); survival/riding and rune-lexicon.',
+			description: 'Badlands (Respite/Providence); survival/riding and rune-lexicon.',
 			type: LanguageType.Regional,
 			related: []
 		},
+
+		// === DEAD ===
 		{
 			name: 'Bargothian',
 			description: 'The language of the ancient Bargothian empire.',
 			type: LanguageType.Dead,
 			related: []
 		},
+
+		// === SECRET ===
 		{
-			name: 'Thieves\' Cant',
-			description:
-                'Secret language spoken by the criminal underworld; uses coded phrases, hand signs, and subtle markings known only to thieves and rogues.',
+			name: 'Druidic',
+			description: 'Secret language spoken by druidic circles.',
 			type: LanguageType.Secret,
 			related: []
 		},
 		{
-			name: 'Druidic',
-			description:
-                'Secret language spoken by druidic circles; sacred tongue of nature priests forbidden to teach outsiders under penalty of divine retribution.',
+			name: 'Thieves\' Cant',
+			description: 'Secret language spoken by the criminal underworld.',
 			type: LanguageType.Secret,
 			related: []
 		}
