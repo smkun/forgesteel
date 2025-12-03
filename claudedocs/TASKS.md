@@ -277,6 +277,130 @@
 
 ---
 
+## Campaign Encounters Backend Sync System
+
+### Phase 1: Backend Infrastructure 🆕 Not Started
+
+#### Database Migration
+- [ ] Create `db/migrations/003_add_campaign_encounters.sql`
+  - campaign_encounters table with all fields
+  - Foreign keys to campaigns and users
+  - Unique constraint on campaign_id + encounter_uuid
+  - Indexes for performance
+  - Rollback script
+- [ ] Run migration on development database
+- [ ] Test migration on production database
+
+#### Backend Data Layer
+- [ ] Create `server/data/encounters.repository.ts`
+  - findById(id): Get single encounter
+  - findByCampaign(campaignId, includeDeleted): Get all campaign encounters
+  - findByUUID(campaignId, uuid): Get encounter by frontend UUID
+  - create(data): Create new encounter
+  - update(id, data): Update encounter
+  - softDelete(id): Mark encounter as deleted
+
+#### Backend Business Logic
+- [ ] Create `server/logic/encounter.logic.ts`
+  - getCampaignEncounters(campaignId, userId, isAdmin): Fetch with access check
+  - getEncounter(encounterId, userId, isAdmin): Single encounter with access check
+  - createEncounter(campaignId, userId, encounter): Create with validation
+  - updateEncounter(encounterId, userId, encounter, isAdmin): Update with permission check
+  - deleteEncounter(encounterId, userId, isAdmin): Soft delete with permission check
+  - validateEncounter(encounter): Validate encounter structure
+  - **Permission checks**:
+    - canUserCreateEncounter(userId, campaignId): GM/Admin check
+    - canUserEditEncounter(userId, encounterId): Creator/GM/Admin check
+    - canUserViewEncounter(userId, encounterId): Campaign member check
+
+#### Backend API Routes
+- [ ] Create `server/routes/encounter.routes.ts`
+  - GET /api/campaigns/:campaignId/encounters (list all)
+  - GET /api/campaigns/:campaignId/encounters/:id (get single)
+  - POST /api/campaigns/:campaignId/encounters (create - GM only)
+  - PUT /api/campaigns/:campaignId/encounters/:id (update - GM only)
+  - DELETE /api/campaigns/:campaignId/encounters/:id (soft delete - GM only)
+- [ ] Register routes in server app.ts/index.ts
+
+#### Validation & Error Handling
+- [ ] Add input validation for encounter endpoints
+  - Encounter UUID: valid UUID format
+  - Name: 1-255 characters
+  - encounter_json: valid JSON with required fields
+- [ ] Add permission validation middleware
+  - Check campaign membership
+  - Check GM role for write operations
+- [ ] Create error responses
+  - 400: Invalid data
+  - 403: Permission denied
+  - 404: Encounter or campaign not found
+
+#### Testing
+- [ ] Test API endpoints respond correctly
+- [ ] Test permission enforcement (player vs GM)
+- [ ] Test CRUD operations work as expected
+
+### Phase 2: Frontend API Integration ⏳ Pending
+
+#### API Service
+- [ ] Add encounter methods to `src/services/api.ts`
+  - getCampaignEncounters(campaignId): Get all encounters
+  - getEncounter(campaignId, encounterId): Get single
+  - createEncounter(campaignId, encounter): Create
+  - updateEncounter(campaignId, encounterId, encounter): Update
+  - deleteEncounter(campaignId, encounterId): Delete
+
+#### State Management
+- [ ] Create encounter sync hook/context
+  - Track local vs server encounters
+  - Handle sync status
+  - Queue offline changes
+
+#### Main Component Integration
+- [ ] Update `src/components/main/main.tsx`
+  - Add campaign-aware encounter CRUD
+  - Integrate with existing createEncounter, saveLibraryElement, deleteLibraryElement
+
+### Phase 3: UI Integration 🎨 Pending
+
+#### Campaign Selection
+- [ ] Add campaign selector to encounter creation flow
+  - Show only campaigns where user is GM
+  - Option to keep encounter local-only
+- [ ] Add campaign indicator to encounter list/cards
+
+#### Sync Status
+- [ ] Add sync status indicators
+  - "Local only" badge for non-synced encounters
+  - "Synced" indicator for server encounters
+  - "Syncing..." during save operations
+- [ ] Add "Sync to Campaign" button for local encounters
+
+#### Encounter List Updates
+- [ ] Update encounter list to show both local and campaign encounters
+- [ ] Add filter for local vs campaign encounters
+- [ ] Show campaign name for synced encounters
+
+### Phase 4: Migration & Polish 🔧 Pending
+
+#### Local Migration Tool
+- [ ] Create "Migrate to Campaign" feature
+  - Select local encounters to migrate
+  - Choose target campaign
+  - Handle duplicates
+
+#### Offline Support
+- [ ] Queue changes when offline
+- [ ] Auto-sync when back online
+- [ ] Conflict resolution UI
+
+#### Testing & Polish
+- [ ] End-to-end testing
+- [ ] Performance testing with many encounters
+- [ ] Documentation updates
+
+---
+
 ## Notes
 
 ### Recent Changes (2025-11-11)

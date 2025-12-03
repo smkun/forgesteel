@@ -626,3 +626,156 @@ CREATE TABLE IF NOT EXISTS `campaign_projects` (
 - Character Model: `src/models/hero.ts`
 - Factory Logic: `src/logic/factory-logic.ts`
 - Update Logic: `src/logic/update/hero-update-logic.ts`
+
+---
+
+## Campaign Encounters Backend Sync System
+
+### Vision
+
+Enable GMs to access their encounters from any device by storing encounters server-side. Currently, encounters are stored only in browser local storage (IndexedDB via localforage). This feature adds server-side encounter storage so GMs can sync encounters across devices and share them within campaigns.
+
+### Feature Overview
+
+**Core Capabilities:**
+- **Campaign-Based Storage**: Encounters belong to campaigns (like characters and projects)
+- **Cross-Device Access**: GMs can access encounters from any PC when logged in
+- **Sharing within Campaigns**: All campaign GMs can access shared encounters
+- **Dual Storage Support**: Local storage for offline/quick access, server sync for persistence
+
+### Current State
+
+**Where Encounters Are Stored Now:**
+```
+Frontend: localforage → IndexedDB
+Key: 'forgesteel-homebrew-settings'
+Contains: Sourcebook[] with encounters[] array per sourcebook
+```
+
+**Current Flow:**
+1. `createEncounter()` → Creates encounter object
+2. Pushes to `sourcebook.encounters[]`
+3. `persistHomebrewSourcebooks()` → Saves to IndexedDB
+4. **NOT synced to server**
+
+### Database Schema
+
+**New Table: `campaign_encounters`**
+```sql
+CREATE TABLE IF NOT EXISTS `campaign_encounters` (
+  `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `campaign_id` INT UNSIGNED NOT NULL,
+  `encounter_uuid` VARCHAR(36) NOT NULL,
+  `name` VARCHAR(255) NULL,
+  `encounter_json` LONGTEXT NOT NULL,
+  `created_by_user_id` INT UNSIGNED NOT NULL,
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  CONSTRAINT `fk_encounters_campaign`
+    FOREIGN KEY (`campaign_id`) REFERENCES `campaigns` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+
+  CONSTRAINT `fk_encounters_creator`
+    FOREIGN KEY (`created_by_user_id`) REFERENCES `users` (`id`)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+
+  UNIQUE KEY `unique_campaign_encounter` (`campaign_id`, `encounter_uuid`)
+);
+```
+
+### API Endpoints
+
+| Method | Endpoint | Description | Access |
+|--------|----------|-------------|--------|
+| GET | `/api/campaigns/:campaignId/encounters` | List all encounters | Campaign member |
+| GET | `/api/campaigns/:campaignId/encounters/:id` | Get single encounter | Campaign member |
+| POST | `/api/campaigns/:campaignId/encounters` | Create encounter | Campaign GM |
+| PUT | `/api/campaigns/:campaignId/encounters/:id` | Update encounter | Campaign GM |
+| DELETE | `/api/campaigns/:campaignId/encounters/:id` | Soft delete encounter | Campaign GM |
+
+### Access Control Matrix
+
+| Action | Creator | Campaign GM | Campaign Player | Other User |
+|--------|---------|-------------|-----------------|------------|
+| List Encounters | ✅ | ✅ | ✅ (read) | ❌ |
+| View Encounter | ✅ | ✅ | ✅ | ❌ |
+| Create Encounter | ✅ | ✅ | ❌ | ❌ |
+| Update Encounter | ✅ | ✅ | ❌ | ❌ |
+| Delete Encounter | ✅ | ✅ | ❌ | ❌ |
+
+### Implementation Phases
+
+**Phase 1: Backend Infrastructure**
+1. Create migration `db/migrations/003_add_campaign_encounters.sql`
+2. Create `server/data/encounters.repository.ts`
+3. Create `server/logic/encounter.logic.ts`
+4. Create `server/routes/encounter.routes.ts`
+5. Register routes in app.ts
+6. Test API endpoints
+
+**Phase 2: Frontend API Integration**
+1. Add `encountersApi` to `src/services/api.ts`
+2. Create encounter sync hook for state management
+3. Update encounter CRUD functions in `main.tsx`
+
+**Phase 3: UI Integration**
+1. Add campaign selector to encounter creation
+2. Add sync status indicators
+3. Add "Sync to Campaign" functionality
+4. Update encounter list to show source (local vs campaign)
+
+**Phase 4: Migration & Polish**
+1. Create tool to migrate local encounters to campaigns
+2. Add offline support (queue changes when offline)
+3. Conflict resolution for concurrent edits
+
+### Key Technical Decisions
+
+**1. Campaign-Based vs User-Based Storage**
+- **Decision**: Campaign-based storage
+- **Rationale**: Follows existing patterns (characters, projects), enables sharing between GMs
+- **Trade-off**: Requires campaign selection for encounter storage
+
+**2. Dual Storage Strategy**
+- **Decision**: Keep local storage + add server sync
+- **Rationale**: Backward compatibility, offline support, faster local access
+- **Trade-off**: More complex sync logic
+
+**3. JSON Column for Encounter Storage**
+- **Decision**: Use LONGTEXT for encounter_json (same as characters)
+- **Rationale**: Encounter structure may change, preserves flexibility
+- **Trade-off**: Not queryable at field level, but encounters rarely searched by content
+
+### Files to Create
+
+**New Files:**
+- `db/migrations/003_add_campaign_encounters.sql`
+- `server/data/encounters.repository.ts`
+- `server/logic/encounter.logic.ts`
+- `server/routes/encounter.routes.ts`
+
+**Modified Files:**
+- `server/app.ts` (or index.ts) - Register routes
+- `src/services/api.ts` - Add encounter API methods
+- `src/components/main/main.tsx` - Integrate server CRUD
+- Encounter creation UI - Add campaign selection
+
+### Estimated Effort
+
+| Phase | Effort |
+|-------|--------|
+| Phase 1: Backend | 4-6 hours |
+| Phase 2: Frontend API | 2-3 hours |
+| Phase 3: UI | 4-6 hours |
+| Phase 4: Migration | 2-4 hours |
+| **Total** | **12-19 hours** |
+
+### References
+
+- Design Specification: `claudedocs/DESIGN_backend_encounters.md`
+- Migration SQL: `db/migrations/003_add_campaign_encounters.sql` (to be created)
+- Encounter Model: `src/models/encounter.ts`
+- Current Storage: `src/components/main/main.tsx` (persistHomebrewSourcebooks)
+- API Patterns: `src/services/api.ts`, `server/routes/character.routes.ts`

@@ -225,3 +225,93 @@ grep -c '32gamers.com/forgesteel/api' distribution/frontend/main-*.js
 1. **Test Full Library CRUD**: Create, edit, save, delete an encounter in the Library to verify fix works
 2. **Audit Remaining Switch Statements**: Check `exportLibraryElement` and any other functions with element type switches
 3. **Test Import/Export**: Verify encounters can be exported to JSON and re-imported correctly
+
+---
+
+## Session Summary - December 3, 2025 (Backend Encounters Design)
+
+### Design Document Created
+
+14. **Created Backend Encounters Design Document** ([claudedocs/DESIGN_backend_encounters.md](claudedocs/DESIGN_backend_encounters.md))
+    - Comprehensive design for adding encounters to the MySQL database
+    - Enables GMs to access encounters from any PC via server-side storage
+    - Campaign-based storage model (follows characters/projects pattern)
+
+### Key Design Decisions
+
+**Architecture Choice**: Campaign-Based Storage
+- Encounters belong to campaigns (like characters and projects)
+- All campaign GMs can access shared encounters
+- Dual storage strategy: local + server sync for backward compatibility
+
+**Database Schema**: New `campaign_encounters` table
+```sql
+CREATE TABLE campaign_encounters (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  campaign_id INT UNSIGNED NOT NULL,
+  encounter_uuid VARCHAR(36) NOT NULL,
+  name VARCHAR(255) NULL,
+  encounter_json LONGTEXT NOT NULL,
+  created_by_user_id INT UNSIGNED NOT NULL,
+  is_deleted TINYINT(1) NOT NULL DEFAULT 0,
+  ...
+);
+```
+
+**API Endpoints** (nested under campaigns):
+- `GET /api/campaigns/:campaignId/encounters` - List all
+- `POST /api/campaigns/:campaignId/encounters` - Create (GM only)
+- `PUT /api/campaigns/:campaignId/encounters/:id` - Update (GM only)
+- `DELETE /api/campaigns/:campaignId/encounters/:id` - Soft delete (GM only)
+
+**Access Control**:
+- Campaign GMs: Full CRUD
+- Campaign Players: Read only
+- Creator: Full access to own encounters
+
+### Documentation Updated
+
+15. **Updated PLANNING.md** ([claudedocs/PLANNING.md](claudedocs/PLANNING.md))
+    - Added "Campaign Encounters Backend Sync System" section
+    - Vision, feature overview, database schema
+    - API endpoints, access control matrix
+    - 4-phase implementation plan with effort estimates
+
+16. **Updated TASKS.md** ([claudedocs/TASKS.md](claudedocs/TASKS.md))
+    - Added detailed task breakdown for all 4 phases
+    - Phase 1: Backend Infrastructure (migration, repository, logic, routes)
+    - Phase 2: Frontend API Integration (api.ts, sync hook)
+    - Phase 3: UI Integration (campaign selector, sync status)
+    - Phase 4: Migration & Polish (local→server migration, offline support)
+
+### Files Created/Modified
+
+**New Files:**
+- `claudedocs/DESIGN_backend_encounters.md` - Full design specification
+
+**Modified Files:**
+- `claudedocs/PLANNING.md` - Added encounters backend section
+- `claudedocs/TASKS.md` - Added encounters implementation tasks
+- `CLAUDE.md` - This session summary
+
+### Implementation Phases (Estimated: 12-19 hours)
+
+| Phase | Description | Effort |
+|-------|-------------|--------|
+| 1 | Backend Infrastructure | 4-6 hours |
+| 2 | Frontend API Integration | 2-3 hours |
+| 3 | UI Integration | 4-6 hours |
+| 4 | Migration & Polish | 2-4 hours |
+
+### Files to Create (Phase 1)
+
+- `db/migrations/003_add_campaign_encounters.sql`
+- `server/data/encounters.repository.ts`
+- `server/logic/encounter.logic.ts`
+- `server/routes/encounter.routes.ts`
+
+### Next 3 Tasks
+
+1. **Start Phase 1**: Create the database migration file `003_add_campaign_encounters.sql`
+2. **Create Repository**: Implement `encounters.repository.ts` following character repository pattern
+3. **Create Logic Layer**: Implement `encounter.logic.ts` with access control
