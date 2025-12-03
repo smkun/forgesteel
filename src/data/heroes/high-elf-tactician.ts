@@ -6,7 +6,8 @@ export const highElfTactician = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		''
+		'',
+		'orden'
 	],
 	ancestry: {
 		id: 'ancestry-high-elf',

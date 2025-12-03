@@ -107,7 +107,6 @@ export const PlaybookEditPage = (props: Props) => {
 					<div className='adventure-container'>
 						<AdventureEditPanel
 							adventure={element as Adventure}
-							playbook={props.playbook}
 							sourcebooks={props.sourcebooks}
 							heroes={props.heroes}
 							options={props.options}
@@ -148,6 +147,7 @@ export const PlaybookEditPage = (props: Props) => {
 						<TacticalMapPanel
 							map={element as TacticalMap}
 							display={TacticalMapDisplayType.DirectorEdit}
+							sourcebooks={props.sourcebooks}
 							options={props.options}
 							mode={PanelMode.Full}
 							updateMap={applyChanges}
@@ -173,6 +173,7 @@ export const PlaybookEditPage = (props: Props) => {
 						<MontagePanel
 							montage={element as Montage}
 							heroes={props.heroes}
+							sourcebooks={props.sourcebooks}
 							options={props.options}
 							mode={PanelMode.Full}
 						/>
@@ -224,7 +225,7 @@ export const PlaybookEditPage = (props: Props) => {
 					</div>
 				</ErrorBoundary>
 				<AppFooter
-					page='playbook'
+					page='session'
 					highlightAbout={props.highlightAbout}
 					showReference={props.showReference}
 					showRoll={props.showRoll}

@@ -173,6 +173,11 @@ export const draachenmar: Sourcebook = {
 	items: [],
 	imbuements: [],
 	monsterGroups: [],
+	adventures: [],
+	encounters: [],
+	montages: [],
+	negotiations: [],
+	tacticalMaps: [],
 	skills: [],
 
 	// Draachenmar languages - sorted by type, then alphabetically

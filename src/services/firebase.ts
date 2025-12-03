@@ -11,7 +11,6 @@ import {
 	sendPasswordResetEmail,
 	signInWithEmailAndPassword,
 	signInWithPopup,
-	signInWithRedirect,
 	updateProfile
 } from 'firebase/auth';
 

@@ -6,7 +6,8 @@ export const orcConduit = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		''
+		'',
+		'orden'
 	],
 	ancestry: {
 		id: 'ancestry-orc',

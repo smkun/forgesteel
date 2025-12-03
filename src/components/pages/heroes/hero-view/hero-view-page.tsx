@@ -1,5 +1,5 @@
 import { Alert, Button, Divider, Empty, Popover } from 'antd';
-import { CloseOutlined, CopyOutlined, DownOutlined, EditOutlined, TeamOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
+import { CloseOutlined, CopyOutlined, DownOutlined, EditOutlined, ToolOutlined, UploadOutlined } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Ability } from '@/models/ability';
 import { Ancestry } from '@/models/ancestry';
@@ -80,7 +80,7 @@ export const HeroViewPage = (props: Props) => {
 	const [ view, setView ] = useState<string>('modern');
 	const [ showCampaignModal, setShowCampaignModal ] = useState<boolean>(false);
 	const [ campaignInfo, setCampaignInfo ] = useState<{ id: number; name: string } | null>(null);
-	const [ gmInfo, setGmInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
+	const [ _gmInfo, setGmInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
 	const [ ownerInfo, setOwnerInfo ] = useState<{ email: string | null; display_name: string | null } | null>(null);
 	const [ isOnline, setIsOnline ] = useState<boolean>(false);
 	const [ fetchedHero, setFetchedHero ] = useState<Hero | null>(null);
@@ -192,6 +192,7 @@ export const HeroViewPage = (props: Props) => {
 	}, [ hero?.id ]);
 
 	const handleCampaignAssignComplete = async () => {
+		if (!hero) return;
 		console.log('[CAMPAIGN ASSIGN] handleCampaignAssignComplete called for hero:', hero.id, hero.name);
 		setShowCampaignModal(false);
 		// Reload character info - use API call to get fresh data
@@ -278,14 +279,14 @@ export const HeroViewPage = (props: Props) => {
 		);
 	};
 
-	const getContent = () => {
+	const getContent = (currentHero: Hero) => {
 		switch (view) {
 			case 'modern':
 				return (
 					<>
 						{getGMSelector()}
 						<HeroPanel
-							hero={hero}
+							hero={currentHero}
 							sourcebooks={props.sourcebooks}
 							options={props.options}
 							mode={PanelMode.Full}
@@ -299,34 +300,33 @@ export const HeroViewPage = (props: Props) => {
 							onSelectTitle={props.showTitle}
 							onSelectMonster={props.showMonster}
 							onSelectFollower={props.showFollower}
-							onSelectCharacteristic={characteristic => props.showCharacteristic(characteristic, hero)}
-							onSelectFeature={feature => props.showFeature(feature, hero)}
-							onSelectAbility={ability => props.showAbility(ability, hero)}
-							onShowState={page => props.showHeroState(hero, page)}
-							onshowReference={page => props.showReference(hero, page)}
+							onSelectCharacteristic={characteristic => props.showCharacteristic(characteristic, currentHero)}
+							onSelectFeature={feature => props.showFeature(feature, currentHero)}
+							onSelectAbility={ability => props.showAbility(ability, currentHero)}
+							onShowState={page => props.showHeroState(currentHero, page)}
+							onshowReference={page => props.showReference(currentHero, page)}
 						/>
 					</>
 				);
 			case 'classic':
 				return (
 					<HeroSheetPage
-						hero={hero}
+						hero={currentHero}
 						sourcebooks={props.sourcebooks}
 						options={props.options}
 					/>
 				);
 			case 'abilities':
 				return (
-					<StandardAbilitiesPage options={props.options} hero={hero} />
+					<StandardAbilitiesPage options={props.options} hero={currentHero} />
 				);
 			case 'notes':
 				return (
 					<MultiLine
 						style={{ height: '100%', flex: '1 1 0' }}
 						inputStyle={{ flex: '1 1 0', resize: 'none' }}
-						value={hero.state.notes}
-						showMarkdownPrompt={false}
-						onChange={value => props.setNotes(hero, value)}
+						value={currentHero.state.notes}
+						onChange={value => props.setNotes(currentHero, value)}
 					/>
 				);
 		}
@@ -420,7 +420,7 @@ export const HeroViewPage = (props: Props) => {
 				</AppHeader>
 				<ErrorBoundary>
 					<div className={isSmall ? 'hero-view-page-content compact' : 'hero-view-page-content'}>
-						{getContent()}
+						{getContent(hero)}
 					</div>
 				</ErrorBoundary>
 				<AppFooter

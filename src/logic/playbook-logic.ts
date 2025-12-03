@@ -13,6 +13,7 @@ import { Negotiation } from '@/models/negotiation';
 import { Options } from '@/models/options';
 import { Playbook } from '@/models/playbook';
 import { Plot } from '@/models/plot';
+import { Session } from '@/models/session';
 import { Sourcebook } from '@/models/sourcebook';
 import { SourcebookLogic } from '@/logic/sourcebook-logic';
 import { TacticalMap } from '@/models/tactical-map';
@@ -82,7 +83,7 @@ export class PlaybookLogic {
 		});
 	};
 
-	static getContentOptions = (session: Playbook) => {
+	static getContentOptions = (session: Session) => {
 		const options: { type: string, id: string, name: string }[] = [];
 
 		session.encounters.forEach(e => options.push({ type: 'encounter', id: e.id, name: e.name || 'Unnamed Encounter' }));
@@ -124,7 +125,7 @@ export class PlaybookLogic {
 				const monster = EncounterLogic.getCustomizedMonster(slot.monsterID, slot.customization, sourcebooks);
 				const monsterGroup = SourcebookLogic.getMonsterGroup(sourcebooks, slot.monsterID);
 				if (monster && monsterGroup) {
-					const count = slot.count * MonsterLogic.getRoleMultiplier(monster.role.organization, options);
+					const count = slot.count * MonsterLogic.getRoleMultiplier(monster.role.organization);
 					const current = monsterInfo.find(info => info.monsterID === slot.monsterID);
 					if (current) {
 						current.count += count;
@@ -145,7 +146,7 @@ export class PlaybookLogic {
 			.forEach(slot => {
 				const info = monsterInfo.find(info => info.monsterID === slot.monsterID);
 				if (info) {
-					const count = slot.count * MonsterLogic.getRoleMultiplier(info.monster.role.organization, options);
+					const count = slot.count * MonsterLogic.getRoleMultiplier(info.monster.role.organization);
 					for (let n = 1; n <= count; ++n) {
 						const monsterCopy = Utils.copy(info.monster);
 						monsterCopy.id = Utils.guid();

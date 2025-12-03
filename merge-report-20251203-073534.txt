@@ -1,0 +1,449 @@
+[2025-12-03 07:35:34] Starting merge process...
+[2025-12-03 07:35:34] Checking prerequisites...
+[2025-12-03 07:35:34] Prerequisites check passed ✓
+[2025-12-03 07:35:34] Creating backup at: /home/skunian/forgesteel-backups/backup-20251203-073534
+[2025-12-03 07:35:46] Backup created ✓
+[2025-12-03 07:35:46] Analyzing differences between repos...
+
+=== DIFFERENCE ANALYSIS ===
+
+NEW FILES:
+./src/assets/screenshots/monster-builder-genesplice.png
+./src/assets/screenshots/playbook-adventure.png
+./src/assets/screenshots/playbook-map-autobuild.png
+./src/assets/screenshots/playbook-map.png
+./src/components/controls/check-icon/check-icon.scss
+./src/components/controls/check-icon/check-icon.tsx
+./src/components/controls/check-label/check-label.scss
+./src/components/controls/check-label/check-label.tsx
+./src/components/controls/markdown/markdown.scss
+./src/components/features/feature-data/ability-cost.tsx
+./src/components/features/feature-data/ability-damage.tsx
+./src/components/features/feature-data/ability-distance.tsx
+./src/components/features/feature-data/ability.tsx
+./src/components/features/feature-data/addon.tsx
+./src/components/features/feature-data/ancestry-choice.tsx
+./src/components/features/feature-data/ancestry-feature-choice.tsx
+./src/components/features/feature-data/bonus.tsx
+./src/components/features/feature-data/characteristic-bonus.tsx
+./src/components/features/feature-data/choice.tsx
+./src/components/features/feature-data/class-ability.tsx
+./src/components/features/feature-data/companion.tsx
+./src/components/features/feature-data/condition-immunity.tsx
+./src/components/features/feature-data/damage-modifier.tsx
+./src/components/features/feature-data/domain-feature.tsx
+./src/components/features/feature-data/domain.tsx
+./src/components/features/feature-data/fixture.tsx
+./src/components/features/feature-data/heroic-resource-gain.tsx
+./src/components/features/feature-data/heroic-resource.tsx
+./src/components/features/feature-data/item-choice.tsx
+./src/components/features/feature-data/kit.tsx
+./src/components/features/feature-data/language-choice.tsx
+./src/components/features/feature-data/language.tsx
+./src/components/features/feature-data/malice-ability.tsx
+./src/components/features/feature-data/malice.tsx
+./src/components/features/feature-data/movement-mode.tsx
+./src/components/features/feature-data/multiple.tsx
+./src/components/features/feature-data/package-content.tsx
+./src/components/features/feature-data/package.tsx
+./src/components/features/feature-data/perk.tsx
+./src/components/features/feature-data/proficiency.tsx
+./src/components/features/feature-data/retainer.tsx
+./src/components/features/feature-data/save-threshold.tsx
+./src/components/features/feature-data/size.tsx
+./src/components/features/feature-data/skill-choice.tsx
+./src/components/features/feature-data/speed.tsx
+./src/components/features/feature-data/summon-choice.tsx
+./src/components/features/feature-data/summon.tsx
+./src/components/features/feature-data/tagged-feature-choice.tsx
+./src/components/features/feature-data/tagged-feature.tsx
+./src/components/features/feature-data/title-choice.tsx
+./src/components/features/feature.tsx
+./src/components/modals/select/retainer-select/retainer-select-modal.scss
+./src/components/modals/select/retainer-select/retainer-select-modal.tsx
+./src/components/pages/backup/backup-page.scss
+./src/components/pages/backup/backup-page.tsx
+./src/components/pages/library/library-list/controls/add-btn.tsx
+./src/components/pages/library/library-list/controls/destination-selector.tsx
+./src/components/pages/library/library-list/controls/element-toolbar.tsx
+./src/components/panels/connection-settings/connection-settings-panel.tsx
+./src/components/panels/data-loader/data-loader.scss
+./src/components/panels/data-loader/data-loader.tsx
+./src/data/sourcebooks/community.ts
+./src/data/sourcebooks/magazine-blacksmith.ts
+./src/data/sourcebooks/magazine-ratcatcher.ts
+./src/data/sourcebooks/triglav.ts
+./src/logic/adventure-logic.ts
+./src/logic/library-logic.ts
+./src/logic/project-logic.ts
+./src/logic/session-logic.ts
+./src/logic/update/connection-settings-update-logic.ts
+./src/logic/update/session-update-logic.ts
+./src/models/connection-settings.ts
+./src/models/monster-role.ts
+./src/models/retainer.ts
+./src/models/session.ts
+./src/utils/data-service.test.ts
+./src/utils/data-service.ts
+
+MODIFIED FILES:
+./tsconfig.node.json
+./readme.md
+./to do.md
+./package-lock.json
+./eslint.config.js
+./package.json
+./vite.config.ts
+./src/index.scss
+./src/data/monsters/human.ts
+./src/data/monsters/retainer.ts
+./src/data/monsters/dwarf.ts
+./src/data/monsters/rival.ts
+./src/data/monsters/dragon-thorn.ts
+./src/data/imbuements/imbued-weapon-data.ts
+./src/data/imbuements/imbued-armor-data.ts
+./src/data/imbuements/imbued-implement-data.ts
+./src/data/heroes/polder-shadow.ts
+./src/data/heroes/human-talent.ts
+./src/data/heroes/human-null.ts
+./src/data/heroes/high-elf-tactician.ts
+./src/data/heroes/dwarf-fury.ts
+./src/data/heroes/polder-elementalist.ts
+./src/data/heroes/orc-conduit.ts
+./src/data/heroes/human-censor.ts
+./src/data/heroes/wode-elf-troubadour.ts
+./src/data/classes/conduit/conduit.ts
+./src/data/classes/summoner/summoner.ts
+./src/data/ancestry-data.ts
+./src/data/sourcebooks/playtest.ts
+./src/data/sourcebooks/core.ts
+./src/data/sourcebooks/orden.ts
+./src/data/project-data.ts
+./src/data/ancestries/time-raider.ts
+./src/data/ancestries/dragon-knight.ts
+./src/data/ancestries/human.ts
+./src/data/ancestries/hakaan.ts
+./src/data/ancestries/dwarf.ts
+./src/data/ancestries/devil.ts
+./src/data/ancestries/elf-high.ts
+./src/data/ancestries/orc.ts
+./src/data/ancestries/polder.ts
+./src/data/ancestries/memonek.ts
+./src/data/ancestries/elf-wode.ts
+./src/data/tip-data.ts
+./src/data/sourcebook-data.ts
+./src/data/items/consumable-data.ts
+./src/data/items/leveled-weapon-data.ts
+./src/data/items/leveled-armor-data.ts
+./src/data/items/leveled-implement-data.ts
+./src/data/items/trinket-data.ts
+./src/data/items/leveled-item-data.ts
+./src/data/complication-data.ts
+./src/data/rules-data.ts
+./src/logic/format-logic.ts
+./src/logic/roll-logic.ts
+./src/logic/factory-feature-logic.ts
+./src/logic/factory-logic.ts
+./src/logic/hero-logic.ts
+./src/logic/feature-logic.ts
+./src/logic/encounter-logic.test.ts
+./src/logic/encounter-difficulty-logic.ts
+./src/logic/hero-sheet/hero-sheet-builder.ts
+./src/logic/hero-sheet/hero-sheet-builder.test.ts
+./src/logic/monster-logic.ts
+./src/logic/classic-sheet/sheet-formatter.test.ts
+./src/logic/classic-sheet/sheet-formatter.ts
+./src/logic/classic-sheet/classic-sheet-builder.ts
+./src/logic/classic-sheet/classic-sheet-builder.test.ts
+./src/logic/playbook-sheets/encounter-sheet-builder.ts
+./src/logic/update/hero-update-logic.ts
+./src/logic/update/feature-update-logic.ts
+./src/logic/update/sourcebook-update-logic.ts
+./src/logic/update/options-update-logic.ts
+./src/logic/encounter-logic.ts
+./src/logic/sourcebook-logic.ts
+./src/enums/ability-keyword.ts
+./src/enums/language-type.ts
+./src/enums/item-type.ts
+./src/enums/sourcebook-type.ts
+./src/enums/feature-type.ts
+./src/utils/utils.ts
+./src/utils/feature-flags.ts
+./src/assets/screenshots/hero-sheet-customize.png
+./src/assets/screenshots/playbook-negotiation-classic.png
+./src/assets/screenshots/playbook-encounter.png
+./src/assets/screenshots/homebrew-kit-tuning.png
+./src/assets/screenshots/playbook-encounter-random.png
+./src/assets/screenshots/playbook-encounter-tools.png
+./src/assets/screenshots/sourcebooks.png
+./src/assets/screenshots/hero-sheet-classic.png
+./src/assets/screenshots/hero-sheet-projects.png
+./src/assets/screenshots/session-montage.png
+./src/assets/screenshots/hero-sheet-inventory.png
+./src/assets/screenshots/playbook-montage-classic.png
+./src/assets/screenshots/playbook-montage.png
+./src/assets/screenshots/hero-sheet-interactive.png
+./src/assets/screenshots/session-negotiation.png
+./src/assets/screenshots/playbook-encounter-classic.png
+./src/assets/screenshots/session-multiple.png
+./src/assets/screenshots/library.png
+./src/assets/screenshots/footer-reference.png
+./src/assets/screenshots/hero-state.png
+./src/assets/screenshots/playbook-negotiation.png
+./src/assets/screenshots/playbook-montage-builder.png
+./src/assets/screenshots/footer.png
+./src/assets/screenshots/hero-vitals.png
+./src/assets/screenshots/hero-roll.png
+./src/assets/screenshots/footer-settings.png
+./src/assets/screenshots/playbook-negotiation-builder.png
+./src/assets/screenshots/monster-builder.png
+./src/assets/screenshots/hero-sheet-manage.png
+./src/assets/screenshots/hero-edit.png
+./src/assets/screenshots/hero-sheet-retinue.png
+./src/assets/screenshots/hero-edit-sourcebooks.png
+./src/assets/screenshots/session-encounter.png
+./src/assets/screenshots/navigation.png
+./src/assets/screenshots/playbook-encounter-builder.png
+./src/assets/screenshots/hero-folder.png
+./src/assets/screenshots/hero-random.png
+./src/assets/screenshots/session-counter.png
+./src/assets/screenshots/footer-roll.png
+./src/assets/screenshots/homebrew.png
+./src/assets/screenshots/third-party.png
+./src/assets/screenshots/hero-pregens.png
+./src/index.tsx
+./src/hooks/use-navigation.ts
+./src/models/tip.ts
+./src/models/classic-sheets/hero-sheet.ts
+./src/models/classic-sheets/ability-sheet.ts
+./src/models/project.ts
+./src/models/sourcebook.ts
+./src/models/playbook.ts
+./src/models/plot.ts
+./src/models/options.ts
+./src/models/monster.ts
+./src/models/ancestry.ts
+./src/models/feature.ts
+./src/components/controls/selectable-panel/selectable-panel.scss
+./src/components/controls/toggle/toggle.tsx
+./src/components/controls/toggle/toggle.scss
+./src/components/controls/error-boundary/error-boundary.tsx
+./src/components/controls/markdown/markdown.tsx
+./src/components/controls/empty/empty.scss
+./src/components/controls/multi-line/multi-line.tsx
+./src/components/controls/dropdown-button/dropdown-button.tsx
+./src/components/controls/expander/expander.scss
+./src/components/controls/expander/expander.tsx
+./src/components/controls/number-spin/number-spin.tsx
+./src/components/controls/header-text/header-text.tsx
+./src/components/controls/header-text/header-text.scss
+./src/components/controls/label-control/label-control.scss
+./src/components/modals/encounter-tools/encounter-tools-modal.tsx
+./src/components/modals/roll/roll-modal.tsx
+./src/components/modals/element/element-modal.tsx
+./src/components/modals/settings/settings-modal.tsx
+./src/components/modals/ability/ability-modal.tsx
+./src/components/modals/hero-state/projects-panel/projects-panel.tsx
+./src/components/modals/hero-state/customize-panel/customize-panel.tsx
+./src/components/modals/hero-state/customize-panel/customize-panel.scss
+./src/components/modals/hero-state/hero-state-modal.tsx
+./src/components/modals/hero-state/inventory-panel/inventory-panel.tsx
+./src/components/modals/hero-state/stats-panel/stats-panel.tsx
+./src/components/modals/encounter-turn/encounter-turn-modal.tsx
+./src/components/modals/sourcebooks/sourcebooks-modal.tsx
+./src/components/modals/terrain/terrain-modal.tsx
+./src/components/modals/monster/monster-modal.tsx
+./src/components/modals/player-view/player-view-modal.tsx
+./src/components/modals/feature/feature-modal.tsx
+./src/components/modals/select/item-select/item-select-modal.tsx
+./src/components/modals/select/standard-ability-select/standard-ability-select-modal.tsx
+./src/components/modals/select/perk-select/perk-select-modal.tsx
+./src/components/modals/select/feature-select/feature-select-modal.tsx
+./src/components/modals/select/ability-select/ability-select-modal.tsx
+./src/components/modals/select/project-select/project-select-modal.tsx
+./src/components/modals/select/hero-select/hero-select-modal.tsx
+./src/components/modals/select/language-select/language-select-modal.tsx
+./src/components/modals/select/monster-select/monster-select-modal.tsx
+./src/components/modals/select/element-select/element-select-modal.tsx
+./src/components/modals/select/skill-select/skill-select-modal.tsx
+./src/components/modals/select/title-select/title-select-modal.tsx
+./src/components/modals/select/malice-feature-select/malice-feature-select-modal.tsx
+./src/components/modals/select/feature-type-select/feature-type-select-modal.tsx
+./src/components/modals/select/condition-select/condition-select-modal.tsx
+./src/components/modals/select/kit-select/kit-select-modal.tsx
+./src/components/modals/select/summon-select/summon-select-modal.tsx
+./src/components/modals/select/subclass-select/subclass-select-modal.tsx
+./src/components/modals/party/party-modal.tsx
+./src/components/modals/reference/reference-modal.tsx
+./src/components/pages/session/player/session-player-page.tsx
+./src/components/pages/session/director/session-director-page.tsx
+./src/components/pages/library/library-edit/library-edit-page.tsx
+./src/components/pages/library/library-edit/library-edit-page.scss
+./src/components/pages/library/library-list/library-list-page.tsx
+./src/components/pages/library/library-list/library-list-page.scss
+./src/components/pages/heroes/hero-list/hero-list-page.tsx
+./src/components/pages/heroes/hero-view/hero-view-page.scss
+./src/components/pages/heroes/hero-view/hero-view-page.tsx
+./src/components/pages/heroes/hero-edit/class-section/class-section.tsx
+./src/components/pages/heroes/hero-edit/start-section/start-section.scss
+./src/components/pages/heroes/hero-edit/start-section/start-section.tsx
+./src/components/pages/heroes/hero-edit/hero-edit-page.scss
+./src/components/pages/heroes/hero-edit/ancestry-section/ancestry-section.tsx
+./src/components/pages/heroes/hero-edit/culture-section/culture-section.tsx
+./src/components/pages/heroes/hero-edit/details-section/details-section.tsx
+./src/components/pages/heroes/hero-edit/empty-message/empty-message.tsx
+./src/components/pages/heroes/hero-edit/hero-edit-page.tsx
+./src/components/pages/heroes/hero-edit/complication-section/complication-section.tsx
+./src/components/pages/heroes/hero-edit/career-section/career-section.tsx
+./src/components/pages/heroes/hero-sheet/hero-sheet-preview-page.tsx
+./src/components/pages/heroes/hero-sheet/hero-sheet-page.tsx
+./src/components/pages/welcome/welcome-page.scss
+./src/components/pages/welcome/welcome-page.tsx
+./src/components/panels/condition/condition-panel.tsx
+./src/components/panels/app-footer/app-footer.tsx
+./src/components/panels/encounter-group/encounter-group-panel.tsx
+./src/components/panels/tip/tip-panel.tsx
+./src/components/panels/tip/tip-panel.scss
+./src/components/panels/terrain-filter/terrain-filter-panel.tsx
+./src/components/panels/health/health-panel.tsx
+./src/components/panels/run/montage-run/montage-run-panel.tsx
+./src/components/panels/run/encounter-run/encounter-run-panel.tsx
+./src/components/panels/run/negotiation-run/negotiation-run-panel.tsx
+./src/components/panels/plot-graph/plot-graph-panel.tsx
+./src/components/panels/hero/hero-panel.scss
+./src/components/panels/hero/stats-sidebar/stats-sidebar-panel.scss
+./src/components/panels/hero/hero-panel.tsx
+./src/components/panels/view-selector/view-selector.scss
+./src/components/panels/view-selector/view-selector.tsx
+./src/components/panels/die-roll/die-roll-panel.tsx
+./src/components/panels/stats-row/stats-row.scss
+./src/components/panels/elements/tactical-map-panel/tactical-map-panel.tsx
+./src/components/panels/elements/sourcebook-panel/sourcebook-panel.tsx
+./src/components/panels/elements/item-panel/item-panel.tsx
+./src/components/panels/elements/counter-panel/counter-panel.tsx
+./src/components/panels/elements/perk-panel/perk-panel.tsx
+./src/components/panels/elements/fixture-panel/fixture-panel.tsx
+./src/components/panels/elements/ancestry-panel/ancestry-panel.tsx
+./src/components/panels/elements/negotiation-panel/negotiation-panel.tsx
+./src/components/panels/elements/kit-panel/kit-panel.tsx
+./src/components/panels/elements/encounter-panel/encounter-panel.tsx
+./src/components/panels/elements/complication-panel/complication-panel.tsx
+./src/components/panels/elements/follower-panel/follower-panel.tsx
+./src/components/panels/elements/ability-panel/ability-panel.tsx
+./src/components/panels/elements/class-panel/class-panel.tsx
+./src/components/panels/elements/class-panel/class-panel.scss
+./src/components/panels/elements/plot-panel/plot-panel.tsx
+./src/components/panels/elements/domain-panel/domain-panel.tsx
+./src/components/panels/elements/culture-panel/culture-panel.tsx
+./src/components/panels/elements/project-panel/project-panel.tsx
+./src/components/panels/elements/montage-panel/montage-panel.tsx
+./src/components/panels/elements/terrain-panel/terrain-panel.tsx
+./src/components/panels/elements/adventure-panel/adventure-panel.tsx
+./src/components/panels/elements/title-panel/title-panel.tsx
+./src/components/panels/elements/monster-panel/monster-panel.tsx
+./src/components/panels/elements/imbuement-panel/imbuement-panel.tsx
+./src/components/panels/elements/monster-group-panel/monster-group-panel.tsx
+./src/components/panels/elements/subclass-panel/subclass-panel.tsx
+./src/components/panels/elements/feature-panel/feature-panel.scss
+./src/components/panels/elements/feature-panel/feature-panel.tsx
+./src/components/panels/elements/career-panel/career-panel.tsx
+./src/components/panels/edit/career-edit/career-edit-panel.tsx
+./src/components/panels/edit/terrain-edit/terrain-edit-panel.tsx
+./src/components/panels/edit/domain-edit/domain-edit-panel.tsx
+./src/components/panels/edit/project-edit/project-edit.tsx
+./src/components/panels/edit/feature-edit/feature-edit-panel.tsx
+./src/components/panels/edit/montage-edit/montage-edit-panel.tsx
+./src/components/panels/edit/complication-edit/complication-edit-panel.tsx
+./src/components/panels/edit/class-edit/class-edit-panel.tsx
+./src/components/panels/edit/encounter-edit/encounter-edit-panel.tsx
+./src/components/panels/edit/encounter-edit/encounter-edit-panel.scss
+./src/components/panels/edit/monster-group-edit/monster-group-edit-panel.tsx
+./src/components/panels/edit/item-edit/item-edit-panel.tsx
+./src/components/panels/edit/fixture-edit/fixture-edit-panel.tsx
+./src/components/panels/edit/follower-edit/follower-edit-panel.tsx
+./src/components/panels/edit/adventure-edit/adventure-edit-panel.tsx
+./src/components/panels/edit/kit-edit/kit-edit-panel.tsx
+./src/components/panels/edit/subclass-edit/subclass-edit-panel.tsx
+./src/components/panels/edit/element-edit/element-edit-panel.tsx
+./src/components/panels/edit/negotiation-edit/negotiation-edit-panel.tsx
+./src/components/panels/edit/monster-edit/monster-edit-panel.tsx
+./src/components/panels/edit/ancestry-edit/ancestry-edit-panel.tsx
+./src/components/panels/edit/ability-edit/ability-edit-panel.tsx
+./src/components/panels/edit/title-edit/title-edit-panel.tsx
+./src/components/panels/edit/plot-edit/plot-edit-panel.tsx
+./src/components/panels/edit/culture-edit/culture-edit-panel.tsx
+./src/components/panels/edit/imbuement-edit/imbuement-edit-panel.tsx
+./src/components/panels/feature-config-panel/feature-config-panel.tsx
+./src/components/panels/monster-filter/monster-filter-panel.tsx
+./src/components/panels/classic-sheet/negotiation-sheet/negotiation-arguments-card.tsx
+./src/components/panels/classic-sheet/negotiation-sheet/negotiation-sheet-page.tsx
+./src/components/panels/classic-sheet/negotiation-sheet/patience-interest-card.tsx
+./src/components/panels/classic-sheet/modifiers-card/modifiers-card.scss
+./src/components/panels/classic-sheet/ability-card/ability-card.scss
+./src/components/panels/classic-sheet/ability-card/ability-card.tsx
+./src/components/panels/classic-sheet/element-sheet/element-sheet.tsx
+./src/components/panels/classic-sheet/element-sheet/element-sheet.scss
+./src/components/panels/classic-sheet/components/project-info-component.tsx
+./src/components/panels/classic-sheet/components/feature-component.tsx
+./src/components/panels/classic-sheet/encounter-sheet/encounter-sheet-page.tsx
+./src/components/panels/classic-sheet/montage-sheet/montage-sheet-page.tsx
+./src/components/panels/encounter-difficulty/encounter-difficulty-panel.tsx
+./src/components/panels/monster-label/monster-label.scss
+./src/components/panels/monster-label/monster-label.tsx
+./src/components/main/main-layout.tsx
+./src/components/main/main.tsx
+./.gitignore
+
+[2025-12-03 07:35:46] Merging new files from community repo...
+[2025-12-03 07:35:47] Copied 77 new files ✓
+[2025-12-03 07:35:47] Merging modified files...
+[WARNING] Manual merge needed: package.json
+MANUAL_MERGE_NEEDED: package.json
+[WARNING] Manual merge needed: vite.config.ts
+MANUAL_MERGE_NEEDED: vite.config.ts
+[WARNING] Manual merge needed: src/data/ancestry-data.ts
+MANUAL_MERGE_NEEDED: src/data/ancestry-data.ts
+[WARNING] Manual merge needed: src/index.tsx
+MANUAL_MERGE_NEEDED: src/index.tsx
+[WARNING] Manual merge needed: src/components/pages/heroes/hero-view/hero-view-page.tsx
+MANUAL_MERGE_NEEDED: src/components/pages/heroes/hero-view/hero-view-page.tsx
+[WARNING] Manual merge needed: src/components/main/main.tsx
+MANUAL_MERGE_NEEDED: src/components/main/main.tsx
+[2025-12-03 07:35:47] Community sourcebooks auto-merged: 2 files ✓
+[2025-12-03 07:35:47] Auto-merged: 298 files ✓
+[WARNING] Manual merge needed: 6 files
+[2025-12-03 07:35:47] Merging package.json (preserving backend dependencies)...
+[WARNING] package.json needs manual merge - files saved to .merge-conflicts/
+MANUAL_MERGE_NEEDED: package.json
+[2025-12-03 07:35:47] Creating merge summary...
+
+=== MERGE SUMMARY ===
+Date: Wed Dec  3 07:35:47 EST 2025
+Backup Location: /home/skunian/forgesteel-backups/backup-20251203-073534
+
+FILES REQUIRING MANUAL MERGE:
+ancestry-data.ts.andy
+ancestry-data.ts.draachenmar
+hero-view-page.tsx.andy
+hero-view-page.tsx.draachenmar
+index.tsx.andy
+index.tsx.draachenmar
+main.tsx.andy
+main.tsx.draachenmar
+package.json.andy
+package.json.draachenmar
+vite.config.ts.andy
+vite.config.ts.draachenmar
+
+[WARNING] Manual merge required for files in .merge-conflicts/
+
+NEXT STEPS:
+1. Review changes: git status
+2. Manually merge files in .merge-conflicts/
+3. Test: npm install && npm run build
+4. Test backend: npm run server:build
+5. Commit: git add . && git commit -m 'Merge community updates'
+
+[2025-12-03 07:35:47] Merge report saved to: merge-report-20251203-073534.txt
+[2025-12-03 07:35:47] Merge process completed! ✓
+[WARNING] ⚠️  Manual merge required for some files

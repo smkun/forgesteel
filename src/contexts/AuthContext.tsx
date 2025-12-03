@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { User } from 'firebase/auth';
 import * as firebase from '@/services/firebase';
 import * as api from '@/services/api';
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	const [ loading, setLoading ] = useState(true);
 	const [ error, setError ] = useState<string | null>(null);
 
-	const loadUserProfile = async (firebaseUser: User) => {
+	const loadUserProfile = async (_firebaseUser: User) => {
 		try {
 			console.log('[AUTH] Loading user profile from backend...');
 			const profile = await api.getCurrentUserProfile();

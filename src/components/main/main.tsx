@@ -15,6 +15,7 @@ import { Career } from '@/models/career';
 import { Characteristic } from '@/enums/characteristic';
 import { Collections } from '@/utils/collections';
 import { Complication } from '@/models/complication';
+import { ConnectionSettings } from '@/models/connection-settings';
 import { Counter } from '@/models/counter';
 import { Culture } from '@/models/culture';
 import { CultureType } from '@/enums/culture-type';
@@ -65,6 +66,7 @@ import { Project } from '@/models/project';
 import { ReferenceModal } from '@/components/modals/reference/reference-modal';
 import { RollModal } from '@/components/modals/roll/roll-modal';
 import { RulesPage } from '@/enums/rules-page';
+import { Session } from '@/models/session';
 import { SessionDirectorPage } from '@/components/pages/session/director/session-director-page';
 import { SessionPlayerPage } from '@/components/pages/session/player/session-player-page';
 import { SettingsModal } from '@/components/modals/settings/settings-modal';
@@ -94,7 +96,7 @@ const ADMIN_SCOPE_STORAGE_KEY = 'forgesteel-admin-show-all';
 interface Props {
 	heroes: Hero[];
 	playbook: Playbook;
-	session: Playbook;
+	session: Session;
 	homebrewSourcebooks: Sourcebook[];
 	hiddenSourcebookIDs: string[];
 	options: Options;
@@ -108,7 +110,7 @@ export const Main = (props: Props) => {
 	const { triggerSyncOnChange } = useSyncStatus();
 	const [ heroes, setHeroes ] = useState<Hero[]>(props.heroes);
 	const [ playbook, setPlaybook ] = useState<Playbook>(props.playbook);
-	const [ session, setSession ] = useState<Playbook>(props.session);
+	const [ session, setSession ] = useState<Session>(props.session);
 	const [ homebrewSourcebooks, setHomebrewSourcebooks ] = useState<Sourcebook[]>(props.homebrewSourcebooks);
 	const [ hiddenSourcebookIDs, setHiddenSourcebookIDs ] = useState<string[]>(props.hiddenSourcebookIDs);
 	const [ options, setOptions ] = useState<Options>(() => {
@@ -128,6 +130,11 @@ export const Main = (props: Props) => {
 	const [ drawer, setDrawer ] = useState<ReactNode>(null);
 	const [ playerView, setPlayerView ] = useState<Window | null>(null);
 	const [ spinning, setSpinning ] = useState(false);
+	const [ connectionSettings, setConnectionSettings ] = useState<ConnectionSettings>({
+		useWarehouse: false,
+		warehouseHost: '',
+		warehouseToken: ''
+	});
 	const previousUserIdRef = useRef<string | null | undefined>(undefined);
 
 	useEffect(() => {
@@ -172,7 +179,7 @@ export const Main = (props: Props) => {
 		} catch (err) {
 			console.error('[MAIN] ❌ Failed to load heroes:', err);
 			notify.error({
-				message: 'Failed to load heroes',
+				title: 'Failed to load heroes',
 				description: err instanceof Error ? err.message : String(err),
 				placement: 'top'
 			});
@@ -199,7 +206,7 @@ export const Main = (props: Props) => {
 				}
 				console.error('[MAIN] ❌ Failed to load heroes:', err);
 				notify.error({
-					message: 'Failed to load heroes',
+					title: 'Failed to load heroes',
 					description: err instanceof Error ? err.message : String(err),
 					placement: 'top'
 				});
@@ -215,9 +222,7 @@ export const Main = (props: Props) => {
 
 	const handleAdminScopeToggle = (value: boolean) => {
 		setShowAllCharacters(value);
-		if (typeof window !== 'undefined') {
-			window.localStorage.setItem(ADMIN_SCOPE_STORAGE_KEY, value ? 'true' : 'false');
-		}
+		localStorage.setItem('forgesteel-admin-show-all', JSON.stringify(value));
 	};
 
 	useErrorListener(event => setErrors([ ...errors, event ]));
@@ -253,7 +258,7 @@ export const Main = (props: Props) => {
 		} catch (err) {
 			console.error('[MAIN] ❌ Error saving heroes:', err);
 			notify.error({
-				message: 'Error saving heroes',
+				title: 'Error saving heroes',
 				description: err instanceof Error ? err.message : String(err),
 				placement: 'top'
 			});
@@ -268,7 +273,7 @@ export const Main = (props: Props) => {
 				err => {
 					console.error(err);
 					notify.error({
-						message: 'Error saving playbook',
+						title: 'Error saving playbook',
 						description: err,
 						placement: 'top'
 					});
@@ -280,15 +285,15 @@ export const Main = (props: Props) => {
 			});
 	};
 
-	const persistSession = (session: Playbook) => {
+	const persistSession = (session: Session) => {
 		return localforage
-			.setItem<Playbook>('forgesteel-session', session)
+			.setItem<Session>('forgesteel-session', session)
 			.then(
 				setSession,
 				err => {
 					console.error(err);
 					notify.error({
-						message: 'Error saving session',
+						title: 'Error saving session',
 						description: err,
 						placement: 'top'
 					});
@@ -311,7 +316,7 @@ export const Main = (props: Props) => {
 				err => {
 					console.error(err);
 					notify.error({
-						message: 'Error saving sourcebooks',
+						title: 'Error saving sourcebooks',
 						description: err,
 						placement: 'top'
 					});
@@ -327,7 +332,7 @@ export const Main = (props: Props) => {
 				err => {
 					console.error(err);
 					notify.error({
-						message: 'Error saving hidden sourcebooks',
+						title: 'Error saving hidden sourcebooks',
 						description: err,
 						placement: 'top'
 					});
@@ -343,7 +348,7 @@ export const Main = (props: Props) => {
 				err => {
 					console.error(err);
 					notify.error({
-						message: 'Error saving options',
+						title: 'Error saving options',
 						description: err,
 						placement: 'top'
 					});
@@ -366,16 +371,6 @@ export const Main = (props: Props) => {
 
 		setDrawer(null);
 		persistHero(hero).then(() => navigation.goToHeroEdit(hero.id, 'start'));
-	};
-
-	const newEncounter = () => {
-		const copy = Utils.copy(playbook);
-
-		const enc = FactoryLogic.createEncounter();
-		copy.encounters.push(enc);
-
-		setDrawer(null);
-		persistPlaybook(copy).then(() => navigation.goToPlaybookEdit('encounter', enc.id));
 	};
 
 	// #endregion
@@ -716,6 +711,116 @@ export const Main = (props: Props) => {
 			persistHomebrewSourcebooks(sourcebooks).then(() => navigation.goToLibraryEdit('monster-group', sourcebook.id, monsterGroup.id));
 		};
 
+		const createEncounter = (original: Encounter | null, sourcebook: Sourcebook | null) => {
+			const sourcebooks = Utils.copy(homebrewSourcebooks);
+			if (!sourcebook) {
+				sourcebook = FactoryLogic.createSourcebook();
+				sourcebooks.push(sourcebook);
+			} else {
+				const id = sourcebook.id;
+				sourcebook = sourcebooks.find(cs => cs.id === id) as Sourcebook;
+			}
+
+			let encounter: Encounter;
+			if (original) {
+				encounter = Utils.copy(original);
+				encounter.id = Utils.guid();
+			} else {
+				encounter = FactoryLogic.createEncounter();
+			}
+
+			sourcebook.encounters.push(encounter);
+			persistHomebrewSourcebooks(sourcebooks).then(() => navigation.goToLibraryEdit('encounter', sourcebook.id, encounter.id));
+		};
+
+		const createAdventure = (original: Adventure | null, sourcebook: Sourcebook | null) => {
+			const sourcebooks = Utils.copy(homebrewSourcebooks);
+			if (!sourcebook) {
+				sourcebook = FactoryLogic.createSourcebook();
+				sourcebooks.push(sourcebook);
+			} else {
+				const id = sourcebook.id;
+				sourcebook = sourcebooks.find(cs => cs.id === id) as Sourcebook;
+			}
+
+			let adventure: Adventure;
+			if (original) {
+				adventure = Utils.copy(original);
+				adventure.id = Utils.guid();
+			} else {
+				adventure = FactoryLogic.createAdventure();
+			}
+
+			sourcebook.adventures.push(adventure);
+			persistHomebrewSourcebooks(sourcebooks).then(() => navigation.goToLibraryEdit('adventure', sourcebook.id, adventure.id));
+		};
+
+		const createMontage = (original: Montage | null, sourcebook: Sourcebook | null) => {
+			const sourcebooks = Utils.copy(homebrewSourcebooks);
+			if (!sourcebook) {
+				sourcebook = FactoryLogic.createSourcebook();
+				sourcebooks.push(sourcebook);
+			} else {
+				const id = sourcebook.id;
+				sourcebook = sourcebooks.find(cs => cs.id === id) as Sourcebook;
+			}
+
+			let montage: Montage;
+			if (original) {
+				montage = Utils.copy(original);
+				montage.id = Utils.guid();
+			} else {
+				montage = FactoryLogic.createMontage();
+			}
+
+			sourcebook.montages.push(montage);
+			persistHomebrewSourcebooks(sourcebooks).then(() => navigation.goToLibraryEdit('montage', sourcebook.id, montage.id));
+		};
+
+		const createNegotiation = (original: Negotiation | null, sourcebook: Sourcebook | null) => {
+			const sourcebooks = Utils.copy(homebrewSourcebooks);
+			if (!sourcebook) {
+				sourcebook = FactoryLogic.createSourcebook();
+				sourcebooks.push(sourcebook);
+			} else {
+				const id = sourcebook.id;
+				sourcebook = sourcebooks.find(cs => cs.id === id) as Sourcebook;
+			}
+
+			let negotiation: Negotiation;
+			if (original) {
+				negotiation = Utils.copy(original);
+				negotiation.id = Utils.guid();
+			} else {
+				negotiation = FactoryLogic.createNegotiation();
+			}
+
+			sourcebook.negotiations.push(negotiation);
+			persistHomebrewSourcebooks(sourcebooks).then(() => navigation.goToLibraryEdit('negotiation', sourcebook.id, negotiation.id));
+		};
+
+		const createTacticalMap = (original: TacticalMap | null, sourcebook: Sourcebook | null) => {
+			const sourcebooks = Utils.copy(homebrewSourcebooks);
+			if (!sourcebook) {
+				sourcebook = FactoryLogic.createSourcebook();
+				sourcebooks.push(sourcebook);
+			} else {
+				const id = sourcebook.id;
+				sourcebook = sourcebooks.find(cs => cs.id === id) as Sourcebook;
+			}
+
+			let tacticalMap: TacticalMap;
+			if (original) {
+				tacticalMap = Utils.copy(original);
+				tacticalMap.id = Utils.guid();
+			} else {
+				tacticalMap = FactoryLogic.createTacticalMap();
+			}
+
+			sourcebook.tacticalMaps.push(tacticalMap);
+			persistHomebrewSourcebooks(sourcebooks).then(() => navigation.goToLibraryEdit('tactical-map', sourcebook.id, tacticalMap.id));
+		};
+
 		const createPerk = (original: Perk | null, sourcebook: Sourcebook | null) => {
 			const sourcebooks = Utils.copy(homebrewSourcebooks);
 			if (!sourcebook) {
@@ -881,6 +986,21 @@ export const Main = (props: Props) => {
 			case 'monster-group':
 				createMonsterGroup(original as MonsterGroup | null, sourcebook);
 				break;
+			case 'encounter':
+				createEncounter(original as Encounter | null, sourcebook);
+				break;
+			case 'adventure':
+				createAdventure(original as Adventure | null, sourcebook);
+				break;
+			case 'montage':
+				createMontage(original as Montage | null, sourcebook);
+				break;
+			case 'negotiation':
+				createNegotiation(original as Negotiation | null, sourcebook);
+				break;
+			case 'tactical-map':
+				createTacticalMap(original as TacticalMap | null, sourcebook);
+				break;
 		}
 	};
 
@@ -936,11 +1056,26 @@ export const Main = (props: Props) => {
 				case 'monster-group':
 					sourcebook.monsterGroups = sourcebook.monsterGroups.filter(x => x.id !== element.id);
 					break;
+				case 'encounter':
+					sourcebook.encounters = sourcebook.encounters.filter(x => x.id !== element.id);
+					break;
+				case 'adventure':
+					sourcebook.adventures = sourcebook.adventures.filter(x => x.id !== element.id);
+					break;
+				case 'montage':
+					sourcebook.montages = sourcebook.montages.filter(x => x.id !== element.id);
+					break;
+				case 'negotiation':
+					sourcebook.negotiations = sourcebook.negotiations.filter(x => x.id !== element.id);
+					break;
+				case 'tactical-map':
+					sourcebook.tacticalMaps = sourcebook.tacticalMaps.filter(x => x.id !== element.id);
+					break;
 			}
 		}
 		setDrawer(null);
 		persistHomebrewSourcebooks(copy);
-	};
+	};;
 
 	const saveLibraryElement = (kind: SourcebookElementKind, sourcebookID: string, element: Element) => {
 		const copy = Utils.copy(homebrewSourcebooks);
@@ -992,11 +1127,26 @@ export const Main = (props: Props) => {
 				case 'monster-group':
 					sourcebook.monsterGroups = sourcebook.monsterGroups.map(x => x.id === element.id ? element : x) as MonsterGroup[];
 					break;
+				case 'encounter':
+					sourcebook.encounters = sourcebook.encounters.map(x => x.id === element.id ? element : x) as Encounter[];
+					break;
+				case 'adventure':
+					sourcebook.adventures = sourcebook.adventures.map(x => x.id === element.id ? element : x) as Adventure[];
+					break;
+				case 'montage':
+					sourcebook.montages = sourcebook.montages.map(x => x.id === element.id ? element : x) as Montage[];
+					break;
+				case 'negotiation':
+					sourcebook.negotiations = sourcebook.negotiations.map(x => x.id === element.id ? element : x) as Negotiation[];
+					break;
+				case 'tactical-map':
+					sourcebook.tacticalMaps = sourcebook.tacticalMaps.map(x => x.id === element.id ? element : x) as TacticalMap[];
+					break;
 			}
 		}
 
 		persistHomebrewSourcebooks(copy).then(() => navigation.goToLibrary(kind, element.id));
-	};
+	};;
 
 	const importLibraryElement = (kind: SourcebookElementKind, sourcebookID: string | null, element: Element) => {
 		const sourcebooks = SourcebookLogic.getSourcebooks(homebrewSourcebooks);
@@ -1015,7 +1165,12 @@ export const Main = (props: Props) => {
 			...sourcebooks.flatMap(sb => sb.perks),
 			...sourcebooks.flatMap(sb => sb.projects),
 			...sourcebooks.flatMap(sb => sb.terrain),
-			...sourcebooks.flatMap(sb => sb.titles)
+			...sourcebooks.flatMap(sb => sb.titles),
+			...sourcebooks.flatMap(sb => sb.encounters),
+			...sourcebooks.flatMap(sb => sb.adventures),
+			...sourcebooks.flatMap(sb => sb.montages),
+			...sourcebooks.flatMap(sb => sb.negotiations),
+			...sourcebooks.flatMap(sb => sb.tacticalMaps)
 		];
 		if (elements.some(e => e.id === element.id)) {
 			element.id = Utils.guid();
@@ -1093,13 +1248,33 @@ export const Main = (props: Props) => {
 				sourcebook.monsterGroups.push(element as MonsterGroup);
 				sourcebook.monsterGroups = Collections.sort<Element>(sourcebook.monsterGroups, item => item.name) as MonsterGroup[];
 				break;
+			case 'encounter':
+				sourcebook.encounters.push(element as Encounter);
+				sourcebook.encounters = Collections.sort<Element>(sourcebook.encounters, item => item.name) as Encounter[];
+				break;
+			case 'adventure':
+				sourcebook.adventures.push(element as Adventure);
+				sourcebook.adventures = Collections.sort<Element>(sourcebook.adventures, item => item.name) as Adventure[];
+				break;
+			case 'montage':
+				sourcebook.montages.push(element as Montage);
+				sourcebook.montages = Collections.sort<Element>(sourcebook.montages, item => item.name) as Montage[];
+				break;
+			case 'negotiation':
+				sourcebook.negotiations.push(element as Negotiation);
+				sourcebook.negotiations = Collections.sort<Element>(sourcebook.negotiations, item => item.name) as Negotiation[];
+				break;
+			case 'tactical-map':
+				sourcebook.tacticalMaps.push(element as TacticalMap);
+				sourcebook.tacticalMaps = Collections.sort<Element>(sourcebook.tacticalMaps, item => item.name) as TacticalMap[];
+				break;
 		}
 
 		SourcebookUpdateLogic.updateSourcebook(sourcebook);
 
 		setDrawer(null);
 		persistHomebrewSourcebooks(copy).then(() => navigation.goToLibrary(kind));
-	};
+	};;
 
 	const exportLibraryElement = (kind: SourcebookElementKind, element: Element, format: 'image' | 'pdf' | 'json') => {
 		let name = Format.capitalize(kind);
@@ -1506,6 +1681,8 @@ export const Main = (props: Props) => {
 				errors={errors}
 				heroes={heroes}
 				setOptions={persistOptions}
+				connectionSettings={connectionSettings}
+				setConnectionSettings={setConnectionSettings}
 				clearErrors={() => setErrors([])}
 				onClose={() => setDrawer(null)}
 			/>
@@ -1528,11 +1705,11 @@ export const Main = (props: Props) => {
 	const onSelectLibraryElement = (element: Element, kind: SourcebookElementKind) => {
 		setDrawer(
 			<ElementModal
-				kind={kind}
+				category={kind}
 				element={element}
+				sourcebooks={SourcebookLogic.getSourcebooks(homebrewSourcebooks)}
 				options={options}
 				onClose={() => setDrawer(null)}
-				export={format => exportLibraryElement(kind, element, format)}
 			/>
 		);
 	};
@@ -1543,9 +1720,9 @@ export const Main = (props: Props) => {
 				monster={monster}
 				monsterGroup={monsterGroup}
 				summon={summon}
+				sourcebooks={SourcebookLogic.getSourcebooks(homebrewSourcebooks)}
 				options={options}
 				onClose={() => setDrawer(null)}
-				export={format => Utils.export([ monster.id ], monster.name || 'Monster', monster, 'monster', format)}
 			/>
 		);
 	};
@@ -1555,8 +1732,8 @@ export const Main = (props: Props) => {
 			<TerrainModal
 				terrain={terrain}
 				upgradeIDs={upgradeIDs}
+				sourcebooks={SourcebookLogic.getSourcebooks(homebrewSourcebooks)}
 				onClose={() => setDrawer(null)}
-				export={format => Utils.export([ terrain.id ], terrain.name || 'Terrain', terrain, 'terrain', format)}
 			/>
 		);
 	};
@@ -1731,7 +1908,6 @@ export const Main = (props: Props) => {
 								showAbout={showAbout}
 								showSettings={showSettings}
 								onNewHero={() => newHero('')}
-								onNewEncounter={() => newEncounter()}
 							/>
 						}
 					/>
@@ -1842,7 +2018,6 @@ export const Main = (props: Props) => {
 								<LibraryListPage
 									heroes={heroes}
 									sourcebooks={SourcebookLogic.getSourcebooks(homebrewSourcebooks)}
-									playbook={playbook}
 									options={options}
 									hiddenSourcebookIDs={hiddenSourcebookIDs}
 									highlightAbout={errors.length > 0}
@@ -1851,13 +2026,19 @@ export const Main = (props: Props) => {
 									showAbout={showAbout}
 									showSourcebooks={showSourcebooks}
 									showSettings={showSettings}
-									showSubclass={sc => onSelectLibraryElement(sc, 'subclass')}
-									showMonster={onSelectMonster}
-									setOptions={persistOptions}
+									showMonster={(monster: Monster) => onSelectMonster(monster)}
+									showEncounterTools={showEncounterTools}
 									createElement={(kind, sourcebookID, element) => createLibraryElement(kind, sourcebookID, element)}
 									importElement={importLibraryElement}
+									moveElement={(kind, sourcebookID, element) => console.log('TODO: moveElement', kind, sourcebookID, element)}
 									deleteElement={deleteLibraryElement}
-									exportElement={exportLibraryElement}
+									exportElementData={(category, element) => exportLibraryElement(category as SourcebookElementKind, element, 'json')}
+									exportElementImage={(category, element) => exportLibraryElement(category as SourcebookElementKind, element, 'image')}
+									exportElementPdf={(category, element, _resolution) => Utils.exportImage([ element.id ], element.name || category)}
+									startEncounter={startEncounter}
+									startMontage={startMontage}
+									startNegotiation={startNegotiation}
+									startMap={startMap}
 								/>
 							}
 						/>
@@ -1873,7 +2054,8 @@ export const Main = (props: Props) => {
 									showRoll={() => showRoll()}
 									showAbout={showAbout}
 									showSettings={showSettings}
-									showMonster={onSelectMonster}
+									showMonster={(monster: Monster, monsterGroup: MonsterGroup) => onSelectMonster(monster, monsterGroup)}
+									showTerrain={onSelectTerrain}
 									saveChanges={saveLibraryElement}
 								/>
 							}
@@ -1939,7 +2121,6 @@ export const Main = (props: Props) => {
 								<SessionDirectorPage
 									heroes={heroes}
 									sourcebooks={SourcebookLogic.getSourcebooks(homebrewSourcebooks)}
-									playbook={playbook}
 									session={session}
 									options={options}
 									highlightAbout={errors.length > 0}
@@ -1969,7 +2150,6 @@ export const Main = (props: Props) => {
 								<SessionPlayerPage
 									heroes={heroes}
 									sourcebooks={SourcebookLogic.getSourcebooks(homebrewSourcebooks)}
-									playbook={playbook}
 									session={session}
 									options={options}
 									highlightAbout={errors.length > 0}
@@ -1986,6 +2166,7 @@ export const Main = (props: Props) => {
 							index={true}
 							element={
 								<CampaignListPage
+									highlightAbout={errors.length > 0}
 									showReference={showReference}
 									showRoll={() => showRoll()}
 									showAbout={showAbout}
@@ -1997,6 +2178,7 @@ export const Main = (props: Props) => {
 							path=':id'
 							element={
 								<CampaignDetailsPage
+									highlightAbout={errors.length > 0}
 									showReference={showReference}
 									showRoll={() => showRoll()}
 									showAbout={showAbout}

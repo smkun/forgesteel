@@ -1,5 +1,5 @@
 import { Ability, AbilitySectionField, AbilitySectionPackage, AbilitySectionRoll, AbilitySectionText } from '@/models/ability';
-import { Alert, Button, Space, Tag } from 'antd';
+import { Alert, Button, Flex, Space, Tag } from 'antd';
 import { Pill, ResourcePill } from '@/components/controls/pill/pill';
 import { ThunderboltFilled, ThunderboltOutlined } from '@ant-design/icons';
 import { useMemo, useState } from 'react';
@@ -22,6 +22,7 @@ import { MonsterLogic } from '@/logic/monster-logic';
 import { Options } from '@/models/options';
 import { PanelMode } from '@/enums/panel-mode';
 import { PowerRollPanel } from '@/components/panels/power-roll/power-roll-panel';
+import { SheetFormatter } from '@/logic/classic-sheet/sheet-formatter';
 
 import './ability-panel.scss';
 
@@ -280,15 +281,15 @@ export const AbilityPanel = (props: Props) => {
 
 	return (
 		<ErrorBoundary>
-			<div className={className} id={props.mode === PanelMode.Full ? props.ability.id : undefined}>
-				<Space direction='vertical' style={{ marginTop: '15px', width: '100%' }}>
+			<div className={className} id={props.mode === PanelMode.Full ? SheetFormatter.getPageId('ability', props.ability.id) : undefined}>
+				<Space orientation='vertical' style={{ marginTop: '15px', width: '100%' }}>
 					{
 						getWarnings().map((warn, n) => (
 							<Alert
 								key={n}
 								type='warning'
 								showIcon={true}
-								message={<div><b>{warn.label}</b>: {warn.text}</div>}
+								title={<div><b>{warn.label}</b>: {warn.text}</div>}
 							/>
 						))
 					}
@@ -315,9 +316,9 @@ export const AbilityPanel = (props: Props) => {
 						<div>
 							{
 								props.ability.keywords.length > 0 ?
-									<div>
+									<Flex gap={5}>
 										{props.ability.keywords.map((k, n) => <Tag key={n}>{k}</Tag>)}
-									</div>
+									</Flex>
 									: null
 							}
 							<AbilityInfoPanel ability={props.ability} hero={props.hero} />
@@ -327,7 +328,7 @@ export const AbilityPanel = (props: Props) => {
 									<Alert
 										type='info'
 										showIcon={true}
-										message='This ability can be used in place of a melee free strike when you take the Charge action.'
+										title='This ability can be used in place of a melee free strike when you take the Charge action.'
 									/>
 									: null
 							}

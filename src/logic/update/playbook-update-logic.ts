@@ -5,9 +5,10 @@ import { FactoryLogic } from '@/logic/factory-logic';
 import { MonsterUpdateLogic } from '@/logic/update/monster-update-logic';
 import { Playbook } from '@/models/playbook';
 import { PlotContentReference } from '@/models/plot';
+import { Session } from '@/models/session';
 
 export class PlaybookUpdateLogic {
-	static updatePlaybook = (playbook: Playbook) => {
+	static updatePlaybook = (playbook: Playbook | Session) => {
 		if (playbook.adventures === undefined) {
 			playbook.adventures = [];
 		}
@@ -185,12 +186,17 @@ export class PlaybookUpdateLogic {
 				});
 		});
 
-		if (playbook.counters === undefined) {
-			playbook.counters = [];
+		// Session-specific properties
+		if ('counters' in playbook) {
+			if (playbook.counters === undefined) {
+				playbook.counters = [];
+			}
 		}
 
-		if (playbook.playerViewID === undefined) {
-			playbook.playerViewID = null;
+		if ('playerViewID' in playbook) {
+			if (playbook.playerViewID === undefined) {
+				playbook.playerViewID = null;
+			}
 		}
 	};
 }

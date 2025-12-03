@@ -1,9 +1,5 @@
 # Development Plans
 
-## Bugs
-
-* The Blade of Quintessence should gain the Ranged keyword at level 5.
-
 ### Heroes
 
 * Classic Sheet
@@ -18,15 +14,13 @@
 * It should be possible to create a homebrew class ability / monster individually
 * Monster Builder:
   * Auto-create monsters
-
-### Playbook
-
 * Encounter Builder:
   * When an encounter has monsters with items, this should be noted in the encounter info (monster info and running encounter notes)
   * Encounters should pull in monsters, rather than storing monster / group IDs
   * Set number of squares for per-square terrain
   * Use encounter templates
 * Tactical Maps:
+  * Add / move minis using drag-and-drop
   * Switch map Z level
     * Show (blurred, translucent, no pointer events) levels below / above
   * Ability to destroy tile squares / wall sections

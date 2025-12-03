@@ -1,9 +1,10 @@
-import { Button, Divider, Flex, Input, Popover, Segmented, Select, Space } from 'antd';
+import { Button, Flex, Input, Popover, Segmented, Select, Space } from 'antd';
 import { Feature, FeatureAbility, FeatureAncestryFeatureChoice, FeatureBonus, FeatureCharacteristicBonus, FeatureClassAbility, FeatureConditionImmunity, FeatureDamageModifier, FeatureData, FeatureFollower, FeatureMovementMode, FeaturePerk, FeatureProficiency, FeatureTitleChoice } from '@/models/feature';
 import { Ability } from '@/models/ability';
 import { AbilityEditPanel } from '@/components/panels/edit/ability-edit/ability-edit-panel';
 import { Characteristic } from '@/enums/characteristic';
 import { ConditionType } from '@/enums/condition-type';
+import { ConfigFeature } from '@/components/features/feature';
 import { DamageModifierType } from '@/enums/damage-modifier-type';
 import { DamageType } from '@/enums/damage-type';
 import { DangerButton } from '@/components/controls/danger-button/danger-button';
@@ -11,7 +12,6 @@ import { Empty } from '@/components/controls/empty/empty';
 import { ErrorBoundary } from '@/components/controls/error-boundary/error-boundary';
 import { Expander } from '@/components/controls/expander/expander';
 import { FactoryLogic } from '@/logic/factory-logic';
-import { FeatureConfigPanel } from '@/components/panels/feature-config-panel/feature-config-panel';
 import { FeatureField } from '@/enums/feature-field';
 import { FeatureType } from '@/enums/feature-type';
 import { Follower } from '@/models/follower';
@@ -87,7 +87,7 @@ export const CustomizePanel = (props: Props) => {
 				trigger='click'
 				content={
 					<>
-						<Divider>Abilities</Divider>
+						<HeaderText level={3}>Abilities</HeaderText>
 						<div className='customize-option-section'>
 							<Button
 								block={true}
@@ -123,7 +123,7 @@ export const CustomizePanel = (props: Props) => {
 								Custom Ability
 							</Button>
 						</div>
-						<Divider>Bonuses</Divider>
+						<HeaderText level={3}>Bonuses</HeaderText>
 						<div className='customize-option-section'>
 							<Button
 								block={true}
@@ -182,7 +182,7 @@ export const CustomizePanel = (props: Props) => {
 								Stat Bonus
 							</Button>
 						</div>
-						<Divider>Game Content</Divider>
+						<HeaderText level={3}>Game Content</HeaderText>
 						<div className='customize-option-section'>
 							<Button
 								block={true}
@@ -239,7 +239,7 @@ export const CustomizePanel = (props: Props) => {
 								Title
 							</Button>
 						</div>
-						<Divider>NPCs</Divider>
+						<HeaderText level={3}>NPCs</HeaderText>
 						<div className='customize-option-section'>
 							<Button
 								block={true}
@@ -247,12 +247,11 @@ export const CustomizePanel = (props: Props) => {
 								onClick={() => {
 									setMenuOpen(false);
 									addFeature(FactoryLogic.feature.createCompanion({
-										id: Utils.guid(),
-										type: 'companion'
+										id: Utils.guid()
 									}));
 								}}
 							>
-								Companion
+								Companion / Mount
 							</Button>
 							<Button
 								block={true}
@@ -272,6 +271,18 @@ export const CustomizePanel = (props: Props) => {
 								type='text'
 								onClick={() => {
 									setMenuOpen(false);
+									addFeature(FactoryLogic.feature.createRetainer({
+										id: Utils.guid()
+									}));
+								}}
+							>
+								Retainer
+							</Button>
+							<Button
+								block={true}
+								type='text'
+								onClick={() => {
+									setMenuOpen(false);
 									addFeature(FactoryLogic.feature.createSummonChoice({
 										id: Utils.guid(),
 										options: []
@@ -281,7 +292,7 @@ export const CustomizePanel = (props: Props) => {
 								Summon
 							</Button>
 						</div>
-						<Divider>Miscellaneous</Divider>
+						<HeaderText level={3}>Miscellaneous</HeaderText>
 						<div className='customize-option-section'>
 							<Button
 								block={true}
@@ -519,11 +530,9 @@ export const CustomizePanel = (props: Props) => {
 		switch (feature.type) {
 			case FeatureType.Ability:
 				return (
-					<div style={{ paddingTop: '20px' }}>
-						<Expander title='Ability Editor'>
-							<AbilityEditPanel ability={feature.data.ability} onChange={setAbility} />
-						</Expander>
-					</div>
+					<Expander title='Ability Editor'>
+						<AbilityEditPanel ability={feature.data.ability} onChange={setAbility} />
+					</Expander>
 				);
 			case FeatureType.AncestryFeatureChoice:
 				return (
@@ -534,15 +543,6 @@ export const CustomizePanel = (props: Props) => {
 							placeholder='Select ancestry'
 							options={[ null, ...SourcebookLogic.getAncestries(props.sourcebooks) ].map(o => ({ value: o ? o.id : '', label: o ? o.name : 'Your ancestry' }))}
 							optionRender={option => <div className='ds-text'>{option.data.label}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.label
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.source.customID}
 							onChange={setCustomAncestryID}
 						/>
@@ -552,22 +552,13 @@ export const CustomizePanel = (props: Props) => {
 				);
 			case FeatureType.Bonus:
 				return (
-					<Space direction='vertical' style={{ width: '100%' }}>
+					<Space orientation='vertical' style={{ width: '100%' }}>
 						<HeaderText>Field</HeaderText>
 						<Select
 							style={{ width: '100%' }}
 							placeholder='Select field'
 							options={[ FeatureField.Disengage, FeatureField.ProjectPoints, FeatureField.Recoveries, FeatureField.RecoveryValue, FeatureField.Renown, FeatureField.Save, FeatureField.Speed, FeatureField.Stability, FeatureField.Stamina, FeatureField.Wealth ].map(o => ({ value: o }))}
 							optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.value
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.field}
 							onChange={setValueField}
 						/>
@@ -581,15 +572,6 @@ export const CustomizePanel = (props: Props) => {
 							mode='multiple'
 							options={[ Characteristic.Might, Characteristic.Agility, Characteristic.Reason, Characteristic.Intuition, Characteristic.Presence ].map(option => ({ value: option }))}
 							optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.value
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.valueCharacteristics}
 							onChange={setValueCharacteristics}
 						/>
@@ -604,15 +586,6 @@ export const CustomizePanel = (props: Props) => {
 							placeholder='Select characteristic'
 							options={[ Characteristic.Might, Characteristic.Agility, Characteristic.Reason, Characteristic.Intuition, Characteristic.Presence ].map(o => ({ value: o }))}
 							optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.value
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.characteristic}
 							onChange={setCharacteristic}
 						/>
@@ -654,42 +627,24 @@ export const CustomizePanel = (props: Props) => {
 			case FeatureType.ConditionImmunity:
 				return (
 					<Select
-						style={{ width: '100%', marginTop: '15px' }}
+						style={{ width: '100%' }}
 						placeholder='Select condition'
 						mode='multiple'
 						options={[ ConditionType.Bleeding, ConditionType.Dazed, ConditionType.Frightened, ConditionType.Grabbed, ConditionType.Prone, ConditionType.Restrained, ConditionType.Slowed, ConditionType.Taunted, ConditionType.Weakened ].map(o => ({ value: o }))}
 						optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-						showSearch={true}
-						filterOption={(input, option) => {
-							const strings = option ?
-								[
-									option.value
-								]
-								: [];
-							return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-						}}
 						value={feature.data.conditions}
 						onChange={setConditionTypes}
 					/>
 				);
 			case FeatureType.DamageModifier:
 				return (
-					<Space direction='vertical' style={{ width: '100%' }}>
+					<Space orientation='vertical' style={{ width: '100%' }}>
 						<HeaderText>Modifier</HeaderText>
 						<Select
 							style={{ width: '100%' }}
 							placeholder='Select field'
 							options={[ DamageType.Damage, DamageType.Acid, DamageType.Cold, DamageType.Corruption, DamageType.Fire, DamageType.Holy, DamageType.Lightning, DamageType.Poison, DamageType.Psychic, DamageType.Sonic ].map(o => ({ value: o }))}
 							optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.value
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.modifiers[0].damageType}
 							onChange={setDamageModifierDamageType}
 						/>
@@ -709,15 +664,6 @@ export const CustomizePanel = (props: Props) => {
 							mode='multiple'
 							options={[ Characteristic.Might, Characteristic.Agility, Characteristic.Reason, Characteristic.Intuition, Characteristic.Presence ].map(option => ({ value: option }))}
 							optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.value
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.modifiers[0].valueCharacteristics}
 							onChange={setDamageModifierCharacteristics}
 						/>
@@ -725,11 +671,9 @@ export const CustomizePanel = (props: Props) => {
 				);
 			case FeatureType.Follower:
 				return (
-					<div style={{ paddingTop: '20px' }}>
-						<Expander title='Customize'>
-							<FollowerEditPanel follower={feature.data.follower} sourcebooks={props.sourcebooks} options={props.options} onChange={setFollower} />
-						</Expander>
-					</div>
+					<Expander title='Customize'>
+						<FollowerEditPanel follower={feature.data.follower} sourcebooks={props.sourcebooks} options={props.options} onChange={setFollower} />
+					</Expander>
 				);
 			case FeatureType.MovementMode:
 				return (
@@ -755,15 +699,6 @@ export const CustomizePanel = (props: Props) => {
 							placeholder='List'
 							options={[ PerkList.Crafting, PerkList.Exploration, PerkList.Interpersonal, PerkList.Intrigue, PerkList.Lore, PerkList.Supernatural ].map(pl => ({ label: pl, value: pl }))}
 							optionRender={option => <div className='ds-text'>{option.data.label}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.label
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.lists}
 							onChange={setPerkLists}
 						/>
@@ -780,15 +715,6 @@ export const CustomizePanel = (props: Props) => {
 							allowClear={true}
 							options={[ KitWeapon.Bow, KitWeapon.Ensnaring, KitWeapon.Heavy, KitWeapon.Light, KitWeapon.Medium, KitWeapon.Polearm, KitWeapon.Unarmed, KitWeapon.Whip ].map(option => ({ value: option }))}
 							optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.value
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.weapons}
 							onChange={setProficiencyWeapons}
 						/>
@@ -800,15 +726,6 @@ export const CustomizePanel = (props: Props) => {
 							allowClear={true}
 							options={[ KitArmor.Heavy, KitArmor.Light, KitArmor.Medium, KitArmor.Shield ].map(option => ({ value: option }))}
 							optionRender={option => <div className='ds-text'>{option.data.value}</div>}
-							showSearch={true}
-							filterOption={(input, option) => {
-								const strings = option ?
-									[
-										option.value
-									]
-									: [];
-								return strings.some(str => str.toLowerCase().includes(input.toLowerCase()));
-							}}
 							value={feature.data.armor}
 							onChange={setProficiencyArmor}
 						/>
@@ -849,18 +766,13 @@ export const CustomizePanel = (props: Props) => {
 								]}
 							>
 								{getEditSection(f)}
-								{
-									[ FeatureType.Bonus, FeatureType.ConditionImmunity, FeatureType.DamageModifier, FeatureType.MovementMode, FeatureType.Proficiency ].includes(f.type) ?
-										null
-										:
-										<FeatureConfigPanel
-											feature={f}
-											options={props.options}
-											hero={hero}
-											sourcebooks={props.sourcebooks}
-											setData={setFeatureData}
-										/>
-								}
+								<ConfigFeature
+									feature={f}
+									hero={props.hero}
+									sourcebooks={props.sourcebooks}
+									options={props.options}
+									setData={data => setFeatureData(f.id, data)}
+								/>
 							</Expander>
 						))
 				}

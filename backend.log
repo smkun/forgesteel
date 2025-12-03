@@ -1,0 +1,2209 @@
+
+> forgesteel@11.114.0 server:dev
+> tsx watch server/index.ts
+
+[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at http (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:202:8)
+    at Object.<anonymous> (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:230:16)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Object.transformer (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/node_modules/tsx/dist/register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at cjsLoader (node:internal/modules/esm/translators:298:15)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1944:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 4000
+}
+
+Node.js v20.19.0
+11:58:19 AM [tsx] change in ./server/data/projects.repository.ts Rerunning...
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+11:59:28 AM [tsx] change in ./server/routes/project.routes.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at http (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:202:8)
+    at Object.<anonymous> (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:230:16)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Object.transformer (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/node_modules/tsx/dist/register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at cjsLoader (node:internal/modules/esm/translators:298:15)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1944:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 4000
+}
+
+Node.js v20.19.0
+11:59:39 AM [tsx] change in ./server/routes/project.routes.ts Rerunning...
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+11:59:47 AM [tsx] change in ./server/routes/project.routes.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at http (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:202:8)
+    at Object.<anonymous> (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:230:16)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Object.transformer (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/node_modules/tsx/dist/register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at cjsLoader (node:internal/modules/esm/translators:298:15)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1944:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 4000
+}
+
+Node.js v20.19.0
+11:59:53 AM [tsx] change in ./server/routes/project.routes.ts Rerunning...
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+12:00:07 PM [tsx] change in ./server/routes/project.routes.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+node:events:502
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::4000
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at Server.listen (node:net:2067:7)
+    at http (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:202:8)
+    at Object.<anonymous> (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/index.ts:230:16)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Object.transformer (/home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/node_modules/tsx/dist/register-D46fvsV_.cjs:3:1104)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+    at cjsLoader (node:internal/modules/esm/translators:298:15)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1944:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 4000
+}
+
+Node.js v20.19.0
+12:00:19 PM [tsx] change in ./server/routes/project.routes.ts Rerunning...
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 8 characters in campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 8 characters in campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /healthz from localhost:4000
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 8 characters in campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 2 total campaigns
+[REQUEST] GET /api/campaigns from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 2 total campaigns
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 8 characters in campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CAMPAIGNS] Found 8 members for campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 8 characters in campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[PROJECTS] Found 1 projects for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 8 characters in campaign 1
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 8 characters in campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 8 members for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 2 total campaigns
+[REQUEST] GET /api/campaigns from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 2 total campaigns
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /healthz from localhost:4000
+[ERROR] {
+  name: 'Error',
+  message: 'Not allowed by CORS',
+  stack: undefined,
+  path: '/api/auth/me',
+  method: 'OPTIONS'
+}
+[ERROR] {
+  name: 'Error',
+  message: 'Not allowed by CORS',
+  stack: undefined,
+  path: '/api/characters',
+  method: 'OPTIONS'
+}
+[REQUEST] GET /api/auth/me from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[REQUEST] GET /api/campaigns from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 2 total campaigns
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 2 total campaigns
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1 from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[REQUEST] GET /api/campaigns/1/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[REQUEST] GET /api/characters from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[REQUEST] GET /api/campaigns/1/members from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[CAMPAIGNS] Found 8 members for campaign 1
+[CAMPAIGNS] Found 1 GMs for campaign 1
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTERS] Found 3 characters for user 1
+[REPO findByOwner] First RAW row from MySQL: {
+  id: 1,
+  campaign_id: 1,
+  campaign_name: '32Gamers-Paul',
+  allKeys: [
+    'id',
+    'owner_user_id',
+    'gm_user_id',
+    'campaign_id',
+    'name',
+    'character_json',
+    'is_deleted',
+    'created_at',
+    'updated_at',
+    'owner_email',
+    'owner_display_name',
+    'gm_email',
+    'gm_display_name',
+    'campaign_name'
+  ]
+}
+[CHARACTERS] Found 8 characters in campaign 1
+[CHARACTERS] Found 0 characters shared with GM 1
+[CHARACTER ROUTE /] First character RAW from DB: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTER ROUTE /] First character SERIALIZED: { id: 1, campaign_id: 1, campaign_name: '32Gamers-Paul' }
+[CHARACTERS] Found 8 characters in campaign 1
+[REQUEST] GET /api/campaigns/1/projects from localhost:4000
+[AUTH LOGIC] Processing login for: scottkunian@gmail.com
+[AUTH LOGIC] 🔒 Admin access granted: scottkunian@gmail.com
+[AUTH] ✅ Authenticated: scottkunian@gmail.com (ID: 1, Admin: true)
+[PROJECTS] Found 1 projects for campaign 1
+1:02:08 PM [tsx] change in ./server/data/projects.repository.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+1:02:14 PM [tsx] change in ./server/data/projects.repository.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+1:02:19 PM [tsx] change in ./server/data/projects.repository.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+1:02:27 PM [tsx] change in ./server/data/projects.repository.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz
+1:02:36 PM [tsx] change in ./server/data/projects.repository.ts Restarting...
+[SHUTDOWN] SIGTERM received, closing server...
+[SHUTDOWN] Server closed
+c[ENV] Current working directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar
+[ENV] Module directory: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/server/utils
+[ENV] Loading environment from: /home/skunian/code/MyCode/Forgesteel/forgesteel-Draachenmar/.env.development
+[ENV] File exists: true
+[DB] Initializing connection pool...
+[DB] Host: 31.22.4.44
+[DB] Port: 3306
+[DB] Database: gamers_forgesteel
+[DB] User: gamers_sa
+[DB] Password: ***SET***
+[AUTH] ✅ Firebase Admin SDK initialized
+[AUTH] Project: forgesteel-6e968
+[BOOT] Starting Forgesteel API...
+[BOOT] Environment: Local Development
+[BOOT] Node version: v20.19.0
+[BOOT] PASSENGER_BASE_URI: not set
+[BOOT] PASSENGER_APP_ENV: not set
+[BOOT] ✅ Server listening on port 4000
+[BOOT] Mode: Local development
+[BOOT] Health check: http://localhost:4000/healthz

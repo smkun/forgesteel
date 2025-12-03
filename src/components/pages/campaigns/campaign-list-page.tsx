@@ -15,6 +15,7 @@ import * as api from '@/services/api';
 import './campaign-list-page.scss';
 
 interface Props {
+	highlightAbout: boolean;
 	showReference: () => void;
 	showRoll: () => void;
 	showAbout: () => void;
@@ -83,7 +84,7 @@ export const CampaignListPage = (props: Props) => {
 			await api.createCampaign({
 				name: newCampaignName.trim(),
 				description: newCampaignDescription.trim() || null,
-				gm_user_id: gmChoice === 'other' ? selectedGmId : undefined
+				gm_user_id: gmChoice === 'other' ? (selectedGmId ?? undefined) : undefined
 			});
 			message.success('Campaign created successfully');
 			setIsModalOpen(false);
@@ -200,8 +201,8 @@ export const CampaignListPage = (props: Props) => {
 					{getCampaignsSection()}
 				</div>
 				<AppFooter
-					page='campaigns'
-					highlightAbout={false}
+					page='heroes'
+					highlightAbout={props.highlightAbout}
 					showReference={props.showReference}
 					showRoll={props.showRoll}
 					showAbout={props.showAbout}

@@ -45,7 +45,7 @@ ALWAYS_KEEP=(
 COMMUNITY_SOURCEBOOKS=(
     "src/data/sourcebooks/core.ts"
     "src/data/sourcebooks/playtest.ts"
-    "src/data/sourcebooks/ratcatcher.ts"
+    "src/data/sourcebooks/magazine-ratcatcher.ts"
 )
 
 # Draachenmar-specific ancestries (keep - never auto-merge)

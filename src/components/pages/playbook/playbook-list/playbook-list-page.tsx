@@ -214,10 +214,9 @@ export const PlaybookListPage = (props: Props) => {
 						adventure={element as Adventure}
 						heroes={props.heroes}
 						sourcebooks={props.sourcebooks}
-						playbook={props.playbook}
 						options={props.options}
 						mode={PanelMode.Full}
-						onStart={props.startElement}
+						onStart={(kind, elem, _party) => props.startElement(kind as PlaybookElementKind, elem)}
 					/>
 				);
 				break;
@@ -265,6 +264,7 @@ export const PlaybookListPage = (props: Props) => {
 								key={element.id}
 								montage={element as Montage}
 								heroes={props.heroes}
+								sourcebooks={props.sourcebooks}
 								options={props.options}
 								mode={PanelMode.Full}
 							/>
@@ -296,7 +296,7 @@ export const PlaybookListPage = (props: Props) => {
 				};
 				break;
 			case 'tactical-map':
-				getPanel = (element: Element) => <TacticalMapPanel key={element.id} map={element as TacticalMap} options={props.options} display={TacticalMapDisplayType.DirectorView} mode={PanelMode.Full} />;
+				getPanel = (element: Element) => <TacticalMapPanel key={element.id} map={element as TacticalMap} sourcebooks={props.sourcebooks} options={props.options} display={TacticalMapDisplayType.DirectorView} mode={PanelMode.Full} />;
 				break;
 		}
 
@@ -474,7 +474,7 @@ export const PlaybookListPage = (props: Props) => {
 					</div>
 				</ErrorBoundary>
 				<AppFooter
-					page='playbook'
+					page='session'
 					highlightAbout={props.highlightAbout}
 					showReference={props.showReference}
 					showRoll={props.showRoll}

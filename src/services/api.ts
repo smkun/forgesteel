@@ -1,8 +1,8 @@
 import { Hero } from '@/models/hero';
-import { Campaign, CampaignMember, CampaignWithMembers, CreateCampaignData, UpdateCampaignData } from '@/models/campaign';
+import { Campaign, CampaignMember, CreateCampaignData, UpdateCampaignData } from '@/models/campaign';
 import { getIdToken } from './firebase';
 
-const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:4000' : 'https://32gamers.com/forgesteel';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000' : 'https://32gamers.com/forgesteel');
 
 export interface CharacterResponse {
 	id: number;

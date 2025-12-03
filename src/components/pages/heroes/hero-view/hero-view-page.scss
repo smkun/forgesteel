@@ -15,13 +15,6 @@
 		&.compact {
 			padding: 10px 0;
 		}
-
-		.gm-panel {
-			background-color: #fff;
-			border-radius: 8px;
-			padding: 16px;
-			margin-bottom: 10px;
-		}
 	}
 }
 
@@ -29,10 +22,6 @@ html[data-theme="dark"] {
 	.hero-view-page {
 		.hero-view-page-content {
 			background-color: rgb(55, 55, 55);
-
-			.gm-panel {
-				background-color: rgb(40, 40, 40);
-			}
 		}
 	}
 }

@@ -1,6 +1,5 @@
 import { Divider, Flex, Space, Tag } from 'antd';
 import { MonsterLabel, TerrainLabel } from '@/components/panels/monster-label/monster-label';
-import { Sourcebook, SourcebookElementKind } from '@/models/sourcebook';
 import { Terrain, TerrainSection } from '@/models/terrain';
 import { AbilityPanel } from '@/components/panels/elements/ability-panel/ability-panel';
 import { AbilityUsage } from '@/enums/ability-usage';
@@ -13,6 +12,8 @@ import { DamageModifierType } from '@/enums/damage-modifier-type';
 import { DamageType } from '@/enums/damage-type';
 import { Domain } from '@/models/domain';
 import { Element } from '@/models/element';
+import { Encounter } from '@/models/encounter';
+import { EncounterSheetPage } from '@/components/panels/classic-sheet/encounter-sheet/encounter-sheet-page';
 import { ErrorBoundary } from '@/components/controls/error-boundary/error-boundary';
 import { Feature } from '@/models/feature';
 import { FeaturePanel } from '@/components/panels/elements/feature-panel/feature-panel';
@@ -21,6 +22,7 @@ import { Field } from '@/components/controls/field/field';
 import { Format } from '@/utils/format';
 import { FormatLogic } from '@/logic/format-logic';
 import { HeaderText } from '@/components/controls/header-text/header-text';
+import { Hero } from '@/models/hero';
 import { HeroClass } from '@/models/class';
 import { Imbuement } from '@/models/imbuement';
 import { Item } from '@/models/item';
@@ -30,12 +32,19 @@ import { Monster } from '@/models/monster';
 import { MonsterGroup } from '@/models/monster-group';
 import { MonsterLogic } from '@/logic/monster-logic';
 import { MonsterOrganizationType } from '@/enums/monster-organization-type';
+import { Montage } from '@/models/montage';
+import { MontageSheetPage } from '@/components/panels/classic-sheet/montage-sheet/montage-sheet-page';
+import { Negotiation } from '@/models/negotiation';
+import { NegotiationSheetPage } from '@/components/panels/classic-sheet/negotiation-sheet/negotiation-sheet-page';
 import { Options } from '@/models/options';
 import { PanelMode } from '@/enums/panel-mode';
 import { Perk } from '@/models/perk';
 import { Pill } from '@/components/controls/pill/pill';
 import { Project } from '@/models/project';
-import { StatsRow } from '../../stats-row/stats-row';
+import { SheetFormatter } from '@/logic/classic-sheet/sheet-formatter';
+import { Sourcebook } from '@/models/sourcebook';
+import { SourcebookLogic } from '@/logic/sourcebook-logic';
+import { StatsRow } from '@/components/panels/stats-row/stats-row';
 import { SubClass } from '@/models/subclass';
 import { TerrainLogic } from '@/logic/terrain-logic';
 import { Title } from '@/models/title';
@@ -43,13 +52,41 @@ import { Title } from '@/models/title';
 import './element-sheet.scss';
 
 interface Props {
-	type: SourcebookElementKind;
+	type: string;
 	element: Element;
 	sourcebooks: Sourcebook[];
+	heroes: Hero[];
 	options: Options;
 }
 
 export const ElementSheet = (props: Props) => {
+	switch (props.type) {
+		case 'encounter':
+			return (
+				<EncounterSheetPage
+					encounter={props.element as Encounter}
+					sourcebooks={props.sourcebooks}
+					heroes={props.heroes}
+					options={props.options}
+				/>
+			);
+		case 'montage':
+			return (
+				<MontageSheetPage
+					montage={props.element as Montage}
+					heroes={props.heroes}
+					options={props.options}
+				/>
+			);
+		case 'negotiation':
+			return (
+				<NegotiationSheetPage
+					negotiation={props.element as Negotiation}
+					options={props.options}
+				/>
+			);
+	}
+
 	let content = null;
 	switch (props.type) {
 		case 'ancestry':
@@ -142,6 +179,16 @@ export const ElementSheet = (props: Props) => {
 				/>
 			);
 			break;
+		case 'monster':
+			content = (
+				<MonsterSheet
+					monster={props.element as Monster}
+					monsterGroup={SourcebookLogic.getMonsterGroup(props.sourcebooks, props.element.id) as MonsterGroup}
+					sourcebooks={props.sourcebooks}
+					options={props.options}
+				/>
+			);
+			break;
 		case 'perk':
 			content = (
 				<PerkSheet
@@ -195,7 +242,7 @@ export const ElementSheet = (props: Props) => {
 
 	return (
 		<ErrorBoundary>
-			<div className={`element-sheet ${props.options.classicSheetPageSize.toLowerCase()} ${props.options.pageOrientation}`} id={props.element.id}>
+			<div className={`element-sheet ${props.options.classicSheetPageSize.toLowerCase()} ${props.options.pageOrientation}`} id={SheetFormatter.getPageId(props.type, props.element.id)}>
 				{content}
 			</div>
 		</ErrorBoundary>
@@ -233,6 +280,11 @@ const AncestrySheet = (props: AncestryProps) => {
 				props.ancestry.features.filter(isPurchasedFeature).map(f => (
 					<FeaturePanel key={f.id} feature={f} options={props.options} sourcebooks={props.sourcebooks} mode={PanelMode.Full} />
 				))
+			}
+			{
+				props.ancestry.culture ?
+					<CultureSheet culture={props.ancestry.culture} sourcebooks={props.sourcebooks} options={props.options} />
+					: null
 			}
 		</>
 	);
@@ -370,7 +422,7 @@ const DomainSheet = (props: DomainProps) => {
 				props.domain.featuresByLevel
 					.filter(lvl => lvl.features.length > 0)
 					.map(lvl => (
-						<Space key={lvl.level} direction='vertical'>
+						<Space key={lvl.level} orientation='vertical'>
 							<HeaderText level={1}>Level {lvl.level.toString()}</HeaderText>
 							{
 								lvl.features.map(f => (
@@ -422,7 +474,7 @@ const ItemSheet = (props: ItemProps) => {
 			<Markdown text={props.item.description} />
 			{
 				props.item.keywords.length > 0 ?
-					<Field label='Keywords' value={props.item.keywords.map((k, n) => <Tag key={n}>{k}</Tag>)} />
+					<Field label='Keywords' value={<Flex gap={5}>{props.item.keywords.map((k, n) => <Tag key={n}>{k}</Tag>)}</Flex>} />
 					: null
 			}
 			<Markdown text={props.item.effect} />
@@ -565,6 +617,17 @@ const MonsterSheet = (props: MonsterProps) => {
 	const features = MonsterLogic.getFeatures(props.monster).filter(f => (f.type === FeatureType.Text) || (f.type === FeatureType.AddOn));
 	const abilities = MonsterLogic.getFeatures(props.monster).filter(f => f.type === FeatureType.Ability).map(f => f.data.ability);
 
+	let rightOfTags = null;
+	if (props.monster.role.organization === MonsterOrganizationType.Minion) {
+		rightOfTags = (
+			<Field label='EV' value={`${props.monster.encounterValue} for 4 minions`} />
+		);
+	} else if (props.monster.encounterValue > 0) {
+		rightOfTags = (
+			<Field label='EV' value={props.monster.encounterValue} />
+		);
+	}
+
 	return (
 		<>
 			<HeaderText level={1}>
@@ -573,16 +636,8 @@ const MonsterSheet = (props: MonsterProps) => {
 			<MonsterLabel monster={props.monster} />
 			<Markdown text={props.monster.description} />
 			<Flex align='center' justify='space-between'>
-				<div>{props.monster.keywords.map((k, n) => <Tag key={n}>{k}</Tag>)}</div>
-				<Field
-					label='EV'
-					value={
-						props.monster.role.organization === MonsterOrganizationType.Minion ?
-							`${props.monster.encounterValue} for 4 minions`
-							:
-							((props.monster.encounterValue === 0) ? '-' : props.monster.encounterValue)
-					}
-				/>
+				<Flex gap={5}>{props.monster.keywords.map((k, n) => <Tag key={n}>{k}</Tag>)}</Flex>
+				{rightOfTags}
 			</Flex>
 			<StatsRow>
 				<Field orientation='vertical' label='Size' value={FormatLogic.getSize(props.monster.size)} />
@@ -716,7 +771,6 @@ const ProjectSheet = (props: ProjectProps) => {
 			{props.project.source ? <Field label='Source' value={props.project.source} /> : null}
 			<Field label='Characteristic' value={props.project.characteristic.length === 5 ? 'highest characteristic' : props.project.characteristic.join(' or ')} />
 			<Field label='Goal' value={props.project.goal || '(varies)'} />
-			<Markdown text={props.project.effect} />
 		</>
 	);
 };
@@ -738,15 +792,13 @@ const SubclassSheet = (props: SubclassProps) => {
 				props.subclass.featuresByLevel
 					.filter(lvl => lvl.features.length > 0)
 					.map(lvl => (
-						<Space key={lvl.level} direction='vertical'>
+						<Space key={lvl.level} orientation='vertical'>
 							<HeaderText level={1}>Level {lvl.level.toString()}</HeaderText>
-							<div className='subclass-features-grid'>
-								{
-									lvl.features.map(f => (
-										<FeaturePanel key={f.id} feature={f} sourcebooks={props.sourcebooks} options={props.options} mode={PanelMode.Full} />
-									))
-								}
-							</div>
+							{
+								lvl.features.map(f => (
+									<FeaturePanel key={f.id} feature={f} sourcebooks={props.sourcebooks} options={props.options} mode={PanelMode.Full} />
+								))
+							}
 						</Space>
 					))
 			}
@@ -763,7 +815,7 @@ interface TerrainProps {
 const TerrainSheet = (props: TerrainProps) => {
 	const getSection = (section: TerrainSection, index: number) => {
 		return (
-			<div key={index} className='terrain-section'>
+			<div key={index}>
 				<Divider />
 				{
 					section.content.map(content => {

@@ -8,6 +8,7 @@ import { Main } from '@/components/main/main.tsx';
 import { Options } from '@/models/options.ts';
 import { OptionsUpdateLogic } from '@/logic/update/options-update-logic.ts';
 import { Playbook } from '@/models/playbook.ts';
+import { Session } from '@/models/session.ts';
 import { PlaybookUpdateLogic } from '@/logic/update/playbook-update-logic.ts';
 import { Sourcebook } from '@/models/sourcebook.ts';
 import { SourcebookLogic } from '@/logic/sourcebook-logic';
@@ -125,9 +126,9 @@ Promise.all(promises).then(results => {
 
 	// #region Session
 
-	let session = results[4] as Playbook | null;
+	let session = results[4] as Session | null;
 	if (!session) {
-		session = FactoryLogic.createPlaybook();
+		session = FactoryLogic.createSession();
 	}
 
 	PlaybookUpdateLogic.updatePlaybook(session);

@@ -21,6 +21,7 @@ import { ProgressUpdateModal } from '@/components/campaigns/projects/ProgressUpd
 import './campaign-details-page.scss';
 
 interface Props {
+	highlightAbout: boolean;
 	showReference: () => void;
 	showRoll: () => void;
 	showAbout: () => void;
@@ -393,6 +394,8 @@ export const CampaignDetailsPage = (props: Props) => {
 						<Spin size='large' />
 					</div>
 					<AppFooter
+						page='heroes'
+						highlightAbout={props.highlightAbout}
 						showReference={props.showReference}
 						showRoll={props.showRoll}
 						showAbout={props.showAbout}
@@ -412,6 +415,8 @@ export const CampaignDetailsPage = (props: Props) => {
 						<Empty />
 					</div>
 					<AppFooter
+						page='heroes'
+						highlightAbout={props.highlightAbout}
 						showReference={props.showReference}
 						showRoll={props.showRoll}
 						showAbout={props.showAbout}
@@ -500,7 +505,7 @@ export const CampaignDetailsPage = (props: Props) => {
 											</div>
 										)}
 										{members.length === 0 ? (
-											<Empty message='No members in this campaign' />
+											<Empty text='No members in this campaign' />
 										) : (
 											<div className='members-grid'>
 												{members.map(member => (
@@ -513,7 +518,7 @@ export const CampaignDetailsPage = (props: Props) => {
 																		danger
 																		size='small'
 																		icon={<UserDeleteOutlined />}
-																		onClick={() => handleRemoveMember(member.user_id, member.display_name)}
+																		onClick={() => handleRemoveMember(member.user_id, member.display_name ?? null)}
 																	>
 																		Remove
 																	</Button>
@@ -570,7 +575,7 @@ export const CampaignDetailsPage = (props: Props) => {
 											</div>
 										)}
 										{characters.length === 0 ? (
-											<Empty message='No characters in this campaign' />
+											<Empty text='No characters in this campaign' />
 										) : (
 											<div className='characters-grid'>
 												{characters.map(character => (
@@ -599,7 +604,7 @@ export const CampaignDetailsPage = (props: Props) => {
 															<div><strong>Owner:</strong> {character.owner_display_name || character.owner_email}</div>
 															{character.hero && (
 																<>
-																	<div><strong>Level:</strong> {character.hero.level}</div>
+																	<div><strong>Level:</strong> {character.hero.class?.level ?? 1}</div>
 																	<div><strong>Ancestry:</strong> {character.hero.ancestry?.name}</div>
 																	<div><strong>Class:</strong> {character.hero.class?.name}</div>
 																</>
@@ -768,8 +773,8 @@ export const CampaignDetailsPage = (props: Props) => {
 				)}
 
 				<AppFooter
-					page='campaigns'
-					highlightAbout={false}
+					page='heroes'
+					highlightAbout={props.highlightAbout}
 					showReference={props.showReference}
 					showRoll={props.showRoll}
 					showAbout={props.showAbout}

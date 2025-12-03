@@ -45,14 +45,14 @@ export const LanguageSelectModal = (props: Props) => {
 			content={
 				<div className='language-select-modal'>
 					{
-						[ LanguageType.Common, LanguageType.Cultural, LanguageType.Regional, LanguageType.Dead, LanguageType.Secret ].map(type => {
+						[ LanguageType.Common, LanguageType.Cultural, LanguageType.Regional, LanguageType.Dead ].map(type => {
 							const subset = languages.filter(l => l.type === type);
 							if (subset.length === 0) {
 								return null;
 							}
 
 							return (
-								<Space key={type} direction='vertical' style={{ width: '100%' }}>
+								<Space key={type} orientation='vertical' style={{ width: '100%' }}>
 									<HeaderText level={1}>{type}</HeaderText>
 									{
 										subset.map((l, n) => (
@@ -68,7 +68,7 @@ export const LanguageSelectModal = (props: Props) => {
 					}
 					<Divider />
 					<Expander title='Add a custom language'>
-						<Space direction='vertical' style={{ width: '100%' }}>
+						<Space orientation='vertical' style={{ width: '100%' }}>
 							<HeaderText>Custom Language</HeaderText>
 							<Input
 								placeholder='Custom Language Name'

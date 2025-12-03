@@ -1,10 +1,10 @@
 import { Badge, Button, Divider, Flex } from 'antd';
-import { BookOutlined, FolderOutlined, InfoCircleOutlined, PlayCircleOutlined, ReadOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, InfoCircleOutlined, PlayCircleOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
 import { ErrorBoundary } from '@/components/controls/error-boundary/error-boundary';
 import { SyncStatus } from '@/components/panels/sync-status/sync-status';
+import { useAuth } from '@/contexts/AuthContext';
 import { useIsSmall } from '@/hooks/use-is-small';
 import { useNavigation } from '@/hooks/use-navigation';
-import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 
 import './app-footer.scss';
@@ -12,7 +12,7 @@ import './app-footer.scss';
 import shield from '@/assets/shield.png';
 
 interface Props {
-	page: 'welcome' | 'heroes' | 'library' | 'playbook' | 'session' | 'player-view' | 'campaigns';
+	page: 'welcome' | 'heroes' | 'library' | 'session' | 'player-view';
 	highlightAbout: boolean;
 	showReference: () => void;
 	showRoll: () => void;
@@ -31,7 +31,7 @@ export const AppFooter = (props: Props) => {
 			try {
 				setSigningOut(true);
 				await signOut();
-				navigation.goToAuth();
+				navigation.goToWelcome();
 			} catch (err) {
 				console.error('[APP FOOTER] Sign out failed:', err);
 			} finally {
@@ -55,23 +55,15 @@ export const AppFooter = (props: Props) => {
 						:
 						<Flex className='navigation-buttons-panel' align='center' gap={2}>
 							<Button type='text' className={props.page === 'welcome' ? 'selected' : ''} icon={<img className='logo-icon' src={shield} />} onClick={() => navigation.goToWelcome()} />
-							<Divider type='vertical' />
+							<Divider orientation='vertical' />
 							<Button type='text' className={props.page === 'heroes' ? 'selected' : ''} icon={<TeamOutlined />} onClick={() => navigation.goToHeroList()}>
 								{isSmall ? null : 'Heroes'}
 							</Button>
-							<Divider type='vertical' />
-							<Button type='text' className={props.page === 'campaigns' ? 'selected' : ''} icon={<FolderOutlined />} onClick={() => navigation.goToCampaigns()}>
-								{isSmall ? null : 'Campaigns'}
-							</Button>
-							<Divider type='vertical' />
+							<Divider orientation='vertical' />
 							<Button type='text' className={props.page === 'library' ? 'selected' : ''} icon={<BookOutlined />} onClick={() => navigation.goToLibrary('ancestry')}>
 								{isSmall ? null : 'Library'}
 							</Button>
-							<Divider type='vertical' />
-							<Button type='text' className={props.page === 'playbook' ? 'selected' : ''} icon={<ReadOutlined />} onClick={() => navigation.goToPlaybook('adventure')}>
-								{isSmall ? null : 'Playbook'}
-							</Button>
-							<Divider type='vertical' />
+							<Divider orientation='vertical' />
 							<Button type='text' className={props.page === 'session' ? 'selected' : ''} icon={<PlayCircleOutlined />} onClick={() => navigation.goToSession()}>
 								{isSmall ? null : 'Session'}
 							</Button>
@@ -86,11 +78,13 @@ export const AppFooter = (props: Props) => {
 						Roll
 					</Button>
 					<Button onClick={props.showAbout}>
-						{ isSmall ? <InfoCircleOutlined /> : 'About' }
+						<InfoCircleOutlined />
+						{ isSmall ? '' : 'About' }
 					</Button>
 					<Badge dot={props.highlightAbout}>
 						<Button onClick={props.showSettings}>
-							{ isSmall ? <SettingOutlined /> : 'Settings' }
+							<SettingOutlined />
+							{ isSmall ? '' : 'Settings' }
 						</Button>
 					</Badge>
 					<Button type='primary' onClick={handleAuthClick} loading={signingOut}>

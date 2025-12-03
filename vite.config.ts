@@ -5,7 +5,8 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	mode: process.env.NODE_ENV || 'development',
+	// Note: Do not override mode here - let Vite use its defaults
+	// (development for dev server, production for build)
 	base: '/forgesteel/',
 	build: {
 		outDir: 'distribution/frontend',

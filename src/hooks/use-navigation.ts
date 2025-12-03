@@ -10,6 +10,9 @@ export const useNavigation = () => {
 		goToWelcome: () => {
 			return navigate('/');
 		},
+		goToAuth: () => {
+			return navigate('/auth');
+		},
 		goToHeroList: (folder?: string) => {
 			if (folder) {
 				return navigate(`/hero/${folder}`);
@@ -43,17 +46,17 @@ export const useNavigation = () => {
 		goToPlaybookEdit: (kind: PlaybookElementKind, elementID: string) => {
 			return navigate(`/playbook/edit/${kind}/${elementID}`);
 		},
+		goToCampaigns: () => {
+			return navigate('/campaigns');
+		},
+		goToCampaignDetails: (campaignID: string) => {
+			return navigate(`/campaigns/${campaignID}`);
+		},
 		goToSession: () => {
 			return navigate('/session/director');
 		},
 		goToPlayerView: () => {
 			return navigate('/session/player');
-		},
-		goToAuth: () => {
-			return navigate('/auth');
-		},
-		goToCampaigns: () => {
-			return navigate('/campaigns');
 		}
 	};
 };
