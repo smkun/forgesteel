@@ -5,3 +5,8 @@ node_modules
 .github
 .vscode/
 .vscode/*
+
+# Firebase credentials
+firebase-service-account.json
+.firebase/
+firebase-debug.log
