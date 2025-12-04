@@ -1,21 +1,195 @@
-import { Button, Select, message, Spin, Tag } from 'antd';
-import { CloudOutlined, CloudSyncOutlined, CheckCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button, Select, message, Spin, Tag, Empty, Modal as AntModal } from 'antd';
+import { CloudOutlined, CloudSyncOutlined, CheckCircleOutlined, SyncOutlined, PlusOutlined } from '@ant-design/icons';
 import { Modal } from '../modal/modal';
 import { useEffect, useState } from 'react';
 import { Encounter } from '@/models/encounter';
 import { Campaign } from '@/models/campaign';
+import { Sourcebook } from '@/models/sourcebook';
 import * as api from '@/services/api';
 import * as encounterStorage from '@/services/encounter-storage';
+import localforage from 'localforage';
 
 import './sync-encounter-modal.scss';
 
-interface Props {
+// Props for syncing an encounter FROM Library (existing use case)
+interface LibrarySyncProps {
 	encounter: Encounter;
 	onSyncComplete: () => void;
 	onClose: () => void;
+	// These are undefined for Library sync
+	open?: undefined;
+	campaignId?: undefined;
+	campaignName?: undefined;
+	onCancel?: undefined;
+	onSynced?: undefined;
+}
+
+// Props for adding an encounter TO a campaign (new use case)
+interface CampaignAddProps {
+	open: boolean;
+	campaignId: number;
+	campaignName: string;
+	onCancel: () => void;
+	onSynced: () => void;
+	// These are undefined for Campaign add
+	encounter?: undefined;
+	onSyncComplete?: undefined;
+	onClose?: undefined;
+}
+
+type Props = LibrarySyncProps | CampaignAddProps;
+
+// Type guard to check which mode we're in
+function isCampaignAddMode(props: Props): props is CampaignAddProps {
+	return 'open' in props && props.open !== undefined;
 }
 
 export const SyncEncounterModal = (props: Props) => {
+	// Campaign Add Mode
+	if (isCampaignAddMode(props)) {
+		return <CampaignAddEncounterModal {...props} />;
+	}
+
+	// Library Sync Mode (original behavior)
+	return <LibrarySyncEncounterModal {...props} />;
+};
+
+// ============================================================================
+// CAMPAIGN ADD MODE - Select an encounter from Library to add to campaign
+// ============================================================================
+
+const CampaignAddEncounterModal = (props: CampaignAddProps) => {
+	const [ encounters, setEncounters ] = useState<Encounter[]>([]);
+	const [ selectedEncounter, setSelectedEncounter ] = useState<Encounter | null>(null);
+	const [ loading, setLoading ] = useState<boolean>(false);
+	const [ syncing, setSyncing ] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (props.open) {
+			loadEncounters();
+		}
+	}, [props.open]);
+
+	const loadEncounters = async () => {
+		setLoading(true);
+		try {
+			// Get encounters from Library (homebrew sourcebooks stored in localforage)
+			const homebrewSourcebooks = await localforage.getItem<Sourcebook[]>('forgesteel-homebrew-settings') || [];
+			const allEncounters: Encounter[] = homebrewSourcebooks.flatMap(sb => sb.encounters || []);
+			setEncounters(allEncounters);
+		} catch (error) {
+			console.error('[SYNC ENCOUNTER] Failed to load encounters:', error);
+			message.error('Failed to load encounters from Library');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleSync = async () => {
+		if (!selectedEncounter) {
+			message.error('Please select an encounter');
+			return;
+		}
+
+		setSyncing(true);
+		try {
+			const result = await encounterStorage.syncEncounterToCampaign(props.campaignId, selectedEncounter);
+			if (result) {
+				message.success(`Encounter "${selectedEncounter.name || 'Unnamed'}" synced to ${props.campaignName}`);
+				props.onSynced();
+			} else {
+				throw new Error('Sync failed');
+			}
+		} catch (error: any) {
+			console.error('[SYNC ENCOUNTER] Sync failed:', error);
+			message.error(error.message || 'Failed to sync encounter');
+		} finally {
+			setSyncing(false);
+		}
+	};
+
+	return (
+		<AntModal
+			title={
+				<div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+					<CloudSyncOutlined style={{ fontSize: '20px' }} />
+					<span>Add Encounter to Campaign</span>
+				</div>
+			}
+			open={props.open}
+			onCancel={props.onCancel}
+			footer={null}
+			destroyOnClose
+		>
+			<div className='sync-encounter-modal-content'>
+				<div style={{ marginBottom: '16px', color: '#888' }}>
+					Campaign: <strong>{props.campaignName}</strong>
+				</div>
+
+				{loading ? (
+					<div className='loading-container'>
+						<Spin size='large' />
+						<div style={{ marginTop: '12px' }}>Loading encounters from Library...</div>
+					</div>
+				) : encounters.length === 0 ? (
+					<Empty
+						description='No encounters in your Library'
+						image={Empty.PRESENTED_IMAGE_SIMPLE}
+					>
+						<div style={{ marginTop: '12px', color: '#888' }}>
+							Create encounters in the Library first, then sync them to campaigns.
+						</div>
+					</Empty>
+				) : (
+					<>
+						<div className='encounter-select'>
+							<div className='select-label'>Select an Encounter:</div>
+							<Select
+								style={{ width: '100%' }}
+								placeholder='Choose encounter to sync...'
+								value={selectedEncounter?.id}
+								onChange={(id) => {
+									const encounter = encounters.find(e => e.id === id);
+									setSelectedEncounter(encounter || null);
+								}}
+								loading={loading}
+								size='large'
+								options={encounters.map(encounter => ({
+									value: encounter.id,
+									label: encounter.name || 'Unnamed Encounter'
+								}))}
+							/>
+						</div>
+
+						<Button
+							block
+							type='primary'
+							size='large'
+							icon={<PlusOutlined />}
+							onClick={handleSync}
+							loading={syncing}
+							disabled={!selectedEncounter || syncing}
+							style={{ marginTop: '16px' }}
+						>
+							Add to Campaign
+						</Button>
+
+						<div className='help-text'>
+							Syncing an encounter to a campaign allows you to access it from any device
+							when logged in. Other GMs in the campaign can also view and run the encounter.
+						</div>
+					</>
+				)}
+			</div>
+		</AntModal>
+	);
+};
+
+// ============================================================================
+// LIBRARY SYNC MODE - Original behavior for syncing from Library page
+// ============================================================================
+
+const LibrarySyncEncounterModal = (props: LibrarySyncProps) => {
 	const [ campaigns, setCampaigns ] = useState<Campaign[]>([]);
 	const [ selectedCampaignId, setSelectedCampaignId ] = useState<number | null>(null);
 	const [ loading, setLoading ] = useState<boolean>(false);

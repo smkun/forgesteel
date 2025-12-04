@@ -49,6 +49,16 @@ ALWAYS_KEEP=(
     # Navigation components with Draachenmar customizations
     "src/components/panels/app-footer/"           # Contains Campaigns button navigation
 
+    # Library edit page with Sync to Campaign button
+    "src/components/pages/library/library-edit/library-edit-page.tsx"  # Has "Sync to Campaign" button for encounters
+
+    # Campaign system (Draachenmar-specific backend integration)
+    "src/components/pages/campaigns/"             # Campaign list and details pages (includes .scss with tab styles)
+    "src/components/campaigns/"                   # Campaign sub-components including:
+                                                  #   - EncounterList.tsx (monster count display with sourcebooks)
+                                                  #   - ProjectList.tsx, CharacterList.tsx
+    "src/models/campaign.ts"                      # Campaign TypeScript models
+
     # Documentation
     "claudedocs/"
     ".htaccess"

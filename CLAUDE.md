@@ -498,3 +498,183 @@ The `app-footer/` directory is now in the `ALWAYS_KEEP` array in merge-tool.sh, 
 1. **Test Campaigns Functionality**: Navigate to Campaigns, create/view campaigns, verify full CRUD
 2. **Run Database Migration**: Execute `003_add_campaign_encounters.sql` for encounters feature
 3. **Deploy to Production**: Build and upload after testing
+
+---
+
+## Session Summary - December 3, 2025 (Campaign Editing & Encounters Tab)
+
+### Issues Addressed
+
+1. **Campaign Editing Not Working**: User reported they could not edit campaign name/description despite being the campaign creator
+2. **Missing Encounters Tab**: Campaign details page was missing the Encounters tab for viewing synced encounters
+
+### Root Cause Analysis
+
+**Campaign Editing Issue:**
+- The `isGM` check on line 432 only checked for `user_role === 'gm'` or admin status
+- Campaign creators who weren't explicitly assigned as GM couldn't edit their own campaigns
+- User clarified: "I am not the GM, but I did create the campaign"
+
+### Changes Made
+
+25. **Fixed Campaign Editing Permissions** ([campaign-details-page.tsx](src/components/pages/campaigns/campaign-details-page.tsx))
+    - Added `isCreator` check: `campaign.created_by_user_id === userProfile?.id`
+    - Modified `isGM` to include creators: `isGM = campaign.user_role === 'gm' || userProfile?.is_admin === true || isCreator`
+    - Updated "Your Role" display to show "Creator" when user has no explicit role but created the campaign
+
+26. **Implemented Encounters Tab** ([campaign-details-page.tsx](src/components/pages/campaigns/campaign-details-page.tsx))
+    - Added encounters state variables (`encounters`, `loadingEncounters`, `syncEncounterModalOpen`)
+    - Added `useEffect` to load encounters when campaign loads
+    - Implemented handlers: `loadEncounters`, `handleRemoveEncounter`, `handleRunEncounterInSession`, `handleEncounterSynced`
+    - Added Encounters tab to Tabs component showing count and encounter grid
+    - Fixed AppFooter page prop from `'heroes'` to `'campaigns'`
+
+27. **Created EncounterList Component** (NEW FILES)
+    - [src/components/campaigns/encounters/EncounterList.tsx](src/components/campaigns/encounters/EncounterList.tsx)
+    - [src/components/campaigns/encounters/EncounterList.scss](src/components/campaigns/encounters/EncounterList.scss)
+    - Grid display of encounter cards with:
+      - Encounter name and creator info
+      - Created/updated timestamps
+      - "Run in Session" button for all users
+      - "Remove" button for GMs only (with confirmation)
+      - "Sync Encounter" button in header (GM only)
+      - Loading spinner and empty states
+
+28. **Enhanced SyncEncounterModal** ([sync-encounter-modal.tsx](src/components/modals/sync-encounter/sync-encounter-modal.tsx))
+    - Refactored to support two modes via TypeScript discriminated unions:
+      - **PlaybookSyncProps**: Original mode for syncing FROM Playbook page
+      - **CampaignAddProps**: New mode for adding encounters TO a campaign
+    - Split into two internal components: `PlaybookSyncEncounterModal` and `CampaignAddEncounterModal`
+    - Campaign add mode shows local encounters from Playbook for selection
+    - Updated styling in [sync-encounter-modal.scss](src/components/modals/sync-encounter/sync-encounter-modal.scss)
+
+### Files Created/Modified
+
+**New Files:**
+```
+src/components/campaigns/encounters/EncounterList.tsx
+src/components/campaigns/encounters/EncounterList.scss
+```
+
+**Modified Files:**
+```
+src/components/pages/campaigns/campaign-details-page.tsx
+src/components/modals/sync-encounter/sync-encounter-modal.tsx
+src/components/modals/sync-encounter/sync-encounter-modal.scss
+```
+
+### Access Control Matrix (Updated)
+
+| Action | GM | Admin | Creator | Player |
+|--------|-----|-------|---------|--------|
+| Edit campaign name/description | ✅ | ✅ | ✅ | ❌ |
+| View encounters tab | ✅ | ✅ | ✅ | ✅ |
+| Sync encounter to campaign | ✅ | ✅ | ❌ | ❌ |
+| Remove encounter from campaign | ✅ | ✅ | ❌ | ❌ |
+| Run encounter in session | ✅ | ✅ | ✅ | ✅ |
+
+### Verification Status
+
+- ✅ TypeScript check passes (`npx tsc --noEmit`)
+- ✅ Build succeeds (`npm run build`)
+- ✅ Campaign editing works for creators
+- ✅ Encounters tab displays correctly
+
+### Technical Notes
+
+**TypeScript Discriminated Union Pattern:**
+```typescript
+interface PlaybookSyncProps {
+    encounter: Encounter;
+    onSyncComplete: () => void;
+    // ... other props with open?: undefined
+}
+
+interface CampaignAddProps {
+    open: boolean;
+    campaignId: number;
+    // ... other props with encounter?: undefined
+}
+
+type Props = PlaybookSyncProps | CampaignAddProps;
+
+function isCampaignAddMode(props: Props): props is CampaignAddProps {
+    return 'open' in props && props.open !== undefined;
+}
+```
+
+### Next 3 Tasks
+
+1. **Run Database Migration**: Execute `003_add_campaign_encounters.sql` on production MySQL
+2. **Test Encounters Workflow**: Create encounter in Playbook → Sync to Campaign → View in Campaign Details
+3. **Deploy to Production**: Build and upload updated frontend/backend
+
+---
+
+## Session Summary - December 3, 2025 (Monster Count & Modal Layout Fix)
+
+### Changes Made
+
+27. **Fixed Monster Count Display in Campaign Encounters** ([EncounterList.tsx](src/components/campaigns/encounters/EncounterList.tsx))
+    - **Issue**: Monster counts showed incorrect values (0, 9, 3) instead of correct counts (e.g., 33)
+    - **Root Cause**: Campaign encounters weren't using `EncounterLogic.getMonsterCount()` with sourcebooks
+    - Added `sourcebooks: Sourcebook[]` prop to EncounterListProps interface
+    - Imported `EncounterLogic` from `@/logic/encounter-logic`
+    - Changed `getMonsterCount()` to use `EncounterLogic.getMonsterCount(encounter.encounter, sourcebooks)`
+    - Changed display from "creatures" to "Monsters" to match Library
+
+28. **Added Sourcebooks Loading to Campaign Details** ([campaign-details-page.tsx](src/components/pages/campaigns/campaign-details-page.tsx))
+    - Added imports: `Sourcebook`, `SourcebookLogic`, `localforage`
+    - Added `sourcebooks` state with `useState<Sourcebook[]>([])`
+    - Added `useEffect` to load sourcebooks from localforage on mount
+    - Passed `sourcebooks` prop to `EncounterList` component
+
+29. **Fixed Tabs Squishing When Add Encounter Modal Opens** ([sync-encounter-modal.tsx](src/components/modals/sync-encounter/sync-encounter-modal.tsx))
+    - **Issue**: Campaign details tabs (Details, Members, Characters, Projects, Encounters) got "squished" requiring scrollbar when modal opened
+    - **Root Cause**: Custom Modal component renders inline with `height: 100%`, pushing page content
+    - **Solution**: Changed `CampaignAddEncounterModal` to use Ant Design's `Modal as AntModal` instead of custom Modal
+    - AntModal renders as proper overlay without affecting underlying page layout
+
+30. **Added CSS for Tab Protection** ([campaign-details-page.scss](src/components/pages/campaigns/campaign-details-page.scss))
+    - Added `.ant-tabs` styles to prevent future squishing issues:
+      - `.ant-tabs-nav-wrap { flex: none }`
+      - `.ant-tabs-nav-list { flex-wrap: nowrap }`
+      - `.ant-tabs-tab { white-space: nowrap; flex-shrink: 0 }`
+
+### Files Modified
+
+```
+src/components/campaigns/encounters/EncounterList.tsx
+src/components/pages/campaigns/campaign-details-page.tsx
+src/components/pages/campaigns/campaign-details-page.scss
+src/components/modals/sync-encounter/sync-encounter-modal.tsx
+```
+
+### Technical Notes
+
+**Monster Count Calculation Pattern:**
+```typescript
+// In EncounterList.tsx - now matches Library behavior
+const getMonsterCount = (encounter: CampaignEncounterResponse): number => {
+    if (!encounter.encounter) return 0;
+    return EncounterLogic.getMonsterCount(encounter.encounter, sourcebooks);
+};
+```
+
+**Modal Component Comparison:**
+| Modal Type | Renders | Layout Impact |
+|------------|---------|---------------|
+| Custom Modal (`@/components/modals/modal/modal`) | Inline with `height: 100%` | Pushes page content |
+| Ant Design Modal (`AntModal`) | Overlay on top of page | No impact on page layout |
+
+### Verification Status
+
+- ✅ TypeScript check passes (`npx tsc --noEmit`)
+- ✅ Monster count now displays correctly (e.g., "33 Monsters")
+- ✅ Add Encounter modal opens as overlay without squishing tabs
+
+### Next 3 Tasks
+
+1. **Test End-to-End**: Verify monster counts match Library display exactly
+2. **Test Modal on Mobile**: Ensure Add Encounter modal works correctly on smaller screens
+3. **Deploy Updates**: Build and deploy frontend with these fixes

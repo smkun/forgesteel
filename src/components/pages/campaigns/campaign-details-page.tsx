@@ -17,6 +17,11 @@ import { ProjectList } from '@/components/campaigns/projects/ProjectList';
 import { ProjectCard } from '@/components/campaigns/projects/ProjectCard';
 import { ProjectForm } from '@/components/campaigns/projects/ProjectForm';
 import { ProgressUpdateModal } from '@/components/campaigns/projects/ProgressUpdateModal';
+import { EncounterList } from '@/components/campaigns/encounters/EncounterList';
+import { SyncEncounterModal } from '@/components/modals/sync-encounter/sync-encounter-modal';
+import { Sourcebook } from '@/models/sourcebook';
+import { SourcebookLogic } from '@/logic/sourcebook-logic';
+import localforage from 'localforage';
 
 import './campaign-details-page.scss';
 
@@ -67,6 +72,12 @@ export const CampaignDetailsPage = (props: Props) => {
 	const [ selectedProject, setSelectedProject ] = useState<CampaignProject | undefined>(undefined);
 	const [ progressModalOpen, setProgressModalOpen ] = useState<boolean>(false);
 
+	// Encounters state
+	const [ encounters, setEncounters ] = useState<api.CampaignEncounterResponse[]>([]);
+	const [ loadingEncounters, setLoadingEncounters ] = useState<boolean>(false);
+	const [ syncEncounterModalOpen, setSyncEncounterModalOpen ] = useState<boolean>(false);
+	const [ sourcebooks, setSourcebooks ] = useState<Sourcebook[]>([]);
+
 	useTitle(campaign ? campaign.name : 'Campaign');
 
 	useEffect(() => {
@@ -81,6 +92,27 @@ export const CampaignDetailsPage = (props: Props) => {
 			loadProjects();
 		}
 	}, [ campaign, showCompleted ]);
+
+	useEffect(() => {
+		// Load encounters when campaign is loaded
+		if (campaign) {
+			loadEncounters();
+		}
+	}, [ campaign ]);
+
+	useEffect(() => {
+		// Load sourcebooks for monster counting
+		const loadSourcebooks = async () => {
+			try {
+				const homebrewSourcebooks = await localforage.getItem<Sourcebook[]>('forgesteel-homebrew-settings') || [];
+				setSourcebooks(SourcebookLogic.getSourcebooks(homebrewSourcebooks));
+			} catch (error) {
+				console.error('[CAMPAIGNS] Failed to load sourcebooks:', error);
+				setSourcebooks(SourcebookLogic.getSourcebooks([]));
+			}
+		};
+		loadSourcebooks();
+	}, []);
 
 	const loadCampaignDetails = async () => {
 		if (!id) return;
@@ -285,6 +317,46 @@ export const CampaignDetailsPage = (props: Props) => {
 		}
 	};
 
+	const loadEncounters = async () => {
+		if (!campaign) return;
+
+		try {
+			setLoadingEncounters(true);
+			const encountersData = await api.getCampaignEncounters(campaign.id);
+			setEncounters(encountersData);
+		} catch (error) {
+			console.error('Failed to load encounters:', error);
+			// Don't show error message - encounters tab may just be empty
+		} finally {
+			setLoadingEncounters(false);
+		}
+	};
+
+	const handleRemoveEncounter = async (encounterId: number) => {
+		if (!campaign) return;
+
+		try {
+			await api.deleteCampaignEncounter(campaign.id, encounterId);
+			message.success('Encounter removed from campaign');
+			loadEncounters();
+		} catch (error) {
+			console.error('Failed to remove encounter:', error);
+			message.error('Failed to remove encounter');
+		}
+	};
+
+	const handleRunEncounterInSession = (encounter: api.CampaignEncounterResponse) => {
+		// Navigate to session with encounter data
+		// For now, just navigate to session - encounter loading can be added later
+		navigation.goToSession();
+	};
+
+	const handleEncounterSynced = () => {
+		setSyncEncounterModalOpen(false);
+		loadEncounters();
+		message.success('Encounter synced to campaign');
+	};
+
 	const handleCreateProject = () => {
 		setEditingProject(undefined);
 		setProjectFormModalOpen(true);
@@ -428,8 +500,9 @@ export const CampaignDetailsPage = (props: Props) => {
 	}
 
 	const unassignedCharacters = allCharacters.filter(char => !char.campaign_id);
-	// Admin users or GMs can manage the campaign
-	const isGM = campaign.user_role === 'gm' || userProfile?.is_admin === true;
+	// Admin users, GMs, or campaign creators can manage the campaign
+	const isCreator = campaign.created_by_user_id === userProfile?.id;
+	const isGM = campaign.user_role === 'gm' || userProfile?.is_admin === true || isCreator;
 
 	// Filter out users who are already members of this campaign
 	const availableUsers = allUsers.filter(user =>
@@ -483,7 +556,10 @@ export const CampaignDetailsPage = (props: Props) => {
 										</div>
 										<div className='field'>
 											<label>Your Role:</label>
-											<div>{campaign.user_role === 'gm' ? 'Game Master' : 'Player'}</div>
+											<div>
+												{campaign.user_role === 'gm' ? 'Game Master' : campaign.user_role === 'player' ? 'Player' : 'Creator'}
+												{userProfile?.is_admin && ' (Admin)'}
+											</div>
 										</div>
 									</SelectablePanel>
 								)
@@ -647,6 +723,21 @@ export const CampaignDetailsPage = (props: Props) => {
 										)}
 									</div>
 								)
+							},
+							{
+								key: 'encounters',
+								label: `Encounters (${encounters.length})`,
+								children: (
+									<EncounterList
+										encounters={encounters}
+										sourcebooks={sourcebooks}
+										loading={loadingEncounters}
+										isGM={isGM}
+										onRemove={handleRemoveEncounter}
+										onRunInSession={handleRunEncounterInSession}
+										onSyncEncounter={() => setSyncEncounterModalOpen(true)}
+									/>
+								)
 							}
 						]}
 					/>
@@ -772,8 +863,17 @@ export const CampaignDetailsPage = (props: Props) => {
 					/>
 				)}
 
+				{/* Sync Encounter Modal */}
+				<SyncEncounterModal
+					open={syncEncounterModalOpen}
+					campaignId={campaign.id}
+					campaignName={campaign.name}
+					onCancel={() => setSyncEncounterModalOpen(false)}
+					onSynced={handleEncounterSynced}
+				/>
+
 				<AppFooter
-					page='heroes'
+					page='campaigns'
 					highlightAbout={props.highlightAbout}
 					showReference={props.showReference}
 					showRoll={props.showRoll}

@@ -2,6 +2,27 @@
 	padding: 20px;
 	max-width: 500px;
 
+	.modal-header-info {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+		padding: 15px;
+		background-color: #1a1a2e;
+		border-radius: 4px;
+
+		.modal-title {
+			font-size: 18px;
+			font-weight: bold;
+			color: #fff;
+		}
+
+		.campaign-name {
+			font-size: 14px;
+			color: #aaa;
+			margin-top: 4px;
+		}
+	}
+
 	.encounter-info {
 		display: flex;
 		align-items: center;
@@ -14,6 +35,23 @@
 			font-size: 18px;
 			font-weight: bold;
 		}
+	}
+
+	.encounter-select {
+		margin-bottom: 20px;
+
+		.select-label {
+			font-weight: bold;
+			margin-bottom: 8px;
+		}
+	}
+
+	.modal-footer {
+		margin-top: 20px;
+		padding-top: 16px;
+		border-top: 1px solid #333;
+		display: flex;
+		justify-content: flex-end;
 	}
 
 	.loading-container {

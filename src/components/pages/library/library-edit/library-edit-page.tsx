@@ -1,6 +1,7 @@
-import { Button, Drawer, Flex, Select, Slider, Space, Tabs } from 'antd';
-import { CloseOutlined, LeftOutlined, SaveOutlined } from '@ant-design/icons';
+import { Button, Drawer, Flex, Select, Slider, Space, Tabs, message } from 'antd';
+import { CloseOutlined, CloudSyncOutlined, LeftOutlined, SaveOutlined } from '@ant-design/icons';
 import { ReactNode, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Sourcebook, SourcebookElementKind } from '@/models/sourcebook';
 import { Adventure } from '@/models/adventure';
 import { AdventureEditPanel } from '@/components/panels/edit/adventure-edit/adventure-edit-panel';
@@ -86,6 +87,7 @@ import { Utils } from '@/utils/utils';
 import { useNavigation } from '@/hooks/use-navigation';
 import { useParams } from 'react-router';
 import { useTitle } from '@/hooks/use-title';
+import { SyncEncounterModal } from '@/components/modals/sync-encounter/sync-encounter-modal';
 
 import './library-edit-page.scss';
 
@@ -105,7 +107,9 @@ interface Props {
 
 export const LibraryEditPage = (props: Props) => {
 	const navigation = useNavigation();
+	const { user } = useAuth();
 	const { kind, sourcebookID, elementID, subElementID } = useParams<{ kind: SourcebookElementKind, sourcebookID: string, elementID: string, subElementID?: string }>();
+	const [ syncModalOpen, setSyncModalOpen ] = useState<boolean>(false);
 	const [ element, setElement ] = useState<Element>(() => {
 		const sourcebook = props.sourcebooks.find(s => s.id === sourcebookID)!;
 		let original: Element;
@@ -945,6 +949,11 @@ export const LibraryEditPage = (props: Props) => {
 		<ErrorBoundary>
 			<div className='library-edit-page'>
 				<AppHeader subheader={getSubheader()}>
+					{kind === 'encounter' && user && (
+						<Button icon={<CloudSyncOutlined />} onClick={() => setSyncModalOpen(true)}>
+							Sync to Campaign
+						</Button>
+					)}
 					<Button type='primary' icon={<SaveOutlined />} disabled={!dirty} onClick={() => props.saveChanges(kind!, sourcebookID!, element)}>
 						Save Changes
 					</Button>
@@ -977,6 +986,16 @@ export const LibraryEditPage = (props: Props) => {
 					showSettings={props.showSettings}
 				/>
 			</div>
+			{kind === 'encounter' && syncModalOpen && (
+				<SyncEncounterModal
+					encounter={element as Encounter}
+					onSyncComplete={() => {
+						setSyncModalOpen(false);
+						message.success('Encounter synced to campaign');
+					}}
+					onClose={() => setSyncModalOpen(false)}
+				/>
+			)}
 		</ErrorBoundary>
 	);
 };
