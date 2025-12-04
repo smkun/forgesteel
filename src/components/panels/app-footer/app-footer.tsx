@@ -1,5 +1,5 @@
 import { Badge, Button, Divider, Flex } from 'antd';
-import { BookOutlined, InfoCircleOutlined, PlayCircleOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, FolderOutlined, InfoCircleOutlined, PlayCircleOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons';
 import { ErrorBoundary } from '@/components/controls/error-boundary/error-boundary';
 import { SyncStatus } from '@/components/panels/sync-status/sync-status';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,7 +12,7 @@ import './app-footer.scss';
 import shield from '@/assets/shield.png';
 
 interface Props {
-	page: 'welcome' | 'heroes' | 'library' | 'session' | 'player-view';
+	page: 'welcome' | 'heroes' | 'campaigns' | 'library' | 'session' | 'player-view';
 	highlightAbout: boolean;
 	showReference: () => void;
 	showRoll: () => void;
@@ -58,6 +58,10 @@ export const AppFooter = (props: Props) => {
 							<Divider orientation='vertical' />
 							<Button type='text' className={props.page === 'heroes' ? 'selected' : ''} icon={<TeamOutlined />} onClick={() => navigation.goToHeroList()}>
 								{isSmall ? null : 'Heroes'}
+							</Button>
+							<Divider orientation='vertical' />
+							<Button type='text' className={props.page === 'campaigns' ? 'selected' : ''} icon={<FolderOutlined />} onClick={() => navigation.goToCampaigns()}>
+								{isSmall ? null : 'Campaigns'}
 							</Button>
 							<Divider orientation='vertical' />
 							<Button type='text' className={props.page === 'library' ? 'selected' : ''} icon={<BookOutlined />} onClick={() => navigation.goToLibrary('ancestry')}>

@@ -121,6 +121,7 @@ const auth_routes_1 = __importDefault(require('./routes/auth.routes.cjs'));
 const character_routes_1 = __importDefault(require('./routes/character.routes.cjs'));
 const campaign_routes_1 = __importDefault(require('./routes/campaign.routes.cjs'));
 const project_routes_1 = __importDefault(require('./routes/project.routes.cjs'));
+const encounter_routes_1 = __importDefault(require('./routes/encounter.routes.cjs'));
 const admin_routes_1 = __importDefault(require('./routes/admin.routes.cjs'));
 const user_routes_1 = __importDefault(require('./routes/user.routes.cjs'));
 const errorHandler_1 = require('./middleware/errorHandler.cjs');
@@ -132,6 +133,8 @@ app.use('/api/characters', character_routes_1.default);
 app.use('/api/campaigns', campaign_routes_1.default);
 // Project routes (nested under campaigns)
 app.use('/api/campaigns/:campaignId/projects', project_routes_1.default);
+// Encounter routes (nested under campaigns)
+app.use('/api/campaigns/:campaignId/encounters', encounter_routes_1.default);
 // Admin routes
 app.use('/api/admin', admin_routes_1.default);
 // User routes

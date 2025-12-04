@@ -119,22 +119,26 @@
 **Problem**: Production build at `https://32gamers.com` was calling `http://localhost:4000/api/...` causing CORS errors
 
 **Root Causes Identified**:
+
 1. No `.env.production` file existed - Vite fell back to `.env` which had no `VITE_API_BASE_URL`
 2. `vite.config.ts` was overriding Vite's mode with `process.env.NODE_ENV`
 3. Shell had `VITE_API_BASE_URL` env var set from dev server, which takes precedence over `.env` files
 
 **Files Created/Modified**:
+
 - `.env.production` (NEW) - Production frontend environment variables
 - `vite.config.ts` - Removed mode override
 
 ### Build Process Notes
 
 **Correct Production Build Command**:
+
 ```bash
 unset VITE_API_BASE_URL && npm run build
 ```
 
 **Vite Environment Variable Loading Order** (later wins):
+
 1. `.env` - Base config
 2. `.env.local` - Local overrides (gitignored)
 3. `.env.[mode]` - Mode-specific (`.env.production` for builds)
@@ -142,6 +146,7 @@ unset VITE_API_BASE_URL && npm run build
 5. **System environment variables** - HIGHEST PRIORITY (can override all above!)
 
 **Verification Command**:
+
 ```bash
 grep -c '32gamers.com/forgesteel/api' distribution/frontend/main-*.js
 # Should output: 1 (indicating production URL is in bundle)
@@ -169,6 +174,7 @@ grep -c '32gamers.com/forgesteel/api' distribution/frontend/main-*.js
     - **Symptom**: Users could create encounters/adventures/etc but could not edit, save, or delete them
 
     **`deleteLibraryElement`** - Added 5 missing cases (lines ~1059-1073):
+
     ```typescript
     case 'encounter':
         sourcebook.encounters = sourcebook.encounters.filter(x => x.id !== element.id);
@@ -188,6 +194,7 @@ grep -c '32gamers.com/forgesteel/api' distribution/frontend/main-*.js
     ```
 
     **`saveLibraryElement`** - Added 5 missing cases (lines ~1115-1129):
+
     ```typescript
     case 'encounter':
         sourcebook.encounters = sourcebook.encounters.map(x => x.id === element.id ? element : x) as Encounter[];
@@ -240,11 +247,13 @@ grep -c '32gamers.com/forgesteel/api' distribution/frontend/main-*.js
 ### Key Design Decisions
 
 **Architecture Choice**: Campaign-Based Storage
+
 - Encounters belong to campaigns (like characters and projects)
 - All campaign GMs can access shared encounters
 - Dual storage strategy: local + server sync for backward compatibility
 
 **Database Schema**: New `campaign_encounters` table
+
 ```sql
 CREATE TABLE campaign_encounters (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -259,12 +268,14 @@ CREATE TABLE campaign_encounters (
 ```
 
 **API Endpoints** (nested under campaigns):
+
 - `GET /api/campaigns/:campaignId/encounters` - List all
 - `POST /api/campaigns/:campaignId/encounters` - Create (GM only)
 - `PUT /api/campaigns/:campaignId/encounters/:id` - Update (GM only)
 - `DELETE /api/campaigns/:campaignId/encounters/:id` - Soft delete (GM only)
 
 **Access Control**:
+
 - Campaign GMs: Full CRUD
 - Campaign Players: Read only
 - Creator: Full access to own encounters
@@ -287,9 +298,11 @@ CREATE TABLE campaign_encounters (
 ### Files Created/Modified
 
 **New Files:**
+
 - `claudedocs/DESIGN_backend_encounters.md` - Full design specification
 
 **Modified Files:**
+
 - `claudedocs/PLANNING.md` - Added encounters backend section
 - `claudedocs/TASKS.md` - Added encounters implementation tasks
 - `CLAUDE.md` - This session summary
@@ -315,3 +328,173 @@ CREATE TABLE campaign_encounters (
 1. **Start Phase 1**: Create the database migration file `003_add_campaign_encounters.sql`
 2. **Create Repository**: Implement `encounters.repository.ts` following character repository pattern
 3. **Create Logic Layer**: Implement `encounter.logic.ts` with access control
+
+---
+
+## Session Summary - December 3, 2025 (Campaign Encounters Implementation Complete)
+
+### Changes Made
+
+17. **Implemented Campaign Encounters Backend** (Phase 1 Complete)
+    - Created database migration for `campaign_encounters` table
+    - Built complete repository, logic, and routes layers
+    - Full CRUD API with role-based access control
+
+    **Files Created:**
+    - [db/migrations/003_add_campaign_encounters.sql](db/migrations/003_add_campaign_encounters.sql) - Database schema
+    - [server/data/encounters.repository.ts](server/data/encounters.repository.ts) - Data access layer
+    - [server/logic/encounter.logic.ts](server/logic/encounter.logic.ts) - Business logic + access control
+    - [server/routes/encounter.routes.ts](server/routes/encounter.routes.ts) - REST API endpoints
+
+18. **Added Frontend API Client** (Phase 2 Complete)
+    - Extended [src/services/api.ts](src/services/api.ts) with encounter API functions
+    - Added `CampaignEncounterResponse` interface
+    - Implemented: `getCampaignEncounters`, `getCampaignEncounter`, `createCampaignEncounter`, `updateCampaignEncounter`, `deleteCampaignEncounter`, `getEncounterAccessLevel`
+
+19. **Created Encounter Storage Service** (Phase 3)
+    - [src/services/encounter-storage.ts](src/services/encounter-storage.ts) - Campaign encounter sync with caching
+    - Functions: `syncEncounterToCampaign`, `unsyncEncounterFromCampaign`, `getCampaignEncounters`, `mergeWithCampaignEncounters`, `syncAllEncountersToCampaign`
+    - In-memory cache for performance optimization
+
+20. **Built Sync Encounter Modal** (Phase 3)
+    - [src/components/modals/sync-encounter/sync-encounter-modal.tsx](src/components/modals/sync-encounter/sync-encounter-modal.tsx) - Campaign selection UI
+    - [src/components/modals/sync-encounter/sync-encounter-modal.scss](src/components/modals/sync-encounter/sync-encounter-modal.scss) - Modal styling
+    - Shows sync status, allows campaign selection, switch, or unsync
+
+21. **Integrated Sync Button in Playbook** ([playbook-list-page.tsx](src/components/pages/playbook/playbook-list/playbook-list-page.tsx))
+    - Added "Sync" / "Synced" button in encounter toolbar
+    - Button shows cloud icon with appropriate state
+    - Only visible when user is signed in
+
+22. **Updated Merge Tool** ([tools/merge-tool.sh](tools/merge-tool.sh))
+    - Protected new encounter files from merge overwrites:
+      - `src/services/encounter-storage.ts`
+      - `src/components/modals/sync-encounter/`
+    - Added comments for encounter API client in api.ts
+
+### API Endpoints Implemented
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/campaigns/:campaignId/encounters` | List all campaign encounters |
+| GET | `/api/campaigns/:campaignId/encounters/:id` | Get single encounter |
+| POST | `/api/campaigns/:campaignId/encounters` | Create encounter (GM only) |
+| PUT | `/api/campaigns/:campaignId/encounters/:id` | Update encounter (GM only) |
+| DELETE | `/api/campaigns/:campaignId/encounters/:id` | Soft delete (GM only) |
+| GET | `/api/campaigns/:campaignId/encounters/:id/access` | Check user access level |
+
+### Access Control Matrix
+
+| Role | Create | Read | Update | Delete |
+|------|--------|------|--------|--------|
+| Campaign GM | ✅ | ✅ | ✅ | ✅ |
+| Campaign Player | ❌ | ✅ | ❌ | ❌ |
+| Admin | ✅ | ✅ | ✅ | ✅ |
+| Creator | ✅ | ✅ | ✅ | ✅ |
+
+### Verification Status
+
+- ✅ Build passes (`npm run build`)
+- ✅ TypeScript clean (`npx tsc --noEmit`)
+- ✅ Server running and accepting requests
+- ✅ API returns 401 for unauthenticated requests (correct behavior)
+- ✅ New files properly protected in merge-tool.sh
+
+### Files Summary
+
+**Backend (4 files):**
+
+```
+server/data/encounters.repository.ts
+server/logic/encounter.logic.ts
+server/routes/encounter.routes.ts
+db/migrations/003_add_campaign_encounters.sql
+```
+
+**Frontend (4 files):**
+
+```
+src/services/api.ts (modified)
+src/services/encounter-storage.ts (new)
+src/components/modals/sync-encounter/sync-encounter-modal.tsx (new)
+src/components/modals/sync-encounter/sync-encounter-modal.scss (new)
+src/components/pages/playbook/playbook-list/playbook-list-page.tsx (modified)
+```
+
+**Config (1 file):**
+
+```
+tools/merge-tool.sh (modified)
+```
+
+### Next Steps for Production
+
+1. **Run Database Migration**: Execute `003_add_campaign_encounters.sql` on production MySQL
+2. **Deploy Backend**: Upload updated server files to production
+3. **Deploy Frontend**: Build and upload frontend to production
+4. **Test End-to-End**: Create encounter → sync to campaign → verify on another device
+
+### Risks
+
+9. **Database Migration Required**: Production database needs migration before feature works
+10. **Cache Invalidation**: In-memory cache in encounter-storage.ts resets on page refresh - consider localStorage persistence
+11. **Offline Support**: Currently requires network connection for sync operations
+
+---
+
+## Session Summary - December 3, 2025 (Campaigns Navigation Fix)
+
+### Issue Reported
+
+**User Report**: "I've noticed a MAJOR issue. Since our merge earlier today the ability to see and manipulate campaigns is gone"
+
+### Root Cause Analysis
+
+The merge at commit `ae95f04f` ("Updated with latest community updates") overwrote [app-footer.tsx](src/components/panels/app-footer/app-footer.tsx) with the upstream community version, which:
+1. Removed the Campaigns button from footer navigation
+2. Removed `'campaigns'` from the page Props type union
+3. Removed the `FolderOutlined` icon import
+
+The upstream community Forgesteel doesn't have campaigns functionality - it's a Draachenmar-specific feature.
+
+### Changes Made
+
+23. **Restored Campaigns Navigation Button** ([app-footer.tsx](src/components/panels/app-footer/app-footer.tsx))
+    - Added `FolderOutlined` icon import from `@ant-design/icons`
+    - Added `'campaigns'` to the page Props type union
+    - Added Campaigns button with folder icon between Heroes and Library buttons
+    - Button uses `navigation.goToCampaigns()` for routing
+
+24. **Protected Footer from Future Merges** ([merge-tool.sh](tools/merge-tool.sh))
+    - Added `src/components/panels/app-footer/` to `ALWAYS_KEEP` array
+    - Comment: "Contains Campaigns button navigation"
+
+### Files Modified
+
+```
+src/components/panels/app-footer/app-footer.tsx
+tools/merge-tool.sh
+```
+
+### Verification Status
+
+- ✅ TypeScript check passes (`npx tsc --noEmit`)
+- ✅ Build succeeds (`npm run build`)
+- ✅ Campaigns button visible in footer navigation
+- ✅ Backend campaigns API working (`[CAMPAIGNS] Found 2 total campaigns`)
+
+### Prevention Measures
+
+The `app-footer/` directory is now in the `ALWAYS_KEEP` array in merge-tool.sh, which means:
+- Future merges will preserve our custom footer with Campaigns button
+- Manual review required if upstream makes footer changes
+
+### Lessons Learned
+
+**Merge Checklist Addition**: Navigation components with Draachenmar-specific buttons (Campaigns, potentially Playbook) should always be reviewed after merges from upstream.
+
+### Next 3 Tasks
+
+1. **Test Campaigns Functionality**: Navigate to Campaigns, create/view campaigns, verify full CRUD
+2. **Run Database Migration**: Execute `003_add_campaign_encounters.sql` for encounters feature
+3. **Deploy to Production**: Build and upload after testing

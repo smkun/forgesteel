@@ -137,6 +137,7 @@ import authRoutes from './routes/auth.routes';
 import characterRoutes from './routes/character.routes';
 import campaignRoutes from './routes/campaign.routes';
 import projectRoutes from './routes/project.routes';
+import encounterRoutes from './routes/encounter.routes';
 import adminRoutes from './routes/admin.routes';
 import userRoutes from './routes/user.routes';
 import { errorHandler } from './middleware/errorHandler';
@@ -152,6 +153,9 @@ app.use('/api/campaigns', campaignRoutes);
 
 // Project routes (nested under campaigns)
 app.use('/api/campaigns/:campaignId/projects', projectRoutes);
+
+// Encounter routes (nested under campaigns)
+app.use('/api/campaigns/:campaignId/encounters', encounterRoutes);
 
 // Admin routes
 app.use('/api/admin', adminRoutes);

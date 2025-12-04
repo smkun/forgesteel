@@ -19,18 +19,37 @@ BACKUP_DIR="$HOME/forgesteel-backups/backup-$(date +%Y%m%d-%H%M%S)"
 MERGE_REPORT="merge-report-$(date +%Y%m%d-%H%M%S).txt"
 
 # Files to always keep (ours - never auto-merge)
+# NOTE: These are Draachenmar-specific customizations that should never be overwritten
+# by community updates. Server/ and db/ contain our backend implementation.
 ALWAYS_KEEP=(
+    # Backend infrastructure (MySQL + Express API)
     "server/"
     "db/"
+
+    # Draachenmar-specific sourcebooks
     "src/data/sourcebooks/draachenmar.ts"
     "src/data/sourcebooks/draachenmar-extensions.ts"
-    "src/services/api.ts"
+
+    # Authentication and API services
+    "src/services/api.ts"                    # Contains encounter API client + all backend integrations
     "src/services/firebase.ts"
     "src/services/character-storage.ts"
+    "src/services/encounter-storage.ts"      # Campaign encounter sync service
+
+    # Auth context and pages
     "src/contexts/AuthContext.tsx"
     "src/components/pages/auth/auth-page.tsx"
+
+    # Custom modals for backend features
     "src/components/modals/admin-tools/"
     "src/components/modals/assign-gm/"
+    "src/components/modals/assign-campaign/"
+    "src/components/modals/sync-encounter/"       # Campaign encounter sync modal
+
+    # Navigation components with Draachenmar customizations
+    "src/components/panels/app-footer/"           # Contains Campaigns button navigation
+
+    # Documentation
     "claudedocs/"
     ".htaccess"
     "MERGE_GUIDE.md"
@@ -38,6 +57,7 @@ ALWAYS_KEEP=(
     "ADDITIVE_ARCHITECTURE.md"
     "DEV_COMMANDS.md"
     "merge-tool.sh"
+    "tools/"
     "sample_characters/"
 )
 
@@ -46,6 +66,7 @@ COMMUNITY_SOURCEBOOKS=(
     "src/data/sourcebooks/core.ts"
     "src/data/sourcebooks/playtest.ts"
     "src/data/sourcebooks/magazine-ratcatcher.ts"
+    "src/data/sourcebooks/magazine-blacksmith.ts"
 )
 
 # Draachenmar-specific ancestries (keep - never auto-merge)

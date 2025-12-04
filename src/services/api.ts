@@ -365,3 +365,115 @@ export async function completeProject(
 export async function deleteCampaignProject(campaignId: number, projectId: number): Promise<void> {
 	await apiRequest(`/api/campaigns/${campaignId}/projects/${projectId}`, { method: 'DELETE' });
 }
+
+// ================================================================
+// Campaign Encounters API
+// ================================================================
+
+import { Encounter } from '@/models/encounter';
+
+/**
+ * Response from encounter API endpoints
+ */
+export interface CampaignEncounterResponse {
+	id: number;
+	campaign_id: number;
+	campaign_name: string | null;
+	encounter_uuid: string;
+	name: string | null;
+	encounter: Encounter;
+	created_by_user_id: number;
+	creator_email: string | null;
+	creator_display_name: string | null;
+	is_deleted: boolean;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface GetEncountersParams {
+	includeDeleted?: boolean;
+}
+
+/**
+ * Get all encounters for a campaign
+ */
+export async function getCampaignEncounters(
+	campaignId: number,
+	params: GetEncountersParams = {}
+): Promise<CampaignEncounterResponse[]> {
+	const searchParams = new URLSearchParams();
+	if (params.includeDeleted) {
+		searchParams.set('includeDeleted', 'true');
+	}
+	const query = searchParams.toString();
+	const response = await apiRequest<{ count: number; encounters: CampaignEncounterResponse[] }>(
+		`/api/campaigns/${campaignId}/encounters${query ? `?${query}` : ''}`
+	);
+	return response.encounters;
+}
+
+/**
+ * Get a single encounter by ID
+ */
+export async function getCampaignEncounter(
+	campaignId: number,
+	encounterId: number
+): Promise<CampaignEncounterResponse> {
+	return apiRequest<CampaignEncounterResponse>(
+		`/api/campaigns/${campaignId}/encounters/${encounterId}`
+	);
+}
+
+/**
+ * Create a new encounter in a campaign
+ */
+export async function createCampaignEncounter(
+	campaignId: number,
+	encounter: Encounter
+): Promise<CampaignEncounterResponse> {
+	return apiRequest<CampaignEncounterResponse>(`/api/campaigns/${campaignId}/encounters`, {
+		method: 'POST',
+		body: JSON.stringify({ encounter })
+	});
+}
+
+/**
+ * Update an existing encounter
+ */
+export async function updateCampaignEncounter(
+	campaignId: number,
+	encounterId: number,
+	encounter: Encounter
+): Promise<CampaignEncounterResponse> {
+	return apiRequest<CampaignEncounterResponse>(
+		`/api/campaigns/${campaignId}/encounters/${encounterId}`,
+		{
+			method: 'PUT',
+			body: JSON.stringify({ encounter })
+		}
+	);
+}
+
+/**
+ * Delete an encounter (soft delete)
+ */
+export async function deleteCampaignEncounter(
+	campaignId: number,
+	encounterId: number
+): Promise<void> {
+	await apiRequest(`/api/campaigns/${campaignId}/encounters/${encounterId}`, {
+		method: 'DELETE'
+	});
+}
+
+/**
+ * Get user's access level for an encounter
+ */
+export async function getEncounterAccessLevel(
+	campaignId: number,
+	encounterId: number
+): Promise<{ encounter_id: number; user_id: number; access_level: 'full' | 'readonly' | 'none' }> {
+	return apiRequest<{ encounter_id: number; user_id: number; access_level: 'full' | 'readonly' | 'none' }>(
+		`/api/campaigns/${campaignId}/encounters/${encounterId}/access`
+	);
+}

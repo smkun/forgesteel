@@ -1,6 +1,6 @@
 import { Adventure, AdventurePackage } from '@/models/adventure';
 import { Alert, Button, Input, Popover } from 'antd';
-import { DoubleLeftOutlined, DoubleRightOutlined, DownOutlined, EditOutlined, PlayCircleOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
+import { CloudOutlined, CloudSyncOutlined, DoubleLeftOutlined, DoubleRightOutlined, DownOutlined, EditOutlined, PlayCircleOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
 import { Playbook, PlaybookElementKind } from '@/models/playbook';
 import { ReactNode, useState } from 'react';
 import { AdventurePanel } from '@/components/panels/elements/adventure-panel/adventure-panel';
@@ -35,6 +35,9 @@ import { ViewSelector } from '@/components/panels/view-selector/view-selector';
 import { useNavigation } from '@/hooks/use-navigation';
 import { useParams } from 'react-router';
 import { useTitle } from '@/hooks/use-title';
+import { SyncEncounterModal } from '@/components/modals/sync-encounter/sync-encounter-modal';
+import { isSignedIn } from '@/services/firebase';
+import * as encounterStorage from '@/services/encounter-storage';
 
 import './playbook-list-page.scss';
 
@@ -68,6 +71,8 @@ export const PlaybookListPage = (props: Props) => {
 	const [ searchTerm, setSearchTerm ] = useState<string>('');
 	const [ showSidebar, setShowSidebar ] = useState<boolean>(true);
 	const [ view, setView ] = useState<string>('modern');
+	const [ showSyncModal, setShowSyncModal ] = useState<boolean>(false);
+	const [ encounterToSync, setEncounterToSync ] = useState<Encounter | null>(null);
 	useTitle('Playbook');
 
 	const categoriesWithClassicView = [ 'encounter', 'montage', 'negotiation' ];
@@ -364,6 +369,19 @@ export const PlaybookListPage = (props: Props) => {
 						</Button>
 						: null
 				}
+				{
+					category === 'encounter' && isSignedIn() ?
+						<Button
+							icon={encounterStorage.isEncounterSynced(element.id) ? <CloudSyncOutlined /> : <CloudOutlined />}
+							onClick={() => {
+								setEncounterToSync(element as Encounter);
+								setShowSyncModal(true);
+							}}
+						>
+							{encounterStorage.isEncounterSynced(element.id) ? 'Synced' : 'Sync'}
+						</Button>
+						: null
+				}
 				<DangerButton
 					mode='block'
 					disabled={PlaybookLogic.getUsedIn(props.playbook, element.id).length !== 0}
@@ -481,6 +499,19 @@ export const PlaybookListPage = (props: Props) => {
 					showAbout={props.showAbout}
 					showSettings={props.showSettings}
 				/>
+				{showSyncModal && encounterToSync ? (
+					<SyncEncounterModal
+						encounter={encounterToSync}
+						onSyncComplete={() => {
+							setShowSyncModal(false);
+							setEncounterToSync(null);
+						}}
+						onClose={() => {
+							setShowSyncModal(false);
+							setEncounterToSync(null);
+						}}
+					/>
+				) : null}
 			</div>
 		</ErrorBoundary>
 	);
