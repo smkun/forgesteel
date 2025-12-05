@@ -6,7 +6,7 @@ export const humanCensor = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		'',
+		'core',
 		'orden'
 	],
 	ancestry: {

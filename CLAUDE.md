@@ -678,3 +678,113 @@ const getMonsterCount = (encounter: CampaignEncounterResponse): number => {
 1. **Test End-to-End**: Verify monster counts match Library display exactly
 2. **Test Modal on Mobile**: Ensure Add Encounter modal works correctly on smaller screens
 3. **Deploy Updates**: Build and deploy frontend with these fixes
+
+---
+
+## Session Summary - December 4, 2025 (Database & Storage Fixes)
+
+### Changes Made
+
+31. **Fixed Characters Missing 'core' in settingIDs** (Database)
+    - **Issue**: Characters in database had empty string `""` in `settingIDs` instead of `"core"`
+    - **Impact**: Perks and other content filtered by sourcebook weren't displaying
+    - **Fix**: SQL updates to replace empty strings with `"core"` for ~25 characters
+    - **Characters Fixed**: All characters in `gamers_forgesteel.characters` table
+
+32. **Fixed Duplicate 'core' Entries** (Database)
+    - **Issue**: Rathgar (ID 1) and Gromgar (ID 44) had `["core", "", "draachenmar", "core"]`
+    - **Fix**: Updated to clean `["core", "draachenmar"]`
+
+33. **Added Auto-Migration for settingIDs** ([main.tsx](src/components/main/main.tsx))
+    - Added migration logic in `fetchHeroes` callback
+    - Detects heroes with empty string in settingIDs
+    - Runs `HeroUpdateLogic.updateHero()` migration
+    - Saves migrated heroes back to database automatically
+    - Only runs for signed-in users
+
+34. **Resolved "Unnamed" Homebrew Sourcebook Issue**
+    - **Issue**: All characters showed an extra "unnamed" homebrew sourcebook
+    - **Root Cause**: Browser's IndexedDB had empty sourcebook in `forgesteel-homebrew-settings` key
+    - **Resolution**: User cleared via DevTools → Application → IndexedDB → Clear site data
+    - **Note**: This was localforage storage issue, not database issue
+
+### Technical Details
+
+**settingIDs Migration Logic** (in main.tsx):
+```typescript
+const fetchHeroes = useCallback(async () => {
+    const loadedHeroes = await storage.getAllCharacters(...);
+    const sourcebooks = SourcebookLogic.getSourcebooks(homebrewSourcebooks);
+    const heroesNeedingSave: Hero[] = [];
+
+    for (const hero of loadedHeroes) {
+        const hadEmptySettingId = hero.settingIDs?.includes('');
+        HeroUpdateLogic.updateHero(hero, sourcebooks);
+        if (hadEmptySettingId) {
+            heroesNeedingSave.push(hero);
+        }
+    }
+
+    // Save migrated heroes back to backend
+    if (heroesNeedingSave.length > 0 && user) {
+        for (const hero of heroesNeedingSave) {
+            await storage.saveCharacter(hero);
+        }
+    }
+}, [user, userProfile, showAllCharacters, homebrewSourcebooks]);
+```
+
+**Database Query Used**:
+```sql
+-- Find characters with empty string in settingIDs
+SELECT id, JSON_EXTRACT(character_json, '$.name') as name,
+       JSON_EXTRACT(character_json, '$.settingIDs') as settingIDs
+FROM characters
+WHERE JSON_CONTAINS(JSON_EXTRACT(character_json, '$.settingIDs'), '""');
+
+-- Fix: Replace empty string with 'core'
+UPDATE characters
+SET character_json = JSON_SET(character_json, '$.settingIDs',
+    JSON_ARRAY('core', 'draachenmar'))
+WHERE id IN (1, 44);
+```
+
+### Files Modified
+
+```
+src/components/main/main.tsx (auto-migration logic)
+src/index.tsx (reverted localforage persistence - heroes are in DB)
+```
+
+### Database Changes
+
+| Character ID | Before | After |
+|--------------|--------|-------|
+| 1 (Rathgar) | `["core", "", "draachenmar", "core"]` | `["core", "draachenmar"]` |
+| 44 (Gromgar) | `["core", "", "draachenmar", "core"]` | `["core", "draachenmar"]` |
+| ~25 others | `["", "draachenmar"]` or similar | `["core", "draachenmar"]` |
+
+### Verification Status
+
+- ✅ All characters now have proper `settingIDs` with `"core"`
+- ✅ No duplicate entries in settingIDs
+- ✅ Unnamed homebrew sourcebook resolved (localforage cleared)
+- ✅ Dev environment running (frontend port 5173, backend port 4000)
+
+### Key Learnings
+
+1. **Dev Environment**: Always start BOTH `npm start` (frontend) AND `npm run server:dev` (backend API)
+2. **settingIDs**: Empty string `""` breaks sourcebook filtering - must be `"core"` for core content
+3. **Browser Storage**: `forgesteel-homebrew-settings` in IndexedDB stores homebrew sourcebooks - can become corrupted
+4. **localforage Access**: Production build doesn't expose `localforage` globally - use DevTools Application tab instead
+
+### Risks
+
+12. **Future Empty settingIDs**: If character creation ever sets `""` instead of `"core"`, issue will recur
+13. **Browser Storage Corruption**: Users may need instructions to clear IndexedDB if homebrew issues arise
+
+### Next 3 Tasks
+
+1. **Review Character Creation**: Ensure new characters always get `["core"]` in settingIDs by default
+2. **Add Defensive Code**: Consider adding empty string filtering in `HeroUpdateLogic.updateHero()`
+3. **Document IndexedDB Clearing**: Add troubleshooting guide for "unnamed sourcebook" issue

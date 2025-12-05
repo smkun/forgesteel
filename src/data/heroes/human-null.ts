@@ -6,7 +6,7 @@ export const humanNull = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		'',
+		'core',
 		'orden'
 	],
 	ancestry: {

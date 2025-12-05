@@ -6,7 +6,7 @@ export const wodeElfTroubadour = {
 	picture: null,
 	folder: '',
 	settingIDs: [
-		'',
+		'core',
 		'orden'
 	],
 	ancestry: {

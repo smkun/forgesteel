@@ -162,6 +162,33 @@ export const Main = (props: Props) => {
 		const loadedHeroes = await storage.getAllCharacters(
 			adminScope ? { adminScope } : {}
 		);
+
+		// Run migrations on loaded heroes and track which ones need to be saved back
+		const sourcebooks = SourcebookLogic.getSourcebooks(homebrewSourcebooks);
+		const heroesNeedingSave: Hero[] = [];
+
+		for (const hero of loadedHeroes) {
+			// Check if hero has the '' -> 'core' migration issue before running update
+			const hadEmptySettingId = hero.settingIDs?.includes('');
+			HeroUpdateLogic.updateHero(hero, sourcebooks);
+			if (hadEmptySettingId) {
+				heroesNeedingSave.push(hero);
+			}
+		}
+
+		// Save migrated heroes back to the backend (only if signed in)
+		if (heroesNeedingSave.length > 0 && user) {
+			console.log(`[MAIN] 🔧 Migrating ${heroesNeedingSave.length} hero(es) with settingIDs fix...`);
+			for (const hero of heroesNeedingSave) {
+				try {
+					await storage.saveCharacter(hero);
+					console.log(`[MAIN] ✅ Migrated hero: ${hero.name || hero.id}`);
+				} catch (error) {
+					console.error(`[MAIN] ❌ Failed to migrate hero ${hero.name || hero.id}:`, error);
+				}
+			}
+		}
+
 		const sortedHeroes = Collections.sort(loadedHeroes, h => h.name);
 		try {
 			await storage.setLocalCharacters(sortedHeroes);
@@ -170,7 +197,7 @@ export const Main = (props: Props) => {
 		}
 		console.log(`[MAIN] 🔄 Synced ${sortedHeroes.length} hero(es) from ${user ? 'API' : 'local storage'}`);
 		return sortedHeroes;
-	}, [ user, userProfile, showAllCharacters ]);
+	}, [ user, userProfile, showAllCharacters, homebrewSourcebooks ]);
 
 	const refreshHeroes = useCallback(async () => {
 		try {
