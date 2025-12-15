@@ -17,6 +17,7 @@
 		"test": "vitest",
 		"check": "npm run lint && vitest run",
 		"build": "npm run build:frontend && npm run build:backend",
+		"build:prod": "bash build-prod.sh",
 		"build:frontend": "vite build",
 		"build:backend": "rm -rf distribution/backend distribution/backend-temp && tsc -p server/tsconfig.json && mv distribution/backend-temp/server distribution/backend && rm -rf distribution/backend-temp && find distribution/backend -name '*.js' -type f ! -name '*.cjs' | while read f; do mv \"$f\" \"${f%.js}.cjs\"; done && find distribution/backend -name '*.cjs' -type f -exec sed -i \"s/require(['\\\"]\\([.]*\\/[^'\\\"]*\\)['\\\"])/require('\\1.cjs')/g\" {} \\; && cp server/app.js distribution/backend/app.js",
 		"predeploy": "npm run lint && vitest run && npm run build",

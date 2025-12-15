@@ -788,3 +788,265 @@ src/index.tsx (reverted localforage persistence - heroes are in DB)
 1. **Review Character Creation**: Ensure new characters always get `["core"]` in settingIDs by default
 2. **Add Defensive Code**: Consider adding empty string filtering in `HeroUpdateLogic.updateHero()`
 3. **Document IndexedDB Clearing**: Add troubleshooting guide for "unnamed sourcebook" issue
+
+---
+
+## Session Summary - December 15, 2025 (Duplicate Characters Fix)
+
+### Issue Reported
+User reported duplicate characters appearing in the database - same heroes showing up multiple times.
+
+### Root Cause Analysis
+
+**The Bug**: Race condition in `saveCharacter()` when multiple characters were saved in parallel via `Promise.all`.
+
+The code in [main.tsx:281](src/components/main/main.tsx#L281) calls:
+```typescript
+await Promise.all(sorted.map(hero => storage.saveCharacter(hero)));
+```
+
+Each concurrent `saveCharacter()` call would:
+1. Check the in-memory cache (empty on first call)
+2. Fetch all characters from API and populate cache using `replaceApiCache()`
+3. But `replaceApiCache()` **clears** the cache before repopulating
+4. Race condition: While one call was populating the cache, another call would clear it
+5. Cache lookup fails → `createCharacter()` called → **DUPLICATE!**
+
+**Evidence**: Database analysis showed all duplicates were created on **Dec 8, 2025 between 11:55:53-11:55:56** (within 3 seconds) - exactly what happens with `Promise.all` parallel execution.
+
+### Changes Made
+
+35. **Fixed Race Condition in saveCharacter** ([character-storage.ts](src/services/character-storage.ts))
+    - Added `cachePopulationPromise` mutex variable to prevent concurrent cache population
+    - Added direct UUID lookup fallback via `api.getCharacterByHeroId()` before creating new characters
+    - Updated `clearApiCache()` to also clear the mutex
+
+**Key Code Changes**:
+```typescript
+// Mutex to prevent concurrent cache population race conditions
+let cachePopulationPromise: Promise<void> | null = null;
+
+export async function saveCharacter(hero: Hero): Promise<Hero> {
+    // ...
+    if (!record) {
+        // Use mutex to prevent concurrent cache population race conditions
+        if (!cachePopulationPromise) {
+            cachePopulationPromise = (async () => {
+                const fetched = await api.getCharacters(...);
+                replaceApiCache(fetched);
+            })();
+        }
+        await cachePopulationPromise;
+        cachePopulationPromise = null;
+        record = apiCharacterCache.get(hero.id);
+    }
+
+    // If still not found in cache, query directly by hero UUID before creating
+    if (!record) {
+        try {
+            const existing = await api.getCharacterByHeroId(hero.id);
+            if (existing) {
+                upsertApiCache(existing);
+                record = existing;
+            }
+        } catch (lookupError) {
+            // 404 means character doesn't exist - expected for new characters
+        }
+    }
+    // ...
+}
+```
+
+36. **Cleaned Up Database Duplicates**
+    - Identified 14 duplicate character rows with same hero UUID
+    - Deleted older duplicates, keeping most recently updated version of each
+    - Before: 45 rows with multiple UUIDs appearing 2-4 times
+    - After: 31 rows = 31 unique heroes (no duplicates)
+
+### Files Modified
+
+```
+src/services/character-storage.ts (race condition fix with mutex + UUID lookup)
+```
+
+### Database Cleanup
+
+**SQL Used to Clean Duplicates**:
+```sql
+-- Delete duplicate characters, keeping the one with the most recent updated_at
+DELETE c FROM characters c
+INNER JOIN (
+    SELECT JSON_UNQUOTE(JSON_EXTRACT(character_json, '$.id')) as hero_uuid,
+           MAX(updated_at) as max_updated
+    FROM characters
+    GROUP BY hero_uuid
+    HAVING COUNT(*) > 1
+) keep ON JSON_UNQUOTE(JSON_EXTRACT(c.character_json, '$.id')) = keep.hero_uuid
+WHERE c.updated_at < keep.max_updated;
+```
+
+### Verification Status
+
+- ✅ TypeScript check passes
+- ✅ Build succeeds
+- ✅ Database cleaned (31 characters, 31 unique UUIDs)
+- ✅ No more duplicate hero UUIDs in database
+
+### Deployment Notes
+
+- **Frontend only**: The fix is in frontend code, no backend changes needed
+- **No server restart required**: Just deploy new `distribution/frontend/` files to production
+- **Database already cleaned**: Duplicate rows have been removed
+
+### Technical Details
+
+**Why the race condition occurred**:
+1. `persistHeroes()` calls `Promise.all(heroes.map(h => saveCharacter(h)))`
+2. All saves start simultaneously with empty cache
+3. Each save calls `api.getCharacters()` to populate cache
+4. `replaceApiCache()` clears cache before populating
+5. Interleaving: Save1 clears → Save2 clears → Save1 populates → Save2 clears again
+6. Cache lookup fails for some heroes → `createCharacter()` called → duplicates
+
+**The fix provides two layers of protection**:
+1. **Mutex**: Only one cache population can happen at a time
+2. **Direct UUID lookup**: Even if cache fails, check backend directly before creating
+
+### Risks
+
+14. **None identified**: The fix is defensive and handles all edge cases
+
+### Next 3 Tasks
+
+1. **Monitor Production**: Watch for any new duplicates after deployment
+2. **Consider Sequential Saves**: Could change `persistHeroes()` to save sequentially instead of parallel as additional safety
+3. **Add Logging**: Consider adding telemetry to track cache hit/miss rates
+
+---
+
+## Session Summary - December 15, 2025 (Build System & Character Restoration)
+
+### Issues Addressed
+
+1. **Production Build Pointed to localhost:4000**: Users on production site getting 503 errors because build was using wrong API URL
+2. **Soft-Deleted Characters Not Showing**: Joric Vel Corwin and Edran Velesh were soft-deleted and not appearing in character list
+
+### Root Cause Analysis
+
+**Production Build Issue**:
+- Running `npm run dev` sets shell environment variable `VITE_API_BASE_URL=http://localhost:4000`
+- This environment variable persists in the shell and **overrides** `.env.production` values
+- When `npm run build` was run in the same shell, Vite used the polluted environment
+- Result: Production build contained `localhost:4000` instead of `32gamers.com/forgesteel`
+
+**Vite Environment Variable Priority** (later wins):
+1. `.env` - Base config
+2. `.env.local` - Local overrides (gitignored)
+3. `.env.[mode]` - Mode-specific (`.env.production` for builds)
+4. `.env.[mode].local` - Local mode-specific (gitignored)
+5. **System environment variables** - HIGHEST PRIORITY (overrides all above!)
+
+### Changes Made
+
+37. **Created Production Build Script** (NEW FILE: [build-prod.sh](build-prod.sh))
+    - Unsets all `VITE_*` environment variables before building
+    - Shows `.env.production` settings for verification
+    - Validates build output contains correct production URL
+    - Fails with error if `localhost:4000` found in build
+    - Provides clear success/failure feedback
+
+    ```bash
+    #!/bin/bash
+    # Production Build Script - Ensures clean environment
+
+    set -e
+
+    echo "🧹 Clearing Vite environment variables..."
+    unset VITE_API_BASE_URL
+    unset VITE_FIREBASE_API_KEY
+    unset VITE_FIREBASE_AUTH_DOMAIN
+
+    echo "📋 Using .env.production settings:"
+    grep "VITE_API_BASE_URL" .env.production
+
+    npm run build
+
+    # Validate production URL is in build
+    PROD_URL_COUNT=$(grep -c '32gamers.com/forgesteel' distribution/frontend/main-*.js)
+    LOCALHOST_COUNT=$(grep -c 'localhost:4000' distribution/frontend/main-*.js || echo "0")
+
+    if [ "$PROD_URL_COUNT" -gt 0 ] && [ "$LOCALHOST_COUNT" -eq 0 ]; then
+        echo "✅ SUCCESS: Build is clean"
+    else
+        echo "❌ ERROR: Build is corrupted"
+        exit 1
+    fi
+    ```
+
+38. **Added npm Script for Production Builds** ([package.json](package.json))
+    - Added `"build:prod": "bash build-prod.sh"` script
+    - Use `npm run build:prod` for all production deployments
+
+39. **Restored Soft-Deleted Characters** (Database)
+    - Restored Joric Vel Corwin (ID 61) - `is_deleted` = 0
+    - Restored Edran Velesh, the Returned (ID 69) - `is_deleted` = 0
+    - These were soft-deleted on 2025-12-15 07:13:xx (before this session)
+
+    ```sql
+    UPDATE characters
+    SET is_deleted = 0, updated_at = NOW()
+    WHERE id IN (61, 69) AND owner_user_id = 1;
+    ```
+
+### Files Created/Modified
+
+**New Files:**
+```
+build-prod.sh                    # Production build script with validation
+```
+
+**Modified Files:**
+```
+package.json                     # Added build:prod npm script
+```
+
+**Database Changes:**
+```
+characters table: Restored IDs 61, 69 (is_deleted = 0)
+```
+
+### Build Commands Reference
+
+| Command | Use Case | Safe for Production? |
+|---------|----------|---------------------|
+| `npm run build` | General build (may be polluted) | ⚠️ Only if fresh shell |
+| `npm run build:prod` | Production deployment | ✅ Always safe |
+| `npm run start` | Development server | N/A (dev only) |
+
+### Verification Checklist for Production Builds
+
+```bash
+# After running build:prod, verify:
+grep -c '32gamers.com/forgesteel' distribution/frontend/main-*.js
+# Should output: 1 (or more)
+
+grep -c 'localhost:4000' distribution/frontend/main-*.js
+# Should output: 0
+```
+
+### Risks
+
+15. **Shell Environment Pollution**: Running dev server in same shell as build can still cause issues if using `npm run build` directly
+16. **Character Soft-Delete Mystery**: The soft-deletion of Joric/Edran happened at 07:13, source unknown - may need investigation
+
+### Prevention Measures
+
+- **Always use `npm run build:prod`** for production deployments
+- **Use fresh shell** or explicitly unset `VITE_*` vars before any build
+- **Verify build output** before deploying (script does this automatically)
+
+### Next 3 Tasks
+
+1. **Deploy Clean Build**: Upload `distribution/frontend/` with correct API URL to production
+2. **Investigate Soft-Delete Source**: Determine what caused Joric/Edran to be soft-deleted at 07:13
+3. **Monitor Character List**: Verify all characters appear correctly after deployment

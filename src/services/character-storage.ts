@@ -10,6 +10,9 @@ const GUEST_LOCALFORAGE_KEY = `${LOCALFORAGE_NAMESPACE}:guest`;
 const apiCharacterCache = new Map<string, api.CharacterResponse>();
 let currentUserIsAdmin = false;
 
+// Mutex to prevent concurrent cache population race conditions
+let cachePopulationPromise: Promise<void> | null = null;
+
 interface GetAllCharactersOptions {
 	adminScope?: 'all' | 'user';
 }
@@ -89,12 +92,45 @@ export async function saveCharacter(hero: Hero): Promise<Hero> {
 	const mode = getStorageMode();
 	if (mode === StorageMode.API) {
 		try {
+			// First check cache without async operations
 			let record = apiCharacterCache.get(hero.id);
+
 			if (!record) {
-				const fetched = await api.getCharacters(currentUserIsAdmin ? { scope: 'all' } : {});
-				replaceApiCache(fetched);
+				// Use mutex to prevent concurrent cache population race conditions
+				// This ensures only one fetch happens at a time when multiple saves occur in parallel
+				if (!cachePopulationPromise) {
+					cachePopulationPromise = (async () => {
+						const fetched = await api.getCharacters(currentUserIsAdmin ? { scope: 'all' } : {});
+						replaceApiCache(fetched);
+					})();
+				}
+				await cachePopulationPromise;
+				cachePopulationPromise = null;
 				record = apiCharacterCache.get(hero.id);
 			}
+
+			// If still not found in cache, query directly by hero UUID before creating
+			// This is a safety check to prevent duplicates even if cache is stale
+			if (!record) {
+				try {
+					console.log(`[STORAGE] 🔍 Character ${hero.id} not in cache, querying by UUID...`);
+					const existing = await api.getCharacterByHeroId(hero.id);
+					if (existing) {
+						console.log(`[STORAGE] ✅ Found existing character by UUID, updating...`);
+						upsertApiCache(existing);
+						record = existing;
+					}
+				} catch (lookupError) {
+					// 404 means character doesn't exist, which is expected for new characters
+					if (lookupError instanceof api.ApiError && lookupError.statusCode === 404) {
+						console.log(`[STORAGE] 📝 Character ${hero.id} not found, will create new...`);
+					} else {
+						// Log but don't throw - we'll try to create anyway
+						console.warn(`[STORAGE] ⚠️ UUID lookup failed:`, lookupError);
+					}
+				}
+			}
+
 			if (record) {
 				const updated = await api.updateCharacter(record.id, hero);
 				upsertApiCache(updated);
@@ -249,6 +285,7 @@ export function setAdminMode(isAdmin: boolean): void {
 
 export function clearApiCache(): void {
 	apiCharacterCache.clear();
+	cachePopulationPromise = null;
 }
 
 function replaceApiCache(characters: api.CharacterResponse[]) {
